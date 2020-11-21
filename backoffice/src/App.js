@@ -21,6 +21,7 @@ function App() {
     const[userTable,setUserTable] = useState();
 
     useEffect(() => {
+        /*
             fetch('http://localhost:8080/product/listall')
                 .then(response => response.json())
                 .then(data => {
@@ -29,6 +30,20 @@ function App() {
                 console.warn("e : ", e);
                 setIsUpdateCard(true);
             });
+            */
+        let uri = "http://localhost:8080/product/listall";
+
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': 'Basic ' + btoa('user1:pass1'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                setContent(data)
+            })
+
         }, []
     )
     ;

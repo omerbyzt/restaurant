@@ -7,68 +7,80 @@ class UserList extends Component {
         userList: [],
         userUpdate: false,
         userID:"",
-        userName:"",
-        password:"",
-        role:""
+        userName: "",
+        password: "",
+        role: ""
     }
 
     componentDidMount() {
 
-        const {orderList} = this.state
+        const {userList} = this.state
 
-        fetch('http://localhost:8080/user/listall')
+        let uri = "http://localhost:8080/user/listall";
+
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': 'Basic ' + btoa('admin:pass3'),
+            }),
+        })
             .then(response => response.json())
             .then(data => {
                 this.setState({
                     userList: data
                 })
-            }).catch(e => {
-            console.warn("e : ", e);
-        });
+            })
 
     }
 
     changeInput = (e) => {
         this.setState({
-            [e.target.name] : e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
     onClickUpdateBtn = (e) => {
         this.setState({
             userUpdate: !this.state.userUpdate,
-            userID:e.userID,
-            userName:e.userName,
-            password:e.password,
-            role:e.role
+            userID: e.userID,
+            userName: e.userName,
+            password: e.password,
+            role: e.role
         })
     }
 
     onClickDeleteBtn = (e) => {
-
+/*
         return fetch('http://localhost:8080/user/delete/' + e.userID, {
             method: 'DELETE',
         }).then(response => response.json())
-        this.componentDidMount()
-
+*/
+        console.log('http://localhost:8080/user/delete/', e.userID);
+/*
+        axios.delete('http://localhost:8080/user/delete/', e.userID, {
+            headers: {
+                Authorization: 'Basic ' + btoa('admin:pass3') //the token is a variable which holds the token
+            }
+        })
+*/
     }
 
     updateUser = (e) => {
 
-        const {userList, userUpdate,userID,userName,password,role} = this.state;
+        const {userList, userUpdate, userID, userName, password, role} = this.state;
 
-        const putUser ={
-            userID : userID,
-            userName : userName,
-            password : password,
-            role : role
+        const putUser = {
+            userID: userID,
+            userName: userName,
+            password: password,
+            role: role
         }
         axios.put('http://localhost:8080/user/update/', putUser);
 
     }
 
     render() {
-        const {userList, userUpdate,userID,userName,password,role} = this.state;
+        const {userList, userUpdate, userID, userName, password, role} = this.state;
         return (
             <div>
                 {
@@ -129,7 +141,9 @@ class UserList extends Component {
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
-                                            <button className="btn btn-warning btn-block" onClick={this.updateUser}>Update</button>
+                                            <button className="btn btn-warning btn-block"
+                                                    onClick={this.updateUser}>Update
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

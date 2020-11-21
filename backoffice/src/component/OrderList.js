@@ -9,7 +9,7 @@ class OrderList extends Component {
 
     componentDidMount() {
         const {orderList} = this.state
-
+/*
         fetch('http://localhost:8080/order/listall')
             .then(response => response.json())
             .then(data => {
@@ -19,6 +19,23 @@ class OrderList extends Component {
             }).catch(e => {
             console.warn("e : ", e);
         });
+        */
+
+        let uri = "http://localhost:8080/order/listall";
+
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': 'Basic ' + btoa('admin:pass3'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    orderList: data
+                })
+            })
+
     }
 
 
