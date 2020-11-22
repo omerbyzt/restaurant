@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import Header from "./Header";
 
 class UserList extends Component {
     state = {
@@ -21,7 +22,7 @@ class UserList extends Component {
         fetch(uri, {
             method: 'get',
             headers: new Headers({
-                'Authorization': 'Basic ' + btoa('admin:pass3'),
+                'Authorization': sessionStorage.getItem('token'),
             }),
         })
             .then(response => response.json())
@@ -50,19 +51,10 @@ class UserList extends Component {
     }
 
     onClickDeleteBtn = (e) => {
-/*
-        return fetch('http://localhost:8080/user/delete/' + e.userID, {
-            method: 'DELETE',
-        }).then(response => response.json())
-*/
-        console.log('http://localhost:8080/user/delete/', e.userID);
-/*
-        axios.delete('http://localhost:8080/user/delete/', e.userID, {
-            headers: {
-                Authorization: 'Basic ' + btoa('admin:pass3') //the token is a variable which holds the token
-            }
-        })
-*/
+
+        window.location.reload();
+        axios.delete('http://localhost:8080/user/delete/' + e.userID,
+            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
     }
 
     updateUser = (e) => {
@@ -75,7 +67,10 @@ class UserList extends Component {
             password: password,
             role: role
         }
-        axios.put('http://localhost:8080/user/update/', putUser);
+        //axios.put('http://localhost:8080/user/update/', putUser);
+
+        axios.put('http://localhost:8080/user/update/',putUser,
+            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
 
     }
 
@@ -83,6 +78,7 @@ class UserList extends Component {
         const {userList, userUpdate, userID, userName, password, role} = this.state;
         return (
             <div>
+                <Header></Header>
                 {
                     userUpdate ?
                         <div>

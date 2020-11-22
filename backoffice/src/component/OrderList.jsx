@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
+import Header from "./Header";
 
 class OrderList extends Component {
 
@@ -9,17 +10,6 @@ class OrderList extends Component {
 
     componentDidMount() {
         const {orderList} = this.state
-/*
-        fetch('http://localhost:8080/order/listall')
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    orderList: data
-                })
-            }).catch(e => {
-            console.warn("e : ", e);
-        });
-        */
 
         let uri = "http://localhost:8080/order/listall";
 
@@ -43,6 +33,7 @@ class OrderList extends Component {
         const {orderList} = this.state;
         return (
             <div>
+                <Header></Header>
                 <Table striped bordered hover>
                     <thead>
                     <tr>

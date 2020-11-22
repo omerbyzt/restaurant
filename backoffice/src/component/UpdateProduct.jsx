@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import Header from "./Header";
 
 class UpdateProduct extends Component {
     state = {
@@ -26,7 +27,9 @@ class UpdateProduct extends Component {
             productCategory : category,
             productPrice : price
         }
-        axios.put('http://localhost:8080/product/update/'+id, putProduct);
+
+        axios.put('http://localhost:8080/product/update/'+id,putProduct,
+            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
     }
 
     render() {
