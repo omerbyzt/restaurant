@@ -14,28 +14,33 @@
 
 .menuBtn{
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-  width: 400px;
+  width: 20%;
   height: 200px;
-  margin:50px;
+  margin-left:10%;
+  margin-top:4%;
 }
 
-.backButton{
+.signOutButton{
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-  width: 100px;
+  width: 10%;
+  height: 6%;
   position: absolute;
-  right: 13.1%;
-  margin-top :5px;
+  right: 10%;
+  margin-top :0.5%;
 }
 
 .categoryColumn{
   width: 300px;
-  height: 900px;
+  height: 850px;
   overflow-y: auto;
 }
 
 .shoppingListColumn{
   width: 300px ;
-  height: 900px;
+  height: 850px;
+}
+
+.shoppingListColumnCardBody{
   overflow-y: auto;
 }
 
@@ -44,9 +49,8 @@
 }
 
 .btnPay{
-  position: absolute;
-  bottom: 2%;
-  width: 87.5%;
+  margin-top : 4%;
+  width: 100%;
 }
 .productCards{
   width: 42%;
@@ -61,6 +65,21 @@
   flex-direction: row;
   flex-wrap: wrap;
   overflow-y: auto;
+}
+
+.userNameLabel{
+  position: absolute;
+  margin-right: 5%;
+}
+
+.cardCss{
+  width: 100%;
+  margin-top: 10%;
+  margin-left:25%;
+}
+
+.loginPageTitle{
+  margin-left: 25%;
 }
 
 

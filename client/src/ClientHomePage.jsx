@@ -5,6 +5,7 @@ import nextId from "react-id-generator";
 import axios from 'axios';
 import LoginPage from "./LoginPage";
 import MenuPage from "./MenuPage";
+import {Link} from "react-router-dom";
 
 class ClientHomePage extends Component {
 
@@ -70,6 +71,8 @@ class ClientHomePage extends Component {
     onClickAddShoppingList = (param) => {
         const {shoppingList, totalPayment, shoppingListAmounts} = this.state;
 
+        this.state.totalPayment += param.productPrice;
+
         if (this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.productID).length > 0) {
             var shoppingListObj = this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.productID)
             shoppingListObj[0].amount += 1;
@@ -95,7 +98,9 @@ class ClientHomePage extends Component {
     }
 
     clickPlusAmountBtn = (value) => {
-        const {totalPrice} = this.state;
+        const {totalPrice,totalPayment} = this.state;
+
+        this.state.totalPayment += value.price;
 
         value.amount += 1;
         value.totalPrice = value.totalPrice + value.price;
@@ -104,8 +109,12 @@ class ClientHomePage extends Component {
     }
 
     clickMinusAmountBtn = (value) => {
+        const{totalPayment} = this.state;
+        this.state.totalPayment -= value.price;
+
         value.amount -= 1;
         value.totalPrice = value.totalPrice - value.price;
+
 
         if (value.amount == 0) {
             this.setState({
@@ -124,6 +133,7 @@ class ClientHomePage extends Component {
                 Authorization: 'Basic ' + btoa('admin:pass3') //the token is a variable which holds the token
             }
         })
+        window.location.reload();
     }
 
     render() {
@@ -133,7 +143,7 @@ class ClientHomePage extends Component {
                 <Table bordered>
                     <tbody>
                     <tr>
-                        <th className="thCategory">
+                        <th>
                             <div className="card categoryColumn">
                                 <div className="card-header">
                                     <h4 className="d-inline">Category List</h4>
@@ -150,11 +160,13 @@ class ClientHomePage extends Component {
                                     }
                                 </div>
                             </div>
+                            <Link to="/menu"><button className="btn btn-danger btnPay">Back to Menu</button></Link>
                         </th>
                         <th className="col-md-6">
                             <div className="card productBigCard">
                                 <div className="card-header">
-                                    <h4 className="d-inline">Product List</h4>
+                                    <h4 className="d-inline">Product List
+                                    </h4>
                                 </div>
                                 <div className="card-body productBigCardBody">
                                     {
@@ -189,7 +201,7 @@ class ClientHomePage extends Component {
                                     <div className="card-header">
                                         <h4 className="d-inline">Shopping List</h4>
                                     </div>
-                                    <div className="card-body">
+                                    <div className="card-body shoppingListColumnCardBody">
                                         {
                                             shoppingList.map(v => {
                                                     return (
@@ -218,11 +230,11 @@ class ClientHomePage extends Component {
                                                 }
                                             )
                                         }
-                                        <button className="btn btn-danger btn-block btnPay"
-                                                onClick={() => this.clickPayButton(shoppingList)}>Total:{totalPayment}₺
-                                        </button>
                                     </div>
                                 </div>
+                                <button className="btn btn-success btnPay"
+                                        onClick={() => this.clickPayButton(shoppingList)}>Total:{totalPayment}₺
+                                </button>
                             </div>
                         </th>
                     </tr>
