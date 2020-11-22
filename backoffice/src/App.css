@@ -24,3 +24,17 @@
   margin-top: 1.2%;
   font-weight:bold ;
 }
+
+.productListAddProduct{
+  width: 7.2%;
+  height: 50px;
+  margin-left:0.4%;
+}
+
+.productTable{
+  margin-top : 0.5%;
+}
+
+.usersTable{
+  margin-top : 0.5%;
+}

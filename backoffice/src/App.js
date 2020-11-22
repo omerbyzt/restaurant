@@ -7,6 +7,7 @@ import './App.css';
 import AddProduct from "./component/AddProduct";
 import AddUser from "./component/AddUser";
 import UserList from "./component/UserList";
+import AuthList from "./component/AuthList";
 
 class App extends Component {
     render() {
@@ -20,6 +21,7 @@ class App extends Component {
                         <Route path = "/addproduct" component={AddProduct}></Route>
                         <Route path = "/adduser" component={AddUser}></Route>
                         <Route path = "/userlist" component={UserList}></Route>
+                        <Route path = "/authlist" component={AuthList}></Route>
                     </Switch>
                 </Router>
             </div>

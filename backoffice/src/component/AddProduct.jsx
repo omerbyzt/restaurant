@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import Header from "./Header";
+import {Link} from 'react-router-dom'
 
 class AddProduct extends Component {
     state = {
@@ -28,7 +29,7 @@ class AddProduct extends Component {
             productPrice: price
         }
         axios.post("http://localhost:8080/product/add", newProduct,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}}
+            {headers:{Authorization: sessionStorage.getItem('token')}}
             );
     }
 
@@ -45,7 +46,7 @@ class AddProduct extends Component {
                                     <h4>Add Product</h4>
                                 </div>
                                 <div className="card-body">
-                                    <form onSubmit={this.addProduct}>
+                                    <form>
                                         <div className="form-group">
                                             <label htmlFor="name">Product Name</label>
                                             <input type="text"
@@ -93,7 +94,7 @@ class AddProduct extends Component {
                                                    onChange={this.changeInput}
                                             />
                                         </div>
-                                        <button className="btn btn-danger btn-block" type="submit">Add Product</button>
+                                        <button className="btn btn-danger btn-block" onClick={this.addProduct}>Add Product</button>
                                     </form>
                                 </div>
                             </div> : null

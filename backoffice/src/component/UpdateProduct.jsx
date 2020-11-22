@@ -29,7 +29,7 @@ class UpdateProduct extends Component {
         }
 
         axios.put('http://localhost:8080/product/update/'+id,putProduct,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
+            {headers:{Authorization: sessionStorage.getItem('token')}});
     }
 
     render() {

@@ -22,6 +22,9 @@ class Header extends Component {
                 <Link to="/userlist">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">User List</button>
                 </Link>
+                <Link to="/authlist">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Auth List</button>
+                </Link>
                 <Link to="/adduser">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Add New User</button>
                 </Link>

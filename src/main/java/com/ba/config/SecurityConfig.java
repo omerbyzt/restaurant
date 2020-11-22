@@ -21,6 +21,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("h2-console/**").permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
+        http.authorizeRequests().antMatchers("/auth/listall").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/auth/add").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/auth/delete**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/auth/update").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/users/listall").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/users/add").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/users/delete**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/users/update").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/hi/user").access("hasAnyRole('USER','ADMIN')");
         http.authorizeRequests().antMatchers("/hi/admin").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/user/**").access("hasRole('ADMIN')");

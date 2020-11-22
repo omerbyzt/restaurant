@@ -6,7 +6,8 @@ class AddUser extends Component {
     state = {
         userName: "",
         userPassword: "",
-        userRole: ""
+        userRole: "",
+        userEnabled:""
     }
 
     changeInput = (e) => {
@@ -16,20 +17,29 @@ class AddUser extends Component {
     }
 
     addUser = (e) => {
-        const {userName, userPassword, userRole} = this.state;
+        const {userName, userPassword, userRole,userEnabled} = this.state;
 
-        const newUser = {
-            userName: userName,
-            password: userPassword,
-            role: userRole
+        const newUsers = {
+            username : userName,
+            password : "{noop}"+userPassword,
+            enabled : userEnabled
         }
 
-        axios.post("http://localhost:8080/user/add", newUser,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
+        axios.post("http://localhost:8080/users/add", newUsers,
+            {headers:{Authorization:sessionStorage.getItem('token')}});
+
+        const newAuth = {
+            username : userName,
+            authority : userRole
+        }
+
+        axios.post("http://localhost:8080/auth/add", newAuth,
+            {headers:{Authorization:sessionStorage.getItem('token')}});
+
     }
 
     render() {
-        const {userName, userPassword, userRole} = this.state;
+        const {userName, userPassword, userRole,userEnabled} = this.state;
         return (
             <div>
                 <Header/>
@@ -73,6 +83,18 @@ class AddUser extends Component {
                                            name="userRole"
                                            id="roleInput"
                                            value={userRole}
+                                           onChange={this.changeInput}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="enabled">User Enabled</label>
+                                    <input type="text"
+                                           className="form-control"
+                                           placeholder="Enter User Enabled"
+                                           name="userEnabled"
+                                           id="enabledInput"
+                                           value={userEnabled}
                                            onChange={this.changeInput}
                                     />
                                 </div>

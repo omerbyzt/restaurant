@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 
 import Table from 'react-bootstrap/Table'
 import UpdateProduct from "./UpdateProduct";
-import {BrowserRouter as Router,Route,Switch,Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Header from "./Header";
 import axios from "axios";
 function App() {
@@ -24,12 +24,13 @@ function App() {
             fetch(uri, {
                 method: 'get',
                 headers: new Headers({
-                    'Authorization': 'Basic ' + btoa('user1:pass1'),
+                    'Authorization': sessionStorage.getItem('token'),
                 }),
             })
                 .then(response => response.json())
                 .then(data => {
                     setContent(data)
+                    console.log()
                 })
 
         }, []
@@ -48,7 +49,7 @@ function App() {
         window.location.reload();
         console.log('http://localhost:8080/product/delete/'+ e.productID)
         axios.delete('http://localhost:8080/product/delete/'+ e.productID,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
+            {headers:{Authorization:sessionStorage.getItem('token')}});
     }
 
     const onClickUpdateBtn = (e) => {
@@ -59,11 +60,10 @@ function App() {
     const clickProductList = () => {
         setProductTable(!productTable)
     }
-
-
     return (
         <div>
             <Header></Header>
+            <Link to = "/addproduct"><button className="btn btn-success productListAddProduct">+ Add Product</button></Link>
             {
                 //Product Ekleme Ekranı
                 isShowCard ? <AddProduct>
@@ -83,7 +83,7 @@ function App() {
 
             {
                 productTable ?
-                    <Table striped bordered hover >
+                    <Table striped bordered hover className="productTable">
                         <thead>
                         <tr>
                             <th>ID</th>

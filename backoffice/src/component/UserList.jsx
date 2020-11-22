@@ -2,22 +2,22 @@ import React, {Component} from 'react';
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Header from "./Header";
+import {Link} from "react-router-dom";
 
 class UserList extends Component {
     state = {
         userList: [],
         userUpdate: false,
-        userID:"",
-        userName: "",
+        username: "",
         password: "",
-        role: ""
+        enabled: "",
     }
 
     componentDidMount() {
 
         const {userList} = this.state
 
-        let uri = "http://localhost:8080/user/listall";
+        let uri = "http://localhost:8080/users/listall";
 
         fetch(uri, {
             method: 'get',
@@ -31,7 +31,6 @@ class UserList extends Component {
                     userList: data
                 })
             })
-
     }
 
     changeInput = (e) => {
@@ -43,42 +42,42 @@ class UserList extends Component {
     onClickUpdateBtn = (e) => {
         this.setState({
             userUpdate: !this.state.userUpdate,
-            userID: e.userID,
-            userName: e.userName,
+            username: e.username,
             password: e.password,
-            role: e.role
+            enabled: e.enabled
         })
     }
 
     onClickDeleteBtn = (e) => {
-
         window.location.reload();
-        axios.delete('http://localhost:8080/user/delete/' + e.userID,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
+        axios.delete('http://localhost:8080/users/delete/' + e.username,
+            {headers:{Authorization: sessionStorage.getItem('token')}});
+
+        axios.delete('http://localhost:8080/auth/delete/' + e.username,
+            {headers:{Authorization: sessionStorage.getItem('token')}});
+
     }
 
     updateUser = (e) => {
 
-        const {userList, userUpdate, userID, userName, password, role} = this.state;
+        const {userList, userUpdate, username, password,enabled} = this.state;
 
         const putUser = {
-            userID: userID,
-            userName: userName,
+            username: username,
             password: password,
-            role: role
+            enabled: enabled
         }
-        //axios.put('http://localhost:8080/user/update/', putUser);
 
-        axios.put('http://localhost:8080/user/update/',putUser,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}});
-
+        axios.put('http://localhost:8080/users/update/',putUser,
+            {headers:{Authorization: sessionStorage.getItem('token')}});
     }
 
     render() {
-        const {userList, userUpdate, userID, userName, password, role} = this.state;
+        const {userList, userUpdate, username, password, enabled} = this.state;
         return (
             <div>
                 <Header></Header>
+                <Link to = "/adduser"><button className="btn btn-success productListAddProduct">+ Add User</button></Link>
                 {
                     userUpdate ?
                         <div>
@@ -90,32 +89,20 @@ class UserList extends Component {
                                     <div className="card-body">
                                         <form>
                                             <div className="form-group">
-                                                <label htmlFor="id">User ID</label>
-                                                <input type="number"
-                                                       className="form-control"
-                                                       placeholder={userID}
-                                                       name="userID"
-                                                       id="idInput"
-                                                       value={userID}
-                                                       disabled={userID}
-                                                       onChange={this.changeInput}
-                                                />
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="id">User Name</label>
+                                                <label htmlFor="username">User Name</label>
                                                 <input type="text"
                                                        className="form-control"
-                                                       placeholder={userName}
-                                                       name="userName"
+                                                       placeholder={username}
+                                                       name="username"
                                                        id="nameInput"
-                                                       value={userName}
+                                                       value={username}
+                                                       disabled = {username}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="id">User Password</label>
+                                                <label htmlFor="password">User Password</label>
                                                 <input type="text"
                                                        className="form-control"
                                                        placeholder={password}
@@ -127,13 +114,13 @@ class UserList extends Component {
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="id">User Role</label>
+                                                <label htmlFor="enabled">User Enabled</label>
                                                 <input type="text"
                                                        className="form-control"
-                                                       placeholder={role}
-                                                       name="role"
-                                                       id="roleInput"
-                                                       value={role}
+                                                       placeholder={enabled}
+                                                       name="enabled"
+                                                       id="nameInput"
+                                                       value={enabled}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
@@ -146,13 +133,12 @@ class UserList extends Component {
                             </div>
                         </div> : null
                 }
-                <Table striped bordered hover>
+                <Table striped bordered hover className="usersTable">
                     <thead>
                     <tr>
-                        <th>#UserID</th>
                         <th>User Name</th>
                         <th>User Password</th>
-                        <th>User Role</th>
+                        <th>User Enabled</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -161,10 +147,9 @@ class UserList extends Component {
                         userList.map(v => {
                             return (
                                 <tr>
-                                    <td>{v.userID}</td>
-                                    <td>{v.userName}</td>
+                                    <td>{v.username}</td>
                                     <td>{v.password}</td>
-                                    <td>{v.role}</td>
+                                    <td>{v.enabled.toString()}</td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2"
                                                 onClick={this.onClickUpdateBtn.bind(this, v)}>Update

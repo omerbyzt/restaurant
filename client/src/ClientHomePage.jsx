@@ -3,8 +3,6 @@ import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import nextId from "react-id-generator";
 import axios from 'axios';
-import LoginPage from "./LoginPage";
-import MenuPage from "./MenuPage";
 import {Link} from "react-router-dom";
 
 class ClientHomePage extends Component {
@@ -37,7 +35,7 @@ class ClientHomePage extends Component {
         fetch(uri, {
             method: 'get',
             headers: new Headers({
-                'Authorization': 'Basic ' + btoa('admin:pass3'),
+                'Authorization': sessionStorage.getItem('token'),
             }),
         })
             .then(response => response.json())
@@ -57,7 +55,7 @@ class ClientHomePage extends Component {
         fetch(uri, {
             method: 'get',
             headers: new Headers({
-                'Authorization': 'Basic ' + btoa('admin:pass3'),
+                'Authorization': sessionStorage.getItem('token'),
             }),
         })
             .then(response => response.json())
@@ -130,7 +128,7 @@ class ClientHomePage extends Component {
 
         axios.post('http://localhost:8080/order/add', value, {
             headers: {
-                Authorization: 'Basic ' + btoa('admin:pass3') //the token is a variable which holds the token
+                Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
             }
         })
         window.location.reload();

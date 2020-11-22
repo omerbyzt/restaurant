@@ -16,7 +16,7 @@ class OrderList extends Component {
         fetch(uri, {
             method: 'get',
             headers: new Headers({
-                'Authorization': 'Basic ' + btoa('admin:pass3'),
+                'Authorization': sessionStorage.getItem('token'),
             }),
         })
             .then(response => response.json())
@@ -43,6 +43,7 @@ class OrderList extends Component {
                         <th>Product Price</th>
                         <th>Product Amount</th>
                         <th>Total Price</th>
+                        <th>Order Date</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,7 @@ class OrderList extends Component {
                                     <td>{v.price}</td>
                                     <td>{v.amount}</td>
                                     <td>{v.amount*v.price}</td>
+                                    <td>{v.orderDate}</td>
                                 </tr>
                             )
                         })
