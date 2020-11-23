@@ -21,7 +21,8 @@ class ClientHomePage extends Component {
             amount: 0,
             pId: 0,
             totalPrice: 0
-        }
+        },
+        selectedCategoryName:"",
     }
 
     constructor(props) {
@@ -30,7 +31,7 @@ class ClientHomePage extends Component {
 
     componentDidMount() {
 
-        let uri = "http://localhost:8080/product/listcategory/";
+        let uri = "http://localhost:8080/category/list-category/";
 
         fetch(uri, {
             method: 'get',
@@ -49,7 +50,7 @@ class ClientHomePage extends Component {
     onClickCategoryName = (category) => {
         console.log(category)
 
-        let uri = 'http://localhost:8080/product/listcategory/' + category;
+        let uri = 'http://localhost:8080/category/list-products/' + category.id;
         console.log(uri);
 
         fetch(uri, {
@@ -151,7 +152,7 @@ class ClientHomePage extends Component {
                                         categoryList.map(v => {
                                                 return (
                                                     <button className="btn btn-info btn-block mb-1"
-                                                            onClick={() => this.onClickCategoryName(v)}>{v}</button>
+                                                            onClick={() => this.onClickCategoryName(v)}>{v.name}</button>
                                                 )
                                             }
                                         )

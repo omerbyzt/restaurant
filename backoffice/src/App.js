@@ -8,6 +8,8 @@ import AddProduct from "./component/AddProduct";
 import AddUser from "./component/AddUser";
 import UserList from "./component/UserList";
 import AuthList from "./component/AuthList";
+import CategoryList from "./component/CategoryList";
+import AddCategory from "./component/AddCategory";
 
 class App extends Component {
     render() {
@@ -22,6 +24,8 @@ class App extends Component {
                         <Route path = "/adduser" component={AddUser}></Route>
                         <Route path = "/userlist" component={UserList}></Route>
                         <Route path = "/authlist" component={AuthList}></Route>
+                        <Route path = "/categorylist" component={CategoryList}></Route>
+                        <Route path = "/addcategory" component={AddCategory}></Route>
                     </Switch>
                 </Router>
             </div>

@@ -10,7 +10,29 @@ class AddProduct extends Component {
         name: "",
         desc: "",
         category: "",
-        price: ""
+        price: "",
+        categoryList:[],
+        btnCategoryName:"Select Category Name",
+        selectedCategoryId : ""
+    }
+
+    componentDidMount() {
+        const {categoryList} = this.state
+
+        let uri = "http://localhost:8080/category/list-category";
+
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('token'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    categoryList: data
+                })
+            })
     }
 
     changeInput = (e) => {
@@ -20,24 +42,33 @@ class AddProduct extends Component {
     }
 
     addProduct = (e) => {
-        const {name, desc, category, price} = this.state;
+        const {name, desc, price,selectedCategoryId,btnCategoryName} = this.state;
 
         const newProduct = {
             productName: name,
             productDesc: desc,
-            productCategory: category,
+            productCategory: btnCategoryName,
             productPrice: price
         }
-        axios.post("http://localhost:8080/product/add", newProduct,
+        axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
             {headers:{Authorization: sessionStorage.getItem('token')}}
             );
     }
 
+    onClickItem = (e) => {
+        this.setState({
+            btnCategoryName: e.name,
+            selectedCategoryId:e.id
+        })
+
+    }
+
     render() {
-        const {name, desc, category, price, isShowCard} = this.state;
+        const {name, desc, category, price, isShowCard,categoryList,btnCategoryName} = this.state;
         return (
             <div>
             <Header></Header>
+
                 <div className="col-md-12 mb-4">
                     {
                         isShowCard ?
@@ -72,18 +103,6 @@ class AddProduct extends Component {
                                         </div>
 
                                         <div className="form-group">
-                                            <label htmlFor="category">Product Category</label>
-                                            <input type="text"
-                                                   className="form-control"
-                                                   placeholder="Enter Product Category"
-                                                   name="category"
-                                                   id="categoryInput"
-                                                   value={category}
-                                                   onChange={this.changeInput}
-                                            />
-                                        </div>
-
-                                        <div className="form-group">
                                             <label htmlFor="price">Product Price</label>
                                             <input type="number"
                                                    className="form-control"
@@ -94,7 +113,25 @@ class AddProduct extends Component {
                                                    onChange={this.changeInput}
                                             />
                                         </div>
-                                        <button className="btn btn-danger btn-block" onClick={this.addProduct}>Add Product</button>
+
+                                        <div className="dropdown">
+                                            <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="true">
+                                                {btnCategoryName}
+                                            </button>
+                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                {
+                                                    categoryList.map(v=>{
+                                                        return(
+                                                            <a className="dropdown-item" onClick={this.onClickItem.bind(this,v)}>{v.name}</a>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <button className="btn btn-danger btn-block addProductButtonCss" onClick={this.addProduct}>Add Product</button>
                                     </form>
                                 </div>
                             </div> : null

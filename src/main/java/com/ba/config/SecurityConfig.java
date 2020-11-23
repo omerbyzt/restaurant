@@ -21,6 +21,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("h2-console/**").permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
+        http.authorizeRequests().antMatchers("/category/list-category").access("hasAnyRole('USER','ADMIN')");
+        http.authorizeRequests().antMatchers("/category/list-products").access("hasAnyRole('USER','ADMIN')");
+        http.authorizeRequests().antMatchers("/category/list-products**").access("hasAnyRole('USER','ADMIN')");
+        http.authorizeRequests().antMatchers("/category/add-category").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/category/delete-category/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/category/update-category").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/category/add-products/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/category/delete-product/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/category/update-product/**").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/auth/listall").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/auth/add").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/auth/delete**").access("hasRole('ADMIN')");

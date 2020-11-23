@@ -31,10 +31,17 @@ class Header extends Component {
                 <Link to="/orderlist">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Order List</button>
                 </Link>
+                <Link to="/categorylist">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Category List</button>
+                </Link>
+                <Link to="/addcategory">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Add Category</button>
+                </Link>
                 <Link to="/">
                     <button className="btn btn-danger btn-lg signOutBtn" onClick={this.clickSignOut}>Sign Out
                         : {sessionStorage.getItem('username')}</button>
                 </Link>
+
             </div>
         );
     }

@@ -38,3 +38,21 @@
 .usersTable{
   margin-top : 0.5%;
 }
+
+.listAddButton {
+  width: 7.2%;
+  height: 50px;
+  margin-left:0.4%;
+}
+
+.dropdownCss {
+  width: 20%;
+}
+
+.addProductButtonCss {
+  margin-top:1%;
+}
+
+.dropDownAddProductPage{
+ width: 100%;
+}

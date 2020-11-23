@@ -87,6 +87,7 @@ class UpdateProduct extends Component {
                                        name="category"
                                        id="categoryInput"
                                        value={category}
+                                       disabled = {category}
                                        onChange={this.changeInput}
                                 />
                             </div>

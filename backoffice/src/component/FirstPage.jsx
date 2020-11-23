@@ -6,16 +6,17 @@ import UpdateProduct from "./UpdateProduct";
 import {Link} from 'react-router-dom'
 import Header from "./Header";
 import axios from "axios";
+
 function App() {
 
     const [content, setContent] = useState();
     const [isShowCard, setIsShowCard] = useState();
-    const[isUpdateCard,setIsUpdateCard] = useState();
-    const[obj,setObj] = useState();
-    const[addUserPanel,setAddUserPanel]=useState();
-    const[productTable,setProductTable] = useState("true");
-    const[orderTable,setOrderTable]=useState();
-    const[userTable,setUserTable] = useState();
+    const [isUpdateCard, setIsUpdateCard] = useState();
+    const [obj, setObj] = useState();
+    const [addUserPanel, setAddUserPanel] = useState();
+    const [productTable, setProductTable] = useState("true");
+    const [orderTable, setOrderTable] = useState();
+    const [userTable, setUserTable] = useState();
 
     useEffect(() => {
 
@@ -32,7 +33,6 @@ function App() {
                     setContent(data)
                     console.log()
                 })
-
         }, []
     )
     ;
@@ -44,12 +44,12 @@ function App() {
         setIsShowCard(!isShowCard)
     }
 
-    const onClickDeleteBtn = (e) =>{
+    const onClickDeleteBtn = (e) => {
 
         window.location.reload();
-        console.log('http://localhost:8080/product/delete/'+ e.productID)
-        axios.delete('http://localhost:8080/product/delete/'+ e.productID,
-            {headers:{Authorization:sessionStorage.getItem('token')}});
+        console.log('http://localhost:8080/product/delete/' + e.productID)
+        axios.delete('http://localhost:8080/product/delete/' + e.productID,
+            {headers: {Authorization: sessionStorage.getItem('token')}});
     }
 
     const onClickUpdateBtn = (e) => {
@@ -63,22 +63,25 @@ function App() {
     return (
         <div>
             <Header></Header>
-            <Link to = "/addproduct"><button className="btn btn-success productListAddProduct">+ Add Product</button></Link>
+            <Link to="/addproduct">
+                <button className="btn btn-success productListAddProduct">+ Add Product</button>
+            </Link>
+
             {
                 //Product Ekleme Ekranı
                 isShowCard ? <AddProduct>
-                </AddProduct>:null
+                </AddProduct> : null
             }
             {
                 //Product Güncelleme
                 isUpdateCard ?
                     <UpdateProduct
                         id={obj.productID}
-                        name = {obj.productName}
-                        desc = {obj.productDesc}
-                        category = {obj.productCategory}
-                        price = {obj.productPrice}
-                    />:null
+                        name={obj.productName}
+                        desc={obj.productDesc}
+                        category={obj.productCategory}
+                        price={obj.productPrice}
+                    /> : null
             }
 
             {
@@ -97,21 +100,25 @@ function App() {
                         <tbody>
                         {
                             content.map(v => {
-                                return (<tr align = "center">
+                                return (<tr align="center">
                                     <td>{v.productID}</td>
                                     <td>{v.productName}</td>
                                     <td>{v.productDesc}</td>
                                     <td>{v.productCategory}</td>
                                     <td>{v.productPrice}</td>
                                     <tr>
-                                        <button className = "btn btn-warning mr-2" onClick={onClickUpdateBtn.bind(this,v)}>Update</button>
-                                        <button className = "btn btn-danger" onClick={onClickDeleteBtn.bind(this,v)}>Delete</button>
+                                        <button className="btn btn-warning mr-2"
+                                                onClick={onClickUpdateBtn.bind(this, v)}>Update
+                                        </button>
+                                        <button className="btn btn-danger"
+                                                onClick={onClickDeleteBtn.bind(this, v)}>Delete
+                                        </button>
                                     </tr>
                                 </tr>)
                             })
                         }
                         </tbody>
-                    </Table>:null
+                    </Table> : null
             }
 
         </div>
