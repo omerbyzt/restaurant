@@ -7,7 +7,14 @@ class AddUser extends Component {
         userName: "",
         userPassword: "",
         userRole: "",
-        userEnabled:""
+        userEnabled:"",
+        roleAdmin:"ROLE_ADMIN",
+        roleUser:"ROLE_USER",
+        roleEnabledTrue:"true",
+        roleEnabledFalse:"false",
+        dropDownRoleName:"Select User Role",
+        dropDownEnabledName:"Select User Enabled"
+
     }
 
     changeInput = (e) => {
@@ -17,12 +24,12 @@ class AddUser extends Component {
     }
 
     addUser = (e) => {
-        const {userName, userPassword, userRole,userEnabled} = this.state;
+        const {userName, userPassword, userRole,userEnabled,dropDownRoleName,dropDownEnabledName} = this.state;
 
         const newUsers = {
             username : userName,
             password : "{noop}"+userPassword,
-            enabled : userEnabled
+            enabled : dropDownEnabledName
         }
 
         axios.post("http://localhost:8080/users/add", newUsers,
@@ -30,7 +37,7 @@ class AddUser extends Component {
 
         const newAuth = {
             username : userName,
-            authority : userRole
+            authority : dropDownRoleName
         }
 
         axios.post("http://localhost:8080/auth/add", newAuth,
@@ -38,8 +45,32 @@ class AddUser extends Component {
 
     }
 
+    clickedAdmin = () => {
+        this.setState({
+            dropDownRoleName:this.state.roleAdmin
+        })
+    }
+
+    clickedUser = () => {
+        this.setState({
+            dropDownRoleName:this.state.roleUser
+        })
+    }
+
+    clickedEnabledTrue = () => {
+        this.setState({
+            dropDownEnabledName:this.state.roleEnabledTrue
+        })
+    }
+
+    clickedEnabledFalse = () => {
+        this.setState({
+            dropDownEnabledName:this.state.roleEnabledFalse
+        })
+    }
+
     render() {
-        const {userName, userPassword, userRole,userEnabled} = this.state;
+        const {userName, userPassword, userRole,userEnabled,roleAdmin,roleUser,dropDownRoleName,dropDownEnabledName,roleEnabledTrue,roleEnabledFalse} = this.state;
         return (
             <div>
                 <Header/>
@@ -75,30 +106,34 @@ class AddUser extends Component {
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="role">User Role</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           placeholder="Enter User Role"
-                                           name="userRole"
-                                           id="roleInput"
-                                           value={userRole}
-                                           onChange={this.changeInput}
-                                    />
+                                <div className="dropdown">
+                                    <label htmlFor="price">User Role : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss2" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                        {dropDownRoleName}
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                            <a className="dropdown-item" onClick={this.clickedUser} >{roleUser}</a>
+                                            <a className="dropdown-item" onClick={this.clickedAdmin}>{roleAdmin}</a>
+                                    </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="enabled">User Enabled</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           placeholder="Enter User Enabled"
-                                           name="userEnabled"
-                                           id="enabledInput"
-                                           value={userEnabled}
-                                           onChange={this.changeInput}
-                                    />
+                                <div className="dropdown">
+                                    <label htmlFor="price">User Enabled : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                        {dropDownEnabledName}
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                        <a className="dropdown-item" onClick={this.clickedEnabledTrue} >{roleEnabledTrue}</a>
+                                        <a className="dropdown-item" onClick={this.clickedEnabledFalse}>{roleEnabledFalse}</a>
+                                    </div>
                                 </div>
-                                <button className="btn btn-warning btn-block" type="submit">Add User</button>
+                                <button className="btn btn-warning btn-block addUserCss" type="submit">Add User</button>
                             </form>
                         </div>
                     </div>

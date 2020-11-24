@@ -115,6 +115,7 @@ class AddProduct extends Component {
                                         </div>
 
                                         <div className="dropdown">
+                                            <label htmlFor="price">Product Category : </label>
                                             <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
                                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="true">

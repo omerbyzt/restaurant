@@ -13,10 +13,7 @@ function App() {
     const [isShowCard, setIsShowCard] = useState();
     const [isUpdateCard, setIsUpdateCard] = useState();
     const [obj, setObj] = useState();
-    const [addUserPanel, setAddUserPanel] = useState();
     const [productTable, setProductTable] = useState("true");
-    const [orderTable, setOrderTable] = useState();
-    const [userTable, setUserTable] = useState();
 
     useEffect(() => {
 

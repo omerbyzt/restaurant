@@ -47,6 +47,14 @@
 
 .dropdownCss {
   width: 20%;
+  margin-left:1%;
+  margin-top:0.4%;
+}
+
+.dropdownCss2 {
+  width: 20%;
+  margin-left:2.4%;
+  margin-top:0.2%;
 }
 
 .addProductButtonCss {
@@ -55,4 +63,11 @@
 
 .dropDownAddProductPage{
  width: 100%;
+}
+.tempCss {
+  margin-top:0.5%;
+}
+
+.addUserCss {
+  margin-top:0.7%;
 }
