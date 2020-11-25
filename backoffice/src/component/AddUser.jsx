@@ -14,7 +14,6 @@ class AddUser extends Component {
         roleEnabledFalse:"false",
         dropDownRoleName:"Select User Role",
         dropDownEnabledName:"Select User Enabled"
-
     }
 
     changeInput = (e) => {

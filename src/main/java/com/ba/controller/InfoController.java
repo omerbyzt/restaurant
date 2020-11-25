@@ -13,8 +13,8 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class InfoController {
 
-    @Value("${server}")
-    private String serverName;
+    @Value("${server.port}")
+    private String serverPort;
 
     @Value("${spring.h2.console.enabled}")
     private String consoleEnabled;
@@ -25,7 +25,7 @@ public class InfoController {
     @Value("${spring.datasource.url}")
     private String dataSourceUrl;
 
-    @Value("${spring.java.show-sql}")
+    @Value("${spring.jpa.show-sql}")
     private String showSql;
 
     @Value("${spring.jpa.properties.hibernate.format_sql}")
@@ -34,27 +34,60 @@ public class InfoController {
     @Value("${logging.level.org.hibernate.type}")
     private String hybernateType;
 
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.datasource.driverClassName}")
+    private String driverClassName;
+
+    @Value("${app.message}")
+    private String message;
+
+    @Value("${spring.profiles.active}")
+    private String profileName;
+
     @GetMapping("infolist")
     public List<Info> getInfo(){
         List<Info> infoList = new ArrayList<>();
 
-        Info info1 = new Info("spring.h2.console.enabled",consoleEnabled);
-        infoList.add(info1);
+        Info infoMessage = new Info("Database Name",message);
+        infoList.add(infoMessage);
 
-        Info info2 = new Info("spring.jpa.hibernate.ddl-auto",ddlAuto);
-        infoList.add(info2);
+        Info infoServerPort = new Info("server.port",serverPort);
+        infoList.add(infoServerPort);
 
-        Info info3 = new Info("spring.datasource.url",dataSourceUrl);
-        infoList.add(info3);
+        Info infoProfileName = new Info("spring.profiles.active",profileName);
+        infoList.add(infoProfileName);
 
-        Info info4 = new Info("spring.java.show-sql",showSql);
-        infoList.add(info4);
+        Info infoDataSourceUrl = new Info("spring.datasource.url",dataSourceUrl);
+        infoList.add(infoDataSourceUrl);
 
-        Info info5 = new Info("spring.jpa.properties.hibernate.format_sql",formatSql);
-        infoList.add(info5);
+        Info infoDdlAuto = new Info("spring.jpa.hibernate.ddl-auto",ddlAuto);
+        infoList.add(infoDdlAuto);
 
-        Info info6 = new Info("logging.level.org.hibernate.type",hybernateType);
-        infoList.add(info6);
+        Info infoUserName = new Info("spring.datasource.username",username);
+        infoList.add(infoUserName);
+
+        Info infoPassword = new Info("spring.datasource.password",password);
+        infoList.add(infoPassword);
+
+        Info infoDriverClassName = new Info("spring.datasource.driverClassName",driverClassName);
+        infoList.add(infoDriverClassName);
+
+        Info infoShowSql = new Info("spring.java.show-sql",showSql);
+        infoList.add(infoShowSql);
+
+        Info infoFormatSql = new Info("spring.jpa.properties.hibernate.format_sql",formatSql);
+        infoList.add(infoFormatSql);
+
+        Info infoHybernateType = new Info("logging.level.org.hibernate.type",hybernateType);
+        infoList.add(infoHybernateType);
+
+        Info infoConsoleEnabled = new Info("spring.h2.console.enabled",consoleEnabled);
+        infoList.add(infoConsoleEnabled);
 
         return infoList;
     }

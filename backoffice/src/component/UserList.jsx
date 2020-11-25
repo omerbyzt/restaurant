@@ -150,7 +150,7 @@ class UserList extends Component {
                                     <td>{v.username}</td>
                                     <td>{v.password}</td>
                                     <td>{v.enabled.toString()}</td>
-                                    p<td align="center">
+                                    <td align="center">
                                         <button className="btn btn-warning mr-2"
                                                 onClick={this.onClickUpdateBtn.bind(this, v)}>Update
                                         </button>

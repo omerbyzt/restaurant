@@ -70,7 +70,7 @@ class TableCategoryList extends Component {
         return (
             <div>
                 <Header/>
-                <Link to ="/addtablecategory"><button className="btn btn-success addCategoryButton">+ Add Table Category</button></Link>
+                <Link to ="/addtablecategory"><button className="btn btn-success addTableCategoryButton">+ Add Table Category</button></Link>
                 {
                     isUpdate ?
                         <div className = "col-md-12 mb-4 mt-2">
@@ -89,6 +89,7 @@ class TableCategoryList extends Component {
                                                    name="id"
                                                    id="idInput"
                                                    value={id}
+                                                   disabled={id}
                                                    onChange={this.changeInput}
                                             />
                                         </div>
