@@ -20,9 +20,11 @@ class ClientHomePage extends Component {
             price: 0,
             amount: 0,
             pId: 0,
-            totalPrice: 0
+            totalPrice: 0,
+            tableName:""
         },
         selectedCategoryName:"",
+
     }
 
     constructor(props) {
@@ -82,13 +84,15 @@ class ClientHomePage extends Component {
 
         } else {
             this.setState({
+
                     shoppingListObj: {
                         shoppingListObjId: nextId(),
                         pId: param.productID,
                         name: param.productName,
                         price: param.productPrice,
                         amount: 1,
-                        totalPrice: param.productPrice
+                        totalPrice: param.productPrice,
+                        tableName:sessionStorage.getItem("table")
                     }
                 }, () => this.setState({shoppingList: [...this.state.shoppingList, this.state.shoppingListObj]})
             )
@@ -132,7 +136,12 @@ class ClientHomePage extends Component {
                 Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
             }
         })
+        sessionStorage.setItem("table","No Item");
         window.location.reload();
+    }
+
+    onClickBackToMenuButton = () => {
+        sessionStorage.setItem("table","No Item")
     }
 
     render() {
@@ -159,7 +168,7 @@ class ClientHomePage extends Component {
                                     }
                                 </div>
                             </div>
-                            <Link to="/menu"><button className="btn btn-danger btnPay">Back to Menu</button></Link>
+                            <Link to="/menu"><button className="btn btn-danger btnPay" onClick={this.onClickBackToMenuButton}>Back to Menu</button></Link>
                         </th>
                         <th className="col-md-6">
                             <div className="card productBigCard">

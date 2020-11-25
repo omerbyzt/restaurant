@@ -14,6 +14,7 @@ public class Orderr {
     private String name;
     private Long price;
     private Long amount;
+    private String tableName;
 
     @Column
     private Date orderDate = new Timestamp(System.currentTimeMillis());
@@ -64,5 +65,13 @@ public class Orderr {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

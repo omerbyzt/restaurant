@@ -29,6 +29,7 @@
   width: 7.2%;
   height: 50px;
   margin-left:0.4%;
+  margin-top:0.4%;
 }
 
 .productTable{
@@ -70,4 +71,26 @@
 
 .addUserCss {
   margin-top:0.7%;
+}
+
+.infoListTitle {
+  text-align: center;
+  margin-top: 1%;
+}
+
+.headerCss {
+  background-color: #34495E;
+}
+
+.btnCss {
+  background-color: #FDFEFE;
+  font-family: "Leelawadee UI";
+  color:#17202A;
+}
+
+.addCategoryButton {
+  width: 7.2%;
+  height: 50px;
+  margin-left:0.4%;
+  margin-top:0.4%;
 }

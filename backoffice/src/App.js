@@ -10,6 +10,11 @@ import UserList from "./component/UserList";
 import AuthList from "./component/AuthList";
 import CategoryList from "./component/CategoryList";
 import AddCategory from "./component/AddCategory";
+import InfoList from "./component/InfoList";
+import TableCategoryList from "./component/TableCategoryList";
+import AddTableCategory from "./component/AddTableCategory";
+import TableList from "./component/TableList";
+import AddTable from "./component/AddTable";
 
 class App extends Component {
     render() {
@@ -26,6 +31,11 @@ class App extends Component {
                         <Route path = "/authlist" component={AuthList}></Route>
                         <Route path = "/categorylist" component={CategoryList}></Route>
                         <Route path = "/addcategory" component={AddCategory}></Route>
+                        <Route path = "/infolist" component={InfoList}></Route>
+                        <Route path = "/tablecategorylist" component={TableCategoryList}></Route>
+                        <Route path = "/addtablecategory" component={AddTableCategory}></Route>
+                        <Route path = "/tablelist" component={TableList}></Route>
+                        <Route path = "/addtable" component={AddTable}></Route>
                     </Switch>
                 </Router>
             </div>

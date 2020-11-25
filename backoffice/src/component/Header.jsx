@@ -12,30 +12,30 @@ class Header extends Component {
 
     render() {
         return (
-            <div>
+            <div className="headerCss">
                 <Link to="/home">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Product List</button>
-                </Link>
-                <Link to="/addproduct">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Add New Product</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Product</button>
                 </Link>
                 <Link to="/userlist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">User List</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">User</button>
                 </Link>
                 <Link to="/authlist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Auth List</button>
-                </Link>
-                <Link to="/adduser">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Add New User</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Auth</button>
                 </Link>
                 <Link to="/orderlist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Order List</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Order</button>
                 </Link>
                 <Link to="/categorylist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Category List</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Category</button>
                 </Link>
-                <Link to="/addcategory">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2">Add Category</button>
+                <Link to="/infolist">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Info</button>
+                </Link>
+                <Link to="/tablecategorylist">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table Category</button>
+                </Link>
+                <Link to="/tablelist">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table</button>
                 </Link>
                 <Link to="/">
                     <button className="btn btn-danger btn-lg signOutBtn" onClick={this.clickSignOut}>Sign Out

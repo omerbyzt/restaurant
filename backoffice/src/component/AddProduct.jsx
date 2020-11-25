@@ -60,7 +60,6 @@ class AddProduct extends Component {
             btnCategoryName: e.name,
             selectedCategoryId:e.id
         })
-
     }
 
     render() {
@@ -69,7 +68,7 @@ class AddProduct extends Component {
             <div>
             <Header></Header>
 
-                <div className="col-md-12 mb-4">
+                <div className="col-md-12 mb-4 mt-4">
                     {
                         isShowCard ?
                             <div className="card" align="left">
@@ -132,7 +131,7 @@ class AddProduct extends Component {
                                             </div>
                                         </div>
 
-                                        <button className="btn btn-danger btn-block addProductButtonCss" onClick={this.addProduct}>Add Product</button>
+                                        <button className="btn btn-warning btn-block addProductButtonCss" onClick={this.addProduct}>Add Product</button>
                                     </form>
                                 </div>
                             </div> : null

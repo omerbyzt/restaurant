@@ -7,11 +7,12 @@ class MenuPage extends Component {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
     }
+
     render() {
         return (
             <div>
-                <Link to="/home"><button className="btn btn-success menuBtn"><h1>SHOPPING</h1></button></Link>
-                <button className="btn btn-success menuBtn">Card 2</button>
+                <Link to="/home"><button className="btn btn-success menuBtn"><h1>Shopping</h1></button></Link>
+                <Link to ="/tablepage"><button className="btn btn-success menuBtn"><h1>Tables</h1></button></Link>
                 <button className="btn btn-success menuBtn">Card 3</button>
                 <button className="btn btn-success menuBtn">Card 4</button>
                 <button className="btn btn-success menuBtn">Card 5</button>

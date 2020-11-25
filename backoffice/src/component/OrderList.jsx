@@ -43,6 +43,7 @@ class OrderList extends Component {
                         <th>Product Price</th>
                         <th>Product Amount</th>
                         <th>Total Price</th>
+                        <th>Table</th>
                         <th>Order Date</th>
                     </tr>
                     </thead>
@@ -57,6 +58,7 @@ class OrderList extends Component {
                                     <td>{v.price}</td>
                                     <td>{v.amount}</td>
                                     <td>{v.amount*v.price}</td>
+                                    <td>{v.tableName}</td>
                                     <td>{v.orderDate}</td>
                                 </tr>
                             )

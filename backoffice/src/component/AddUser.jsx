@@ -74,7 +74,7 @@ class AddUser extends Component {
         return (
             <div>
                 <Header/>
-                <div className="col-md-12 mb-4 mt2">
+                <div className="col-md-12 mb-4 mt-4">
 
                     <div className="card">
                         <div className="card-header">

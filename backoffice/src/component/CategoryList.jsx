@@ -75,7 +75,7 @@ class CategoryList extends Component {
             <div>
                 <Header></Header>
                 <Link to="/addcategory">
-                    <button className="btn btn-success listAddButton">+ Add Category</button>
+                    <button className="btn btn-success addCategoryButton">+ Add Category</button>
                 </Link>
                 {
                     isUpdate ?

@@ -1,47 +1,54 @@
 import AddProduct from "./AddProduct";
-import React, {useState, useEffect} from 'react';
-
 import Table from 'react-bootstrap/Table'
 import UpdateProduct from "./UpdateProduct";
 import {Link} from 'react-router-dom'
 import Header from "./Header";
 import axios from "axios";
 
-function App() {
+import React, {Component} from 'react';
 
-    const [content, setContent] = useState();
-    const [isShowCard, setIsShowCard] = useState();
-    const [isUpdateCard, setIsUpdateCard] = useState();
-    const [obj, setObj] = useState();
-    const [productTable, setProductTable] = useState("true");
+class FirstPage extends Component {
 
-    useEffect(() => {
+    state = {
+        content:[],
+        isShowCard:"",
+        isUpdateCard:"",
+        obj:"",
+        productTable:[]
+    }
+    constructor(props) {
+        super(props);
+        this.filterList = this.filterList.bind(this);
+    }
 
-            let uri = "http://localhost:8080/product/listall";
 
-            fetch(uri, {
-                method: 'get',
-                headers: new Headers({
-                    'Authorization': sessionStorage.getItem('token'),
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setContent(data)
-                    console.log()
+
+    componentDidMount() {
+        const {content} = this.state
+
+        let uri = "http://localhost:8080/product/listall";
+
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('token'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    content: data
                 })
-        }, []
-    )
-    ;
-    if (!content) {
-        return null;
+            })
     }
 
-    const clickedAddButton = () => {
-        setIsShowCard(!isShowCard)
+    clickedAddButton = () => {
+        this.setState({
+            isShowCard:!this.state.isShowCard
+        })
     }
 
-    const onClickDeleteBtn = (e) => {
+    onClickDeleteBtn = (e) => {
 
         window.location.reload();
         console.log('http://localhost:8080/product/delete/' + e.productID)
@@ -49,77 +56,95 @@ function App() {
             {headers: {Authorization: sessionStorage.getItem('token')}});
     }
 
-    const onClickUpdateBtn = (e) => {
-        setObj(e);
-        setIsUpdateCard(!isUpdateCard)
+    onClickUpdateBtn = (e) => {
+        this.setState({
+            obj:e,
+            isUpdateCard:!this.state.isUpdateCard
+        })
     }
 
-    const clickProductList = () => {
-        setProductTable(!productTable)
+    clickProductList = () => {
+        this.setState({
+            productTable:!this.state.productTable
+            })
     }
-    return (
-        <div>
-            <Header></Header>
-            <Link to="/addproduct">
-                <button className="btn btn-success productListAddProduct">+ Add Product</button>
-            </Link>
 
-            {
-                //Product Ekleme Ekranı
-                isShowCard ? <AddProduct>
-                </AddProduct> : null
-            }
-            {
-                //Product Güncelleme
-                isUpdateCard ?
-                    <UpdateProduct
-                        id={obj.productID}
-                        name={obj.productName}
-                        desc={obj.productDesc}
-                        category={obj.productCategory}
-                        price={obj.productPrice}
-                    /> : null
-            }
+    filterList = (e) => {
+        this.setState({
+            content:this.state.content.filter(
+                productByFilter => productByFilter.productCategory == e
+            )
+        })
+    }
 
-            {
-                productTable ?
-                    <Table striped bordered hover className="productTable">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Product Name</th>
-                            <th>Product Description</th>
-                            <th>Product Category</th>
-                            <th>Product Price</th>
-                            <th>Buttons</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            content.map(v => {
-                                return (<tr align="center">
-                                    <td>{v.productID}</td>
-                                    <td>{v.productName}</td>
-                                    <td>{v.productDesc}</td>
-                                    <td>{v.productCategory}</td>
-                                    <td>{v.productPrice}</td>
-                                    <tr>
-                                        <button className="btn btn-warning mr-2"
-                                                onClick={onClickUpdateBtn.bind(this, v)}>Update
-                                        </button>
-                                        <button className="btn btn-danger"
-                                                onClick={onClickDeleteBtn.bind(this, v)}>Delete
-                                        </button>
-                                    </tr>
-                                </tr>)
-                            })
-                        }
-                        </tbody>
-                    </Table> : null
-            }
+    render() {
+        const {isShowCard,isUpdateCard,productTable,obj,content}=this.state;
+        return (
+            <div>
+                <Header></Header>
+                <Link to="/addproduct">
+                    <button className="btn btn-success productListAddProduct">+ Add Product</button>
+                </Link>
 
-        </div>
-    );
+                {
+                    //Product Ekleme Ekranı
+                    isShowCard ? <AddProduct>
+                    </AddProduct> : null
+                }
+                {
+                    //Product Güncelleme
+                    isUpdateCard ?
+                        <UpdateProduct
+                            id={obj.productID}
+                            name={obj.productName}
+                            desc={obj.productDesc}
+                            category={obj.productCategory}
+                            price={obj.productPrice}
+                        /> : null
+                }
+
+                {
+                    productTable ?
+                        <Table striped bordered hover className="productTable">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Product Description</th>
+                                <th>Product Category</th>
+                                <th>Product Price</th>
+                                <th>Buttons</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                content.map(v => {
+                                    return (<tr align="center">
+                                        <td>{v.productID}</td>
+                                        <td>{v.productName}</td>
+                                        <td>{v.productDesc}</td>
+                                        <td>
+                                            <button className="btn btn-link" onClick={()=> this.filterList(v.productCategory)}>{v.productCategory}</button>
+                                        </td>
+                                        <td>{v.productPrice}</td>
+                                        <td align="center">
+                                            <button className="btn btn-warning mr-2"
+                                                    onClick={this.onClickUpdateBtn.bind(this, v)}>Update
+                                            </button>
+                                            <button className="btn btn-danger"
+                                                    onClick={this.onClickDeleteBtn.bind(this, v)}>Delete
+                                            </button>
+                                        </td>
+                                    </tr>)
+                                })
+                            }
+                            </tbody>
+                        </Table> : null
+                }
+            </div>
+        );
+    }
 }
 
-export default App;
+export default FirstPage;
+
