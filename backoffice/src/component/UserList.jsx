@@ -148,7 +148,7 @@ class UserList extends Component {
                             return (
                                 <tr>
                                     <td>{v.username}</td>
-                                    <td>{v.password}</td>
+                                    <td className="hidePassword">{v.password}</td>
                                     <td>{v.enabled.toString()}</td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2"

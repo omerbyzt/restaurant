@@ -54,6 +54,14 @@ class TableList extends Component {
             .then(res => {this.setState({tableList: this.state.tableList})});
     }
 
+    filterList = (e) => {
+        this.setState({
+            tableList:this.state.tableList.filter(
+                productByFilter => productByFilter.category == e
+            )
+        })
+    }
+
     render() {
         const{tableList,isUpdate,id,number,category} = this.state;
         return (
@@ -133,7 +141,9 @@ class TableList extends Component {
                              <tr align="center">
                                  <td>{v.id}</td>
                                  <td>{v.number}</td>
-                                 <td>{v.category}</td>
+                                 <td>
+                                     <button className="btn btn-link" onClick={()=> this.filterList(v.category)}>{v.category}</button>
+                                 </td>
                                  <td>
                                      <button className="btn btn-warning mr-2" onClick={this.onClickUpdateTableBtn.bind(this,v)}>Update</button>
                                      <button className="btn btn-danger mr-2" onClick={this.onClickDeleteTableBtn.bind(this,v)}>Delete</button>

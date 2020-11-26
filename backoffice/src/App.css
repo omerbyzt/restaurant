@@ -101,3 +101,6 @@
   margin-left:0.4%;
   margin-top:0.4%;
 }
+.hidePassword {
+  -webkit-text-security: disc;
+}
