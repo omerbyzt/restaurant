@@ -1,5 +1,6 @@
 package com.ba.controller;
 
+import com.ba.dto.OrderDTO;
 import com.ba.entity.Orderr;
 import com.ba.service.OrderService;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,17 +18,17 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/listall")
-    public List<Orderr> listAllOrders(){
+    public List<OrderDTO> listAllOrders() {
         return orderService.listAllOrders();
     }
 
     @PostMapping("/add")
-    public List<Orderr>addOrder(@RequestBody List<Orderr> order){
-        return orderService.addOrder(order);
+    public void addOrder(@RequestBody List<OrderDTO> orderDTO) {
+        orderService.addOrder(orderDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public List<Orderr> deleteOrder(@PathVariable Long id){
-        return orderService.deleteOrder(id);
+    public void deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
     }
 }

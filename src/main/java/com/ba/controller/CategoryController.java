@@ -1,5 +1,7 @@
 package com.ba.controller;
 
+import com.ba.dto.CategoryDTO;
+import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
 import com.ba.service.CategoryService;
@@ -18,13 +20,13 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping("/list-category")
-    public List<Category> listCategory(){
+    public List<CategoryDTO> listCategory(){
         return categoryService.listCategory();
     }
 
     @PostMapping("/add-category")
-    public void addCategory(@RequestBody Category category){
-        categoryService.addCategory(category);
+    public void addCategory(@RequestBody CategoryDTO categoryDTO){
+        categoryService.addCategory(categoryDTO);
     }
 
     @DeleteMapping("/delete-category/{id}")
@@ -34,33 +36,33 @@ public class CategoryController {
     }
 
     @PutMapping("/update-category")
-    public Category updateCategory(@RequestBody Category category){
-        return categoryService.updateCategory(category);
+    public CategoryDTO updateCategory(@RequestBody CategoryDTO categoryDTO){
+        return categoryService.updateCategory(categoryDTO);
     }
 
-    @GetMapping("/list-products")
-    public List<Product> listProducts(){
-        return categoryService.listProducts();
-    }
+//    @GetMapping("/list-products")
+//    public List<Product> listProducts(){
+//        return categoryService.listProducts();
+//    }
 
     @GetMapping("/list-products/{id}")
-    public Set<Product> listProductsById(@PathVariable Long id){
+    public Set<ProductDTO> listProductsById(@PathVariable Long id){
         return categoryService.listProductsById(id);
     }
 
     @PostMapping("/add-product/{id}")
-    public void addProduct(@RequestBody Product product,@PathVariable Long id){
-        categoryService.addProduct(product,id);
+    public void addProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id){
+        categoryService.addProduct(productDTO,id);
     }
 
-    @DeleteMapping("/delete-product/{id}")
-    public void deleteProduct(@PathVariable Long id){
-        categoryService.deleteProduct(id);
-    }
-
-    @PutMapping("/update-product/{id}")
-    public void updateProduct(@RequestBody Product product,@PathVariable Long id){
-        categoryService.updateProduct(product,id);
-    }
+//    @DeleteMapping("/delete-product/{id}")
+//    public void deleteProduct(@PathVariable Long id){
+//        categoryService.deleteProduct(id);
+//    }
+//
+//    @PutMapping("/update-product/{id}")
+//    public void updateProduct(@RequestBody Product product,@PathVariable Long id){
+//        categoryService.updateProduct(product,id);
+//    }
 
 }

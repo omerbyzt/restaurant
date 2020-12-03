@@ -21,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("h2-console/**").permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
+
         http.authorizeRequests().antMatchers("/category/list-category").access("hasAnyRole('USER','ADMIN')");
         http.authorizeRequests().antMatchers("/category/list-products").access("hasAnyRole('USER','ADMIN')");
         http.authorizeRequests().antMatchers("/category/list-products**").access("hasAnyRole('USER','ADMIN')");
@@ -49,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/order/listall").access("hasRole('ADMIN')");
         http.authorizeRequests().antMatchers("/order/add").access("hasAnyRole('USER','ADMIN')");
         http.authorizeRequests().antMatchers("/order/delete/**").access("hasRole('ADMIN')");
+
         http.httpBasic();
         http.cors();
     }

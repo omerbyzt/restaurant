@@ -1,5 +1,7 @@
 package com.ba.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -13,10 +15,11 @@ public class Category{
     private String description;
     private String imageToUrl;
 
+    @JsonIgnore
     @OneToMany(
+            mappedBy = "category",
             cascade = CascadeType.ALL
     )
-    @JoinColumn(name = "category_id")
     private Set<Product> products;
 
     public Category(String name, String description, String imageToUrl) {

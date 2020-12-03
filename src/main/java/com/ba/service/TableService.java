@@ -1,8 +1,7 @@
 package com.ba.service;
 
-import com.ba.entity.Category;
 import com.ba.entity.TableCategory;
-import com.ba.entity.Tables;
+import com.ba.unused.Tables;
 import com.ba.repository.TableCategoryRepository;
 import com.ba.repository.TableRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.ba.controller;
 
-import com.ba.model.Authorities;
-import com.ba.model.Users;
+import com.ba.dto.AuthoritiesDTO;
+import com.ba.entity.Authorities;
 import com.ba.service.AuthoritiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,22 +23,22 @@ public class AuthoritiesController {
     }
 
     @GetMapping("/listall")
-    public List<Authorities> authoritiesList(){
+    public List<AuthoritiesDTO> authoritiesList(){
         return authoritiesService.authoritiesList();
     }
 
     @PostMapping("/add")
-    public void addAuth(@RequestBody Authorities auth){
-        authoritiesService.addAuth(auth);
+    public void addAuth(@RequestBody AuthoritiesDTO authDTO){
+        authoritiesService.addAuth(authDTO);
     }
 
     @DeleteMapping("/delete/{username}")
-    public List<Authorities> deleteAuth(@PathVariable String username){
+    public List<AuthoritiesDTO> deleteAuth(@PathVariable String username){
         return authoritiesService.deleteAuth(username);
     }
 
     @PutMapping("/update")
-    public Authorities updateAuth(@RequestBody Authorities auth){
+    public List<AuthoritiesDTO> updateAuth(@RequestBody AuthoritiesDTO auth){
         return authoritiesService.updateAuth(auth);
     }
 }

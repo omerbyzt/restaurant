@@ -1,6 +1,7 @@
 package com.ba.repository;
 
-import com.ba.model.Users;
+import com.ba.dto.UsersDTO;
+import com.ba.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

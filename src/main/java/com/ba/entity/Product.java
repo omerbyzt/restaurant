@@ -1,9 +1,8 @@
 package com.ba.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 public class Product {
@@ -16,6 +15,12 @@ public class Product {
     private String productCategory;
     private Double productPrice;
 
+    @ManyToOne
+    @JoinColumn(
+            name = "category_id"
+    )
+    private Category category;
+
     public Product(String productName, String productDesc, String productCategory, Double productPrice) {
         this.productName = productName;
         this.productDesc = productDesc;
@@ -25,6 +30,14 @@ public class Product {
 
     public Product() {
 
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Long getProductID() {

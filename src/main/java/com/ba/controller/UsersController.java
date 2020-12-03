@@ -1,6 +1,7 @@
 package com.ba.controller;
 
-import com.ba.model.Users;
+import com.ba.dto.UsersDTO;
+import com.ba.entity.Users;
 import com.ba.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,22 +23,22 @@ public class UsersController {
     }
 
     @GetMapping("/listall")
-    public List<Users> listUsers(){
+    public List<UsersDTO> listUsers(){
         return usersService.listUsers();
     }
 
     @PostMapping("/add")
-    public void addUsers(@RequestBody Users users){
-        usersService.addUsers(users);
+    public void addUsers(@RequestBody UsersDTO usersDTO){
+        usersService.addUsers(usersDTO);
     }
 
     @DeleteMapping("/delete/{username}")
-    public List<Users> deleteUsers(@PathVariable String username){
+    public List<UsersDTO> deleteUsers(@PathVariable String username){
         return usersService.deleteUsers(username);
     }
 
     @PutMapping("/update")
-    public List<Users> updateUsers(@RequestBody Users users){
-        return usersService.updateUsers(users);
+    public List<UsersDTO> updateUsers(@RequestBody UsersDTO usersDTO){
+        return usersService.updateUsers(usersDTO);
     }
 }

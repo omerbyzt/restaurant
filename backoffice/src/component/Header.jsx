@@ -34,9 +34,11 @@ class Header extends Component {
                 <Link to="/tablecategorylist">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table Category</button>
                 </Link>
-                <Link to="/tablelist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table</button>
-                </Link>
+
+                {/*<Link to="/tablelist">*/}
+                {/*    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table</button>*/}
+                {/*</Link>*/}
+
                 <Link to="/">
                     <button className="btn btn-danger btn-lg signOutBtn" onClick={this.clickSignOut}>Sign Out
                         : {sessionStorage.getItem('username')}</button>

@@ -1,26 +1,9 @@
-package com.ba.model;
+package com.ba.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Users {
-    @Id
+public class UsersDTO {
     private String username;
     private String password;
     private Boolean enabled;
-
-    public Users(String username, String password, Boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-    }
-
-    public Users() {
-
-    }
 
     public String getUsername() {
         return username;

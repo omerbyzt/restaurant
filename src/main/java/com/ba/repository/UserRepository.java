@@ -1,6 +1,6 @@
 package com.ba.repository;
 
-import com.ba.entity.User;
+import com.ba.unused.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

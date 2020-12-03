@@ -1,4 +1,4 @@
-package com.ba.entity;
+package com.ba.unused;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

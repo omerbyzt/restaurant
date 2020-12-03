@@ -9,7 +9,8 @@ class TableCategoryList extends Component {
         tableCategoryList: [],
         isUpdate : false,
         id:"",
-        name:""
+        name:"",
+        number:""
     }
 
     componentDidMount() {
@@ -41,16 +42,18 @@ class TableCategoryList extends Component {
         this.setState({
             isUpdate : !this.state.isUpdate,
             id:e.id,
-            name:e.name
+            name:e.name,
+            number:e.number
         })
     }
 
     updateTableCategory = (e) => {
-        const{id,name,tableCategoryList} = this.state
+        const{id,name,tableCategoryList,number} = this.state
 
         const putTableCategory = {
             id:id,
-            name:name
+            name:name,
+            number:number
         }
 
         axios.put('http://localhost:8080/table-category/update/',putTableCategory,
@@ -74,7 +77,7 @@ class TableCategoryList extends Component {
     }
 
     render() {
-        const {tableCategoryList,isUpdate,id,name} = this.state
+        const {tableCategoryList,isUpdate,id,name,number} = this.state
         return (
             <div>
                 <Header/>
@@ -114,6 +117,18 @@ class TableCategoryList extends Component {
                                             />
                                         </div>
 
+                                        <div className="form-group">
+                                            <label htmlFor="tablecategorynumber">Table Category Number</label>
+                                            <input type="text"
+                                                   className="form-control"
+                                                   placeholder={number}
+                                                   name="number"
+                                                   id="tablecategorynumber"
+                                                   value={number}
+                                                   onChange={this.changeInput}
+                                            />
+                                        </div>
+
                                         <button className="btn btn-warning btn-block"
                                                 onClick={this.updateTableCategory}>Update
                                         </button>
@@ -127,6 +142,7 @@ class TableCategoryList extends Component {
                     <tr>
                         <th>Table Category ID</th>
                         <th>Table Category Name</th>
+                        <th>Table Number</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -138,6 +154,9 @@ class TableCategoryList extends Component {
                                     <td>{v.id}</td>
                                     <td>
                                         <button className="btn btn-link" onClick={()=> this.filterList(v.name)}>{v.name}</button>
+                                    </td>
+                                    <td>
+                                        {v.number}
                                     </td>
                                     <td>
                                         <button className="btn btn-warning mr-2" onClick={this.onClickUpdateTableCategoryBtn.bind(this,v)}>Update</button>

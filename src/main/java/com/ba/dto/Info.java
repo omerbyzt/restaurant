@@ -1,4 +1,4 @@
-package com.ba.entity;
+package com.ba.dto;
 
 public class Info {
     private String key;

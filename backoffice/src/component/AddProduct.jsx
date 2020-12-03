@@ -48,7 +48,7 @@ class AddProduct extends Component {
             productName: name,
             productDesc: desc,
             productCategory: btnCategoryName,
-            productPrice: price
+            productPrice: price,
         }
         axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
             {headers:{Authorization: sessionStorage.getItem('token')}}
@@ -68,7 +68,7 @@ class AddProduct extends Component {
             <div>
             <Header></Header>
 
-                <div className="col-md-12 mb-4 mt-4">
+                <div className="col-md-6 mx-auto mb-4 mt-4">
                     {
                         isShowCard ?
                             <div className="card" align="left">

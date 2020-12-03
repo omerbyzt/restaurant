@@ -1,6 +1,6 @@
 package com.ba.controller;
 
-import com.ba.entity.Info;
+import com.ba.dto.Info;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

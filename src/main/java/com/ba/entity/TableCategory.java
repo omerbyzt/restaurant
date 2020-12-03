@@ -1,5 +1,7 @@
 package com.ba.entity;
 
+import com.ba.unused.Tables;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ public class TableCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    private int number;
 
     @OneToMany(
             cascade = CascadeType.ALL
@@ -19,13 +22,22 @@ public class TableCategory {
     private Set<Tables> tables;
 
 
-    public TableCategory(String name) {
+    public TableCategory(String name,int number) {
         this.name = name;
+        this.number = number;
     }
 
 
     public TableCategory() {
 
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public long getId() {

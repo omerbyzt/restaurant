@@ -136,12 +136,12 @@ class ClientHomePage extends Component {
                 Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
             }
         })
-        sessionStorage.setItem("table","No Item");
+        sessionStorage.setItem("table","No Table");
         window.location.reload();
     }
 
     onClickBackToMenuButton = () => {
-        sessionStorage.setItem("table","No Item")
+        sessionStorage.setItem("table","No Table")
     }
 
     render() {
@@ -191,7 +191,7 @@ class ClientHomePage extends Component {
                                                         <p className="card-text">Product Category
                                                             : {v.productCategory}</p>
                                                         <p className="card-text">Product Price : {v.productPrice}</p>
-                                                        <button className="btn btn-warning btn-block"
+                                                        <button className="btn btn-warning btn-block addListButton"
                                                                 onClick={() => this.onClickAddShoppingList(v)}>Add List
                                                             +
                                                         </button>

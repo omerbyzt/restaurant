@@ -1,6 +1,6 @@
 package com.ba.controller;
 
-import com.ba.entity.Tables;
+import com.ba.unused.Tables;
 import com.ba.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

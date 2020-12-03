@@ -51,7 +51,6 @@ class FirstPage extends Component {
     onClickDeleteBtn = (e) => {
 
         window.location.reload();
-        console.log('http://localhost:8080/product/delete/' + e.productID)
         axios.delete('http://localhost:8080/product/delete/' + e.productID,
             {headers: {Authorization: sessionStorage.getItem('token')}});
     }
