@@ -1,4 +1,4 @@
-package com.ba.service;
+package com.ba.unused;
 
 import com.ba.unused.User;
 import com.ba.repository.UserRepository;

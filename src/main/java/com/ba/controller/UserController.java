@@ -1,7 +1,7 @@
 package com.ba.controller;
 
 import com.ba.unused.User;
-import com.ba.service.UserService;
+import com.ba.unused.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -21,3 +21,5 @@ Insert into table_category VALUES(3,'Balkon',8)
 
 Insert into users VALUES('omer',true,'{noop}1234')
 Insert into authorities VALUES('omer','ROLE_USER')
+
+Insert into waiter VALUES(1,'Arapzade Mah','byztomer@gmail.com','Omer Beyazit','05373331244',2500,'img')

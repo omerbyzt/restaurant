@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import {Link} from "react-router-dom";
+import {Modal} from "react-bootstrap";
+import ClientHomePage from "./ClientHomePage";
 
 class TablePage extends Component {
     state = {
@@ -9,52 +11,237 @@ class TablePage extends Component {
         tableList: [],
         categoryName: "",
         categoryTableNumber: "",
-        array:[]
+        array: [],
+        showModal: false,
+        waiterList: [],
+        selectedTable: "",
+        showClearTableModal: false,
+        modalObjectList: [],
+        tableOrderList:[]
     }
 
     componentDidMount() {
-        const {tableCategoryList} = this.state;
+        const {tableCategoryList, waiterList} = this.state;
         axios.get('http://localhost:8080/table-category/listall',
             {headers: {Authorization: sessionStorage.getItem('token')}})
             .then(res => {
                 this.setState({tableCategoryList: res.data})
             });
+
+        axios.get('http://localhost:8080/waiter/list-waiters',
+            {headers: {Authorization: sessionStorage.getItem('token')}})
+            .then(res => {
+                this.setState({waiterList: res.data})
+            });
+
     }
 
     onClickTableCategoryName = (e) => {
-        // const{tableList}=this.state;
-        // axios.get('http://localhost:8080/table-category/list-table/'+e.id,
-        //     {headers:{Authorization: sessionStorage.getItem('token')}})
-        //     .then(res => {this.setState({tableList: res.data,
-        //     categoryName:e.name})});
-
-         this.setState({
-             categoryTableNumber: e.number,
-             categoryName : e.name
-         })
+        this.setState({
+            categoryTableNumber: e.number,
+            categoryName: e.name
+        })
 
         this.state.array = [];
 
-        for(let i = 1 ; i<=e.number;i++){
-            this.state.array.push(<button className="btn btn-success tableButtons" onClick={() => this.goShoppingList(i)} >{e.name} : {i}</button>)
+        let orderString;
+        let orderList;
+        if (localStorage.getItem("orderList") === null) {
+            orderString = "";
+        } else {
+            orderString = localStorage.getItem("orderList");
+            orderList = JSON.parse(localStorage.getItem("orderList"));
         }
 
+        let count = 0;
+        for (let i = 1; i <= e.number; i++) {//loop for selected category tables
+            count = 0;
+            let temp = `"${e.name} ${i}"`
+            if (orderString.indexOf(temp) !== -1) {
+                for (let j = 0; j < orderList.length; j++) {
+                    for (let k = 0; k < orderList[j].length; k++) {
+                        let tmp = JSON.stringify(orderList[j][k]);
+                        if (tmp.indexOf(temp) !== -1) {
+                            let startKey = "\"amount\":";
+                            let amountStartIndex = tmp.indexOf(startKey) + startKey.length;
+                            let endKey = ",\"totalPrice";
+                            let amountLastIndex = tmp.indexOf(endKey);
+                            let productAmount = Number(tmp.substring(amountStartIndex, amountLastIndex));
+                            count += productAmount;
+                        }
+                    }
+                }
+                this.state.array.push(<button className="btn btn-danger tableButtons"
+                                              onClick={() => this.fullTableModal(i)}><h4>{e.name} : {i}</h4> {count}
+                </button>)
+            } else {
+                this.state.array.push(<button className="btn btn-success tableButtons"
+                                              onClick={() => this.emptyTableModal(i)}>{e.name} : {i}</button>)
+            }
+        }
         return this.state.array;
+    }
+
+    handleFullTableModal = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
+    handleEmptyTableModal = () => {
+        this.setState({showClearTableModal: !this.state.showClearTableModal})
+    }
+
+    emptyTableModal = (e) => {
+        this.setState({
+            showModal: !this.state.showModal,
+            selectedTable: e
+        })
+    }
+
+    fullTableModal = (e) => {
+        const {modalObjectList,tableOrderList} = this.state;
+
+        this.setState({
+            showClearTableModal: !this.state.showClearTableModal
+        })
+        this.state.selectedTable = e;
+        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable)
+
+        let orderList = JSON.parse(localStorage.getItem("orderList"))
+
+        modalObjectList.length = 0;
+
+        let table = sessionStorage.getItem("table")
+        for (let i = 0; i < orderList.length; i++) {
+            for (let j = 0; j < orderList[i].length; j++) {
+                if(orderList[i][j].tableName === table){
+                    tableOrderList.push(orderList[i][j])
+                    let asd = {name: orderList[i][j].name, amount: orderList[i][j].amount,price : orderList[i][j].price}
+                    modalObjectList.push(asd);
+                }
+            }
+        }
     }
 
     goShoppingList = (e) => {
         this.props.history.push("/home")
-        sessionStorage.setItem("table", this.state.categoryName + " " + e)
+        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable)
+        sessionStorage.setItem("waiterID", e.id)
+        sessionStorage.setItem("waiterName", e.name)
     }
 
     onClickBackToMenuButton = () => {
         sessionStorage.setItem("table", "No Table")
     }
 
+    clearTable = () => {
+        let orderList = ClientHomePage.getOrderListFromStorage();
+
+        orderList.forEach(function (order, index) {
+            let firstOrderString = JSON.stringify(order[0])
+            let sessionTableString = "\"" + sessionStorage.getItem("table") + "\"";
+            if (firstOrderString.indexOf(sessionTableString) !== -1) {
+                orderList.splice(index, 1);
+            }
+        })
+        localStorage.setItem("orderList", JSON.stringify(orderList))
+        window.location.reload()
+    }
+
+    payTable = (value) => {
+        console.log(value);
+
+        axios.post('http://localhost:8080/order/add', value, {
+            headers: {
+                Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
+            }
+        })
+         let orderList = ClientHomePage.getOrderListFromStorage();
+
+        sessionStorage.setItem("waiterID","-1");
+        sessionStorage.setItem("waiterName","No Waiter");
+
+        orderList.forEach(function (order, index) {
+            let firstOrderString = JSON.stringify(order[0])
+            let sessionTableString = "\"" + sessionStorage.getItem("table") + "\"";
+            if (firstOrderString.indexOf(sessionTableString) !== -1) {
+                orderList.splice(index, 1);
+            }
+        })
+
+        localStorage.setItem("orderList", JSON.stringify(orderList))
+        window.alert("Payment Received");
+        sessionStorage.setItem("table","No Table");
+        this.props.history.push("/menu")
+    }
+
+    goTable = () => {
+        sessionStorage.setItem("table" ,this.state.categoryName + " " + this.state.selectedTable)
+        this.setState({
+            showModal:!this.state.showModal
+        })
+        //this.props.history.push("/home")
+    }
+
     render() {
-        const {tableCategoryList, tableList, categoryName, categoryTableNumber,array} = this.state
+        const {tableCategoryList, tableList, categoryName, categoryTableNumber, array, waiterList, modalObjectList} = this.state
         return (
             <div className="App">
+                <Modal show={this.state.showModal} onHide={() => this.handleFullTableModal()}>
+                    <Modal.Header closeButton>Modal Header</Modal.Header>
+                    <Modal.Body className="modelBody">
+                        {
+                            waiterList.map(v => {
+                                return (
+                                    <button className="btn btn-info btn-block mb-1"
+                                            onClick={() => this.goShoppingList(v)}>{v.name}</button>
+                                )
+                            })
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-danger" onClick={() => this.handleFullTableModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={this.state.showClearTableModal} onHide={() => this.handleEmptyTableModal()}>
+                    <Modal.Header closeButton><h4>Table Detail</h4></Modal.Header>
+                    <Modal.Body align="center">
+
+                        <Table>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                modalObjectList.map(v => {
+                                    return (
+                                        <tr>
+                                            <td>{v.name}</td>
+                                            <td>{v.amount}</td>
+                                            <td>{v.price*v.amount}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            </tbody>
+                        </Table>
+                        <button className="btn btn-warning btn-lg mr-2" onClick={() => this.goTable()}>Go Table</button>
+                        <button className="btn btn-success btn-lg mr-2" onClick={() => this.payTable(this.state.tableOrderList)}>Pay Table</button>
+                        <button className="btn btn-danger btn-lg" onClick={() => this.clearTable()}> Clear Table
+                        </button>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-danger" onClick={() => this.handleEmptyTableModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
                 <Table bordered>
                     <tbody>
                     <tr>
@@ -89,12 +276,6 @@ class TablePage extends Component {
                                 <div className="card-body tablesBigCardBody" id="tables-body">
                                     {
                                         this.state.array
-                                        // tableList.map(v => {
-                                        //     return (
-                                        //         <button className="btn btn-success tableButtons"
-                                        //                 onClick={() => this.goShoppingList(v)}>{categoryName} : {v.number}</button>
-                                        //     )
-                                        // })
                                     }
                                 </div>
                             </div>

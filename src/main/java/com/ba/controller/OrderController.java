@@ -23,12 +23,8 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public void addOrder(@RequestBody List<OrderDTO> orderDTO) {
+    public String addOrder(@RequestBody List<OrderDTO> orderDTO) {
         orderService.addOrder(orderDTO);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+        return "Order Added";
     }
 }

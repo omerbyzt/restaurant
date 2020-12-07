@@ -34,7 +34,7 @@ class AddTableCategory extends Component {
             <div>
                 <Header/>
 
-                <div className="col-md-6 mx-auto mb-4 mt-4">
+                <div className="col-md-5 mr-auto mb-4 mt-4">
                     <div className = "card">
                         <div className = "card-header">
                             <h4>Add Table Category</h4>

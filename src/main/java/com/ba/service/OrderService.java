@@ -21,11 +21,12 @@ public class OrderService {
         return OrderConverter.convertOrderListToOrderListDTO(orderRepository.findAll());
     }
 
-    public void addOrder(List<OrderDTO> orderDTO){
+    public String addOrder(List<OrderDTO> orderDTO){
         orderRepository.saveAll(OrderConverter.convertOrderListDTOToOrderList(orderDTO));
+        return "Order Added";
     }
 
-    public void deleteOrder(Long id){
-        orderRepository.deleteById(id);
-    }
+//    public void deleteOrder(Long id){
+//        orderRepository.deleteById(id);
+//    }
 }

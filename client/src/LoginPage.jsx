@@ -21,7 +21,7 @@ class LoginPage extends Component {
                 this.setState({userList: res.data});
                 console.log(res.data)
             });
-        sessionStorage.setItem("table","No Item");
+        sessionStorage.setItem("table","No Table");
     }
 
     clickLoginButton = (e) => {

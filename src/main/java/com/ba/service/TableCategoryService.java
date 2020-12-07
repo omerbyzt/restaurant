@@ -27,19 +27,19 @@ public class TableCategoryService {
         return TableCategoryConverter.convertDTOListtoList(tableCategoryRepository.findAll());
     }
 
-    public List<TableCategoryDTO> addTableCategory(TableCategoryDTO tableCategoryDTO) {
+    public String addTableCategory(TableCategoryDTO tableCategoryDTO) {
         tableCategoryRepository.save(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
-        return listTableCategories();
+        return "Table Category Added";
     }
 
-    public List<TableCategoryDTO> deleteTableCategory(Long id) {
+    public String deleteTableCategory(Long id) {
         tableCategoryRepository.deleteById(id);
-        return listTableCategories();
+        return "Table Category Deleted";
     }
 
-    public List<TableCategoryDTO> updateTableCategory(TableCategoryDTO tableCategoryDTO) {
+    public TableCategoryDTO updateTableCategory(TableCategoryDTO tableCategoryDTO) {
         tableCategoryRepository.saveAndFlush(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
-        return listTableCategories();
+        return tableCategoryDTO;
     }
 
 //    public Set<Tables> listTablesById(Long id) {

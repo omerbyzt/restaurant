@@ -24,17 +24,18 @@ public class AuthoritiesService {
         return AuthoritiesConverter.convertAuthListToAuthListDTO(authoritiesRepository.findAll());
     }
 
-    public void addAuth(AuthoritiesDTO authDTO){
+    public String addAuth(AuthoritiesDTO authDTO){
         authoritiesRepository.save(AuthoritiesConverter.convertAuthDTOToauth(authDTO));
+        return "Auth Added";
     }
 
-    public List<AuthoritiesDTO> deleteAuth(String username){
+    public String deleteAuth(String username){
         authoritiesRepository.deleteById(username);
-        return authoritiesList();
+        return "Auth Deleted";
     }
 
-    public List<AuthoritiesDTO> updateAuth (AuthoritiesDTO authDTO){
+    public AuthoritiesDTO updateAuth (AuthoritiesDTO authDTO){
         authoritiesRepository.saveAndFlush(AuthoritiesConverter.convertAuthDTOToauth(authDTO));
-        return authoritiesList();
+        return authDTO;
     }
 }

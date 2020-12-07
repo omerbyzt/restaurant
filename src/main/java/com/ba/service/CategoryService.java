@@ -8,11 +8,11 @@ import com.ba.entity.Product;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -27,12 +27,14 @@ public class CategoryService {
         return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
     }
 
-    public void addCategory(CategoryDTO categoryDTO) {
+    public String addCategory(CategoryDTO categoryDTO) {
         categoryRepository.save(CategoryConvertor.convertDTOtoCategory(categoryDTO));
+        return "Category Added";
     }
 
-    public void deleteCategory(Long id) {
+    public String deleteCategory(Long id) {
         categoryRepository.deleteById(id);
+        return "Category Deleted";
     }
 
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
@@ -40,33 +42,19 @@ public class CategoryService {
         return categoryDTO;
     }
 
-//    public List<Product> listProducts() {
-//        return productRepository.findAll();
-//    }
-
     public Set<ProductDTO> listProductsById(Long id) {
-        Optional<Category> category=categoryRepository.findById(id);
+        Optional<Category> category = categoryRepository.findById(id);
         return CategoryConvertor.convertOptionalCategoryToSetDTO(category);
     }
 
-    public void addProduct(ProductDTO productDTO, Long id) {
+    public String addProduct(ProductDTO productDTO, Long id) {
         Optional<Category> category = categoryRepository.findById(id);
-        Product product =  CategoryConvertor.convertDTOToProduct(productDTO);
+        Product product = CategoryConvertor.convertDTOToProduct(productDTO);
 
         product.setCategory(category.get());
         category.get().getProducts().add(product);
         categoryRepository.save(category.get());
-    }
 
-//    public void deleteProduct(Long id) {
-//        productRepository.deleteById(id);
-//    }
-//
-//    //
-//    public void updateProduct(Product product, Long id) {
-//        Optional<Category> category = categoryRepository.findById(id);
-//        //Optional<Product> product2 =category.get().getProducts().stream().filter(p -> p.getProductID() == product.getProductID()).findAny();
-//
-//        categoryRepository.saveAndFlush(category.get());
-//    }
+        return "Product Added";
+    }
 }

@@ -28,17 +28,19 @@ public class AuthoritiesController {
     }
 
     @PostMapping("/add")
-    public void addAuth(@RequestBody AuthoritiesDTO authDTO){
+    public String addAuth(@RequestBody AuthoritiesDTO authDTO){
         authoritiesService.addAuth(authDTO);
+        return "Auth Added";
     }
 
     @DeleteMapping("/delete/{username}")
-    public List<AuthoritiesDTO> deleteAuth(@PathVariable String username){
-        return authoritiesService.deleteAuth(username);
+    public String deleteAuth(@PathVariable String username){
+        authoritiesService.deleteAuth(username);
+        return "Auth Deleted";
     }
 
     @PutMapping("/update")
-    public List<AuthoritiesDTO> updateAuth(@RequestBody AuthoritiesDTO auth){
+    public AuthoritiesDTO updateAuth(@RequestBody AuthoritiesDTO auth){
         return authoritiesService.updateAuth(auth);
     }
 }

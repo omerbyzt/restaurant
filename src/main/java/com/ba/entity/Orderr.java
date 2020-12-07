@@ -15,6 +15,15 @@ public class Orderr {
     private Long price;
     private Long amount;
     private String tableName;
+    private Long waiterID;
+
+    public Long getWaiterID() {
+        return waiterID;
+    }
+
+    public void setWaiterID(Long waiterID) {
+        this.waiterID = waiterID;
+    }
 
     @Column
     private Date orderDate = new Timestamp(System.currentTimeMillis());

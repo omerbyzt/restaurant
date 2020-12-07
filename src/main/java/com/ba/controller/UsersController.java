@@ -28,17 +28,18 @@ public class UsersController {
     }
 
     @PostMapping("/add")
-    public void addUsers(@RequestBody UsersDTO usersDTO){
+    public String addUsers(@RequestBody UsersDTO usersDTO){
         usersService.addUsers(usersDTO);
+        return "User Added";
     }
 
     @DeleteMapping("/delete/{username}")
-    public List<UsersDTO> deleteUsers(@PathVariable String username){
+    public String deleteUsers(@PathVariable String username){
         return usersService.deleteUsers(username);
     }
 
     @PutMapping("/update")
-    public List<UsersDTO> updateUsers(@RequestBody UsersDTO usersDTO){
+    public UsersDTO updateUsers(@RequestBody UsersDTO usersDTO){
         return usersService.updateUsers(usersDTO);
     }
 }

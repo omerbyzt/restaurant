@@ -22,29 +22,15 @@ public class ProductController {
         return productService.listAllProducts();
     }
 
-//    @PostMapping("/add")
-//    public void addNews(@RequestBody Product product){
-//        productService.addProduct(product);
-//    }
-
     @DeleteMapping("/delete/{id}")
-    public void deleteNews(@PathVariable Long id){
+    public String deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
+        return "Product Deleted";
     }
 
     @PutMapping("/update/{id}")
-    public List<ProductDTO> updateNews(@RequestBody ProductDTO productDTO){
-        return productService.updateProduct(productDTO);
+    public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
+        productService.updateProduct(productDTO);
+        return productDTO;
     }
-
-//    @GetMapping("/listcategory")
-//    public List<String> listAllCategories(){
-//        List<String> tmpList =  productService.listAllCategories();
-//        return productService.listAllCategories();
-//    }
-
-//    @GetMapping("listcategory/{categoryName}")
-//    public List<Product> listSelectedCategory(@PathVariable String categoryName){
-//        return productService.listSelectedCategory(categoryName);
-//    }
 }

@@ -21,24 +21,14 @@ public class ProductService {
         return ProductConverter.convertProductToProductDTO(productRepository.findAll());
     }
 
-//    public void addProduct(Product product){
-//        productRepository.save(product);
-//    }
-
-    public void deleteProduct(Long id){
+    public String deleteProduct(Long id){
         productRepository.deleteById(id);
+        return "Product Deleted";
     }
 
-    public List<ProductDTO> updateProduct(ProductDTO productDTO){
+    public ProductDTO updateProduct(ProductDTO productDTO){
         productRepository.saveAndFlush(ProductConverter.convertDTOToProduct(productDTO));
-        return listAllProducts();
+        return productDTO;
     }
 
-//    public List<String> listAllCategories(){
-//        return productRepository.listAllCategories();
-//    }
-
-//    public List<Product> listSelectedCategory(String categoryName){
-//        return productRepository.listSelectedCategory(categoryName);
-//    }
 }

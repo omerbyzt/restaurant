@@ -68,7 +68,7 @@ class AddProduct extends Component {
             <div>
             <Header></Header>
 
-                <div className="col-md-6 mx-auto mb-4 mt-4">
+                <div className="col-md-6 mr-auto mb-4 mt-4">
                     {
                         isShowCard ?
                             <div className="card" align="left">

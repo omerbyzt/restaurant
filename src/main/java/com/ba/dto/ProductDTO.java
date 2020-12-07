@@ -10,6 +10,7 @@ public class ProductDTO {
     private String productCategory;
     private Double productPrice;
 
+    //
     private Category category;
 
     public Long getProductID() {

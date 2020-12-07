@@ -15,6 +15,8 @@ import TableCategoryList from "./component/TableCategoryList";
 import AddTableCategory from "./component/AddTableCategory";
 import TableList from "./component/TableList";
 import AddTable from "./component/AddTable";
+import WaiterList from "./component/WaiterList";
+import AddWaiter from "./component/AddWaiter";
 
 class App extends Component {
     render() {
@@ -36,6 +38,8 @@ class App extends Component {
                         <Route path = "/addtablecategory" component={AddTableCategory}></Route>
                         <Route path = "/tablelist" component={TableList}></Route>
                         <Route path = "/addtable" component={AddTable}></Route>
+                        <Route path = "/waiterlist" component={WaiterList}></Route>
+                        <Route path = "/addwaiter" component={AddWaiter}></Route>
                     </Switch>
                 </Router>
             </div>

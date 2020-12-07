@@ -20,6 +20,7 @@ public class OrderConverter {
             orderDTO.setAmount(orderListItem.getAmount());
             orderDTO.setPrice(orderListItem.getPrice());
             orderDTO.setTableName(orderListItem.getTableName());
+            orderDTO.setWaiterID(orderListItem.getWaiterID());
             orderListDTO.add(orderDTO);
         }
         return orderListDTO;
@@ -36,6 +37,7 @@ public class OrderConverter {
             orderr.setAmount(orderDTO.get(i).getAmount());
             orderr.setPrice(orderDTO.get(i).getPrice());
             orderr.setTableName(orderDTO.get(i).getTableName());
+            orderr.setWaiterID(orderDTO.get(i).getWaiterID());
             orderList.add(orderr);
         }
         return orderList;

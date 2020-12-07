@@ -11,6 +11,15 @@ public class OrderDTO {
     private Long amount;
     private String tableName;
     private Date orderDate = new Timestamp(System.currentTimeMillis());
+    private Long waiterID;
+
+    public Long getWaiterID() {
+        return waiterID;
+    }
+
+    public void setWaiterID(Long waiterID) {
+        this.waiterID = waiterID;
+    }
 
     public Long getOrderID() {
         return orderID;

@@ -24,18 +24,21 @@ public class TableCategoryController {
     }
 
     @PostMapping("/add")
-    public List<TableCategoryDTO> addTableCategory(@RequestBody TableCategoryDTO tableCategoryDTO){
-        return tableCategoryService.addTableCategory(tableCategoryDTO);
+    public String addTableCategory(@RequestBody TableCategoryDTO tableCategoryDTO){
+        tableCategoryService.addTableCategory(tableCategoryDTO);
+        return "Table Category Added";
     }
 
     @DeleteMapping("/delete/{id}")
-    public List<TableCategoryDTO> deleteTableCategory(@PathVariable Long id){
-        return tableCategoryService.deleteTableCategory(id);
+    public String deleteTableCategory(@PathVariable Long id){
+        tableCategoryService.deleteTableCategory(id);
+        return "Table Category Deleted";
     }
 
     @PutMapping("/update")
-    public List<TableCategoryDTO> updateTableCategory(@RequestBody TableCategoryDTO tableCategoryDTO){
-        return tableCategoryService.updateTableCategory(tableCategoryDTO);
+    public TableCategoryDTO updateTableCategory(@RequestBody TableCategoryDTO tableCategoryDTO){
+        tableCategoryService.updateTableCategory(tableCategoryDTO);
+        return tableCategoryDTO;
     }
 
 //    @GetMapping("/list-table/{id}")

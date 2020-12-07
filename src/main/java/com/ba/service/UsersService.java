@@ -26,17 +26,18 @@ public class UsersService {
         return UsersConverter.convertUsersListToDTO(usersRepository.findAll());
     }
 
-    public void addUsers(UsersDTO usersDTO) {
+    public String addUsers(UsersDTO usersDTO) {
         usersRepository.save(UsersConverter.convertUsersDTOToUsers(usersDTO));
+        return "Users Added";
     }
 
-    public List<UsersDTO> deleteUsers(String username) {
+    public String deleteUsers(String username) {
         usersRepository.deleteById(username);
-        return listUsers();
+        return "Users Deleted";
     }
 
-    public List<UsersDTO> updateUsers(UsersDTO usersDTO) {
+    public UsersDTO updateUsers(UsersDTO usersDTO) {
         usersRepository.saveAndFlush(UsersConverter.convertUsersDTOToUsers(usersDTO));
-        return listUsers();
+        return usersDTO;
     }
 }

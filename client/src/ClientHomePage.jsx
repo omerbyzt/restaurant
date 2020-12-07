@@ -47,6 +47,38 @@ class ClientHomePage extends Component {
                     categoryList: data
                 })
             })
+
+        //
+        let uri2 = 'http://localhost:8080/product/listall';
+
+        fetch(uri2, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('token'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    content: data
+                })
+            })
+        //
+
+        let allOrders = ClientHomePage.getOrderListFromStorage();
+        let table = sessionStorage.getItem("table")
+        if(allOrders.length>0){
+            for(let i = 0 ; i<allOrders.length;i++){
+                if(allOrders[i][0].tableName.indexOf(table) !==-1){
+                    for (let j = 0 ; j<allOrders[0].length; j++){
+                        this.state.shoppingList.push(allOrders[i][j]);
+                        this.state.totalPayment += allOrders[i][j].totalPrice;
+                    }
+                    allOrders.splice(i,1);
+                }
+            }
+            localStorage.setItem("orderList",JSON.stringify(allOrders))
+        }
     }
 
     onClickCategoryName = (category) => {
@@ -92,7 +124,8 @@ class ClientHomePage extends Component {
                         price: param.productPrice,
                         amount: 1,
                         totalPrice: param.productPrice,
-                        tableName:sessionStorage.getItem("table")
+                        tableName:sessionStorage.getItem("table"),
+                        waiterID:sessionStorage.getItem("waiterID")
                     }
                 }, () => this.setState({shoppingList: [...this.state.shoppingList, this.state.shoppingListObj]})
             )
@@ -129,19 +162,52 @@ class ClientHomePage extends Component {
     }
 
     clickPayButton = (value) => {
-        console.log(value);
+        // CREATE TABLE OR PAY DIRECTLY
+        // if(sessionStorage.getItem("table") === "No Table"){
+            console.log(value);
 
-        axios.post('http://localhost:8080/order/add', value, {
-            headers: {
-                Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
-            }
-        })
+            axios.post('http://localhost:8080/order/add', value, {
+                headers: {
+                    Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
+                }
+            })
+            window.alert("Ödeme Alındı");
+        // }else{
+        //     let orderList = ClientHomePage.getOrderListFromStorage();
+        //     if (this.state.shoppingList.length>0){
+        //         orderList.push(this.state.shoppingList);
+        //         localStorage.setItem("orderList",JSON.stringify(orderList));
+        //     }
+        //     window.alert("Table Created");
+        // }
+
         sessionStorage.setItem("table","No Table");
-        window.location.reload();
+        sessionStorage.setItem("waiterID","-1");
+        sessionStorage.setItem("waiterName","No Waiter");
+        this.props.history.push("/menu")
+    }
+
+    static getOrderListFromStorage = () => {
+        let orderList;
+
+        if(localStorage.getItem("orderList") === null){
+            orderList=[];
+        }else{
+            orderList = JSON.parse(localStorage.getItem("orderList"));
+        }
+
+        return orderList;
     }
 
     onClickBackToMenuButton = () => {
+        let orderList = ClientHomePage.getOrderListFromStorage();
+        if (this.state.shoppingList.length>0){
+            orderList.push(this.state.shoppingList);
+            localStorage.setItem("orderList",JSON.stringify(orderList));
+        }
         sessionStorage.setItem("table","No Table")
+        sessionStorage.setItem("waiterID","-1")
+        sessionStorage.setItem("waiterName","No Waiter")
     }
 
     render() {
@@ -168,6 +234,8 @@ class ClientHomePage extends Component {
                                     }
                                 </div>
                             </div>
+                            <button className="btn btn-default btnPay"><b>Waiter : </b>{sessionStorage.getItem("waiterName")}</button>
+                            <Link to="/tablepage"><button className="btn btn-default btnPay" ><b>Selected Table : </b>{sessionStorage.getItem("table")}</button></Link>
                             <Link to="/menu"><button className="btn btn-danger btnPay" onClick={this.onClickBackToMenuButton}>Back to Menu</button></Link>
                         </th>
                         <th className="col-md-6">
