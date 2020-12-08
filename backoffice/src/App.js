@@ -17,6 +17,7 @@ import TableList from "./component/TableList";
 import AddTable from "./component/AddTable";
 import WaiterList from "./component/WaiterList";
 import AddWaiter from "./component/AddWaiter";
+import AddImage from "./component/AddImage";
 
 class App extends Component {
     render() {
@@ -40,6 +41,7 @@ class App extends Component {
                         <Route path = "/addtable" component={AddTable}></Route>
                         <Route path = "/waiterlist" component={WaiterList}></Route>
                         <Route path = "/addwaiter" component={AddWaiter}></Route>
+                        <Route path = "/addimage" component={AddImage}></Route>
                     </Switch>
                 </Router>
             </div>

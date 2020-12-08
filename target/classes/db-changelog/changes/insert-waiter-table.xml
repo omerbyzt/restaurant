@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="omer.byzt" id="07-12-2020_15:10">
+
+        <insert tableName="waiter">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Ömer Beyazit"/>
+            <column name="phone_Number" value="05373331244"/>
+            <column name="mail" value="byztomer@gmail.com"/>
+            <column name="address" value="Arapzade Mahallesi"/>
+            <column name="url_To_Image" value="img"/>
+            <column name="salary" value="3000"/>
+        </insert>
+
+        <insert tableName="waiter">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="İbrahim"/>
+            <column name="phone_Number" value="05371352511"/>
+            <column name="mail" value="ibolee@gmail.com"/>
+            <column name="address" value="Beykent Merkez"/>
+            <column name="url_To_Image" value="img"/>
+            <column name="salary" value="7500"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

@@ -19,8 +19,8 @@ public class InfoController {
     @Value("${spring.h2.console.enabled}")
     private String consoleEnabled;
 
-    @Value("${spring.jpa.hibernate.ddl-auto}")
-    private String ddlAuto;
+//    @Value("${spring.jpa.hibernate.ddl-auto}")
+//    private String ddlAuto;
 
     @Value("${spring.datasource.url}")
     private String dataSourceUrl;
@@ -65,8 +65,8 @@ public class InfoController {
         Info infoDataSourceUrl = new Info("spring.datasource.url",dataSourceUrl);
         infoList.add(infoDataSourceUrl);
 
-        Info infoDdlAuto = new Info("spring.jpa.hibernate.ddl-auto",ddlAuto);
-        infoList.add(infoDdlAuto);
+//        Info infoDdlAuto = new Info("spring.jpa.hibernate.ddl-auto",ddlAuto);
+//        infoList.add(infoDdlAuto);
 
         Info infoUserName = new Info("spring.datasource.username",username);
         infoList.add(infoUserName);

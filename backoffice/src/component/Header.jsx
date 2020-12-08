@@ -37,6 +37,9 @@ class Header extends Component {
                 <Link to="/waiterlist">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Waiter</button>
                 </Link>
+                <Link to="/addimage">
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Image</button>
+                </Link>
 
                 {/*<Link to="/tablelist">*/}
                 {/*    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Table</button>*/}

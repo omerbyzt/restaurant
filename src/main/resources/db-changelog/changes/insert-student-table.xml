@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<changeSet author="omer.byzt" id="07-12-2020_15:10">
+
+    <insert tableName="student">
+        <column name="id" valueNumeric="1"/>
+        <column name="name" value="ahmet"/>
+        <column name="passportNumber" value="TC123"/>
+    </insert>
+
+    <insert tableName="student">
+        <column name="id" valueNumeric="2"/>
+        <column name="name" value="omer"/>
+        <column name="passportNumber" value="TC321"/>
+    </insert>
+
+    <insert tableName="student">
+        <column name="id" valueNumeric="3"/>
+        <column name="name" value="ibo"/>
+        <column name="passportNumber" value="TC456"/>
+    </insert>
+</changeSet>
+</databaseChangeLog>
