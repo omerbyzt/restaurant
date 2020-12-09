@@ -1,5 +1,7 @@
 package com.ba.service;
 
+import com.ba.builder.TableCategoryBuilder;
+import com.ba.builder.TableCategoryDTOBuilder;
 import com.ba.converter.TableCategoryConverter;
 import com.ba.dto.TableCategoryDTO;
 import com.ba.entity.TableCategory;
@@ -35,16 +37,13 @@ public class TableCategoryServiceTest {
     private TableCategoryDTO tableCategoryDTO = new TableCategoryDTO();
     private List<TableCategoryDTO> tableCategoryDTOList = new ArrayList<>();
     private List<TableCategory> tableCategoriesList = new ArrayList<>();
+    private long id = 1;
 
     @Before
     public void setUp() throws Exception {
-        tableCategory.setId(1);
-        tableCategory.setName("Bahçe");
-        tableCategory.setNumber(15);
 
-        tableCategoryDTO.setId(2);
-        tableCategoryDTO.setName("BahçeDTO");
-        tableCategoryDTO.setNumber(25);
+        tableCategory = new TableCategoryBuilder().id(1L).name("Bahçe").number(15).build();
+        tableCategoryDTO = new TableCategoryDTOBuilder().id(2L).name("BahçeDTO").number(25).build();
 
         tableCategoryDTOList.add(tableCategoryDTO);
         tableCategoriesList.add(tableCategory);
@@ -52,6 +51,7 @@ public class TableCategoryServiceTest {
 
     @Test
     public void shouldAddNewTableCategory() {
+
         Mockito.when(tableCategoryRepository.save(any())).thenReturn(tableCategory);
 
         String res = tableCategoryService.addTableCategory(tableCategoryDTO);
@@ -62,7 +62,6 @@ public class TableCategoryServiceTest {
 
     @Test
     public void shouldDeleteTableCategory() {
-        long id = 111;
 
         String res = tableCategoryService.deleteTableCategory(id);
 
@@ -72,7 +71,6 @@ public class TableCategoryServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldNotDeleteTableCategoryWhenThrownException() {
-        long id = 111;
 
         doThrow(new RuntimeException("Cant delete here")).when(tableCategoryRepository).deleteById(id);
         String res = tableCategoryService.deleteTableCategory(id);
@@ -80,6 +78,7 @@ public class TableCategoryServiceTest {
 
     @Test
     public void shouldUpdateTableCategory() {
+
         when(tableCategoryRepository.saveAndFlush(tableCategory)).thenReturn(tableCategory);
 
         TableCategoryDTO tableCategoryDTO2 = tableCategoryService.updateTableCategory(tableCategoryDTO);
@@ -90,6 +89,7 @@ public class TableCategoryServiceTest {
 
     @Test
     public void shouldListTableCategory() {
+
         when(tableCategoryRepository.findAll()).thenReturn(tableCategoriesList);
 
         List<TableCategoryDTO> tempDTOList = TableCategoryConverter.convertDTOListtoList(tableCategoriesList);

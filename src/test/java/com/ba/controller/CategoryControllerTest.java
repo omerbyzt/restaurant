@@ -1,5 +1,9 @@
 package com.ba.controller;
 
+import com.ba.builder.CategoryBuilder;
+import com.ba.builder.CategoryDTOBuilder;
+import com.ba.builder.ProductBuilder;
+import com.ba.builder.ProductDTOBuilder;
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
@@ -33,39 +37,25 @@ public class CategoryControllerTest {
     private CategoryDTO categoryDTO = new CategoryDTO();
     private List<Category> categoryList = new ArrayList<>();
     private List<CategoryDTO> categoryListDTO = new ArrayList<>();
-    private Set<Product> productSetList = new HashSet<>();
-    private Set<ProductDTO> productSetListDTO = new HashSet<>();
+    private List<Product> productSetList = new ArrayList<>();
+    private List<ProductDTO> productSetListDTO = new ArrayList<>();
     private Product product = new Product();
     private ProductDTO productDTO = new ProductDTO();
     private Long id = 111L;
 
     @Before
     public void setUp() throws Exception {
-        category.setImageToUrl("img");
-        category.setName("Çorba");
-        category.setDescription("Sıcak Çorba");
-        category.setId(1L);
 
-        categoryDTO.setImageToUrl("imgDTO");
-        categoryDTO.setName("ÇorbaDTO");
-        categoryDTO.setDescription("Sıcak ÇorbaDTO");
-        categoryDTO.setId(2L);
+        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).imageToUrl("img").build();
+        categoryDTO = new CategoryDTOBuilder().id(2L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").imageToUrl("imgDTO").build();
 
         categoryList.add(category);
 
-        product.setProductID(1L);
-        product.setProductPrice(15D);
-        product.setProductCategory("Çorba");
-        product.setProductDesc("desc");
-        product.setProductName("Mercimek");
-        product.setCategory(category);
+//        product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").category(category).build();
+//        productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").category(category).build();
 
-        productDTO.setProductID(1L);
-        productDTO.setProductPrice(15D);
-        productDTO.setProductCategory("ÇorbaDTO");
-        productDTO.setProductDesc("descDTO");
-        productDTO.setProductName("MercimekDTO");
-        productDTO.setCategory(category);
+        product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").build();
+        productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").build();
 
         categoryListDTO.add(categoryDTO);
         productSetListDTO.add(productDTO);
@@ -102,7 +92,7 @@ public class CategoryControllerTest {
     @Test
     public void shouldVerifyListProductById() {
         when(service.listProductsById(id)).thenReturn(productSetListDTO);
-        Set<ProductDTO> tempDTOList = controller.listProductsById(id);
+        List<ProductDTO> tempDTOList = controller.listProductsById(id);
         assertEquals(tempDTOList, productSetListDTO);
     }
 

@@ -1,4 +1,4 @@
-package com.ba.controller;
+package com.ba.unused;
 
 import com.ba.unused.Tables;
 import com.ba.unused.TableService;

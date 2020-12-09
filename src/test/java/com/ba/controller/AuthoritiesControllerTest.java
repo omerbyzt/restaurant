@@ -1,5 +1,7 @@
 package com.ba.controller;
 
+import com.ba.builder.AuthoritiesBuilder;
+import com.ba.builder.AuthoritiesDTOBuilder;
 import com.ba.dto.AuthoritiesDTO;
 import com.ba.entity.Authorities;
 import com.ba.service.AuthoritiesService;
@@ -34,11 +36,10 @@ public class AuthoritiesControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        auth.setUsername("omer");
-        auth.setAuthority("ROLE_USER");
 
-        authDTO.setUsername("omerDTO");
-        authDTO.setAuthority("ROLE_USER");
+        auth = new AuthoritiesBuilder().username("omer").authority("ROLE_USER").build();
+
+        authDTO = new AuthoritiesDTOBuilder().username("omerDTO").authority("ROLE_USER").build();
 
         authList.add(auth);
         authListDTO.add(authDTO);

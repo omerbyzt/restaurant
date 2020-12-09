@@ -1,5 +1,7 @@
 package com.ba.service;
 
+import com.ba.builder.OrderBuilder;
+import com.ba.builder.OrderDTOBuilder;
 import com.ba.dto.OrderDTO;
 import com.ba.entity.Orderr;
 import com.ba.repository.OrderRepository;
@@ -35,24 +37,9 @@ public class OrderServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        Date tempDate = new Date();
-        order.setTableName("Salon 1");
-        order.setpId(1L);
-        order.setAmount(3L);
-        order.setName("Mercimek");
-        order.setOrderDate(tempDate);
-        order.setOrderID(1L);
-        order.setPrice(15L);
-        order.setWaiterID(1L);
 
-        orderDTO.setTableName("Salon 1DTO");
-        orderDTO.setpId(1L);
-        orderDTO.setAmount(3L);
-        orderDTO.setName("MercimekDTO");
-        orderDTO.setOrderDate(tempDate);
-        orderDTO.setOrderID(1L);
-        orderDTO.setPrice(15L);
-        orderDTO.setWaiterID(1L);
+        order = new OrderBuilder().tableName("Salon 1").pId(1L).amount(3L).name("Mercimek").orderID(1L).price(15L).waiterID(1L).build();
+        orderDTO = new OrderDTOBuilder().tableName("Salon 1DTO").pId(1L).amount(3L).name("MercimekDTO").orderID(1L).price(15L).waiterID(1L).build();
 
         listOrderDTO.add(orderDTO);
         listOrderr.add(order);
@@ -71,7 +58,6 @@ public class OrderServiceTest {
 
     @Test
     public void shouldListOrder() {
-        //Mockito.when(orderRepository.findAll()).thenReturn(listOrderr);
 
         List<OrderDTO> orderDTOList = orderService.listAllOrders();
         assertNotNull(orderDTOList);

@@ -1,5 +1,7 @@
 package com.ba.service;
 
+import com.ba.builder.UsersBuilder;
+import com.ba.builder.UsersDTOBuilder;
 import com.ba.dto.UsersDTO;
 import com.ba.entity.Users;
 import com.ba.repository.UsersRepository;
@@ -33,13 +35,9 @@ public class UsersServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        users.setEnabled(true);
-        users.setPassword("123");
-        users.setUsername("omer");
 
-        usersDTO.setUsername("omerDTO");
-        usersDTO.setPassword("123123");
-        usersDTO.setEnabled(true);
+        users = new UsersBuilder().username("omer").password("123").enabled(true).build();
+        usersDTO = new UsersDTOBuilder().username("omerDTO").password("123123").enabled(true).build();
     }
 
     @Test

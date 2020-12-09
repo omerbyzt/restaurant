@@ -1,9 +1,12 @@
 package com.ba.entity;
 
+import com.ba.dto.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,13 +17,16 @@ public class Category{
     private String name;
     private String description;
     private String imageToUrl;
-
-    @JsonIgnore
-    @OneToMany(
-            mappedBy = "category",
-            cascade = CascadeType.ALL
-    )
-    private Set<Product> products;
+//
+//    @JsonIgnore
+//    @OneToMany(
+//            mappedBy = "category",
+//            cascade = CascadeType.ALL
+//    )
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(name="CATEGORY_PRODUCT" , joinColumns = @JoinColumn(name="category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products;
 
     public Category(String name, String description, String imageToUrl) {
         this.name = name;
@@ -64,11 +70,11 @@ public class Category{
         this.imageToUrl = imageToUrl;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

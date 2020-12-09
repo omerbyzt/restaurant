@@ -42,7 +42,7 @@ public class CategoryService {
         return categoryDTO;
     }
 
-    public Set<ProductDTO> listProductsById(Long id) {
+    public List<ProductDTO> listProductsById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         return CategoryConvertor.convertOptionalCategoryToSetDTO(category);
     }
@@ -51,9 +51,9 @@ public class CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         Product product = CategoryConvertor.convertDTOToProduct(productDTO);
 
-        product.setCategory(category.get());
-        category.get().getProducts().add(product);
-        categoryRepository.save(category.get());
+       // product.setCategory(category.get());
+//        category.get().getProducts().add(product);
+//        categoryRepository.save(category.get());
 
         return "Product Added";
     }

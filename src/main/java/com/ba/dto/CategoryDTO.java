@@ -2,6 +2,7 @@ package com.ba.dto;
 
 import com.ba.entity.Product;
 
+import java.util.List;
 import java.util.Set;
 
 public class CategoryDTO {
@@ -10,7 +11,7 @@ public class CategoryDTO {
     private String name;
     private String description;
     private String imageToUrl;
-    private Set<Product> products;
+    private List<Product> products;
 
     public Long getId() {
         return id;
@@ -44,11 +45,11 @@ public class CategoryDTO {
         this.imageToUrl = imageToUrl;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

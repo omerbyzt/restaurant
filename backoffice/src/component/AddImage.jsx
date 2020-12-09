@@ -1,19 +1,3 @@
-// import React, {Component} from 'react';
-// import Header from "./Header";
-//
-// class AddImage extends Component {
-//     render() {
-//         return (
-//             <div>
-//                 <Header/>
-//                 BURALARA HEP IMAGE GELECEK
-//             </div>
-//         );
-//     }
-// }
-//
-// export default AddImage;
-
 import React, {useState, useEffect} from 'react';
 //import '../App.css';
 import Header from "./Header";

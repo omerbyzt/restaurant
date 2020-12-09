@@ -1,5 +1,7 @@
 package com.ba.controller;
 
+import com.ba.builder.UsersBuilder;
+import com.ba.builder.UsersDTOBuilder;
 import com.ba.dto.AuthoritiesDTO;
 import com.ba.dto.UsersDTO;
 import com.ba.entity.Users;
@@ -31,21 +33,16 @@ public class UsersControllerTest {
     private UsersDTO usersDTO = new UsersDTO();
     private List<Users> usersList = new ArrayList<>();
     private List<UsersDTO> usersListDTO = new ArrayList<>();
-    private String username;
+    private String username = "omer";
 
     @Before
     public void setUp() throws Exception {
-        users.setEnabled(true);
-        users.setPassword("123");
-        users.setUsername("omer");
 
-        usersDTO.setUsername("omerDTO");
-        usersDTO.setPassword("123123");
-        usersDTO.setEnabled(true);
+        users = new UsersBuilder().username("omer").password("123").enabled(true).build();
+        usersDTO = new UsersDTOBuilder().username("omerDTO").password("123123").enabled(true).build();
 
         usersList.add(users);
         usersListDTO.add(usersDTO);
-        username = "omer";
     }
 
     @Test

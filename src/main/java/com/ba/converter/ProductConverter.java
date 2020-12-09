@@ -15,7 +15,8 @@ public class ProductConverter {
         for (Product productListItem : productList){
             ProductDTO productDTO = new ProductDTO();
 
-            productDTO.setCategory(productListItem.getCategory());
+            productDTO.setCategories(productListItem.getCategories());
+            //productDTO.setCategory(productListItem.getCategory());
             productDTO.setProductCategory(productListItem.getProductCategory());
             productDTO.setProductDesc(productListItem.getProductDesc());
             productDTO.setProductID(productListItem.getProductID());
@@ -30,7 +31,8 @@ public class ProductConverter {
     public static Product convertDTOToProduct(ProductDTO productDTO){
         Product product = new Product();
 
-        product.setCategory(productDTO.getCategory());
+        product.setCategories(productDTO.getCategories());
+        //product.setCategory(productDTO.getCategory());
         product.setProductName(productDTO.getProductName());
         product.setProductDesc(productDTO.getProductDesc());
         product.setProductCategory(productDTO.getProductCategory());

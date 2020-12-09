@@ -1,5 +1,8 @@
 package com.ba.service;
 
+import com.ba.builder.CategoryBuilder;
+import com.ba.builder.ProductBuilder;
+import com.ba.builder.ProductDTOBuilder;
 import com.ba.converter.ProductConverter;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
@@ -38,28 +41,18 @@ public class ProductServiceTest {
     private List<Product> productList = new ArrayList<>();
     private List<ProductDTO> productListDTO = new ArrayList<>();
     private Category category = new Category();
-
+    private Long id = 1L;
 
     @Before
     public void setUp() throws Exception {
-        category.setId(1L);
-        category.setDescription("denemeDesc");
-        category.setName("denemeName");
-        category.setImageToUrl("denemeImg");
 
-        product.setCategory(category);
-        product.setProductName("mercimek");
-        product.setProductDesc("mercimek çorbası");
-        product.setProductCategory("çorba");
-        product.setProductPrice(15D);
-        product.setProductID(1L);
+        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").imageToUrl("denemeImg").build();
 
-        productDTO.setCategory(category);
-        productDTO.setProductName("mercimekDTO");
-        productDTO.setProductDesc("mercimek çorbasıDTO");
-        productDTO.setProductCategory("çorbaDTO");
-        productDTO.setProductPrice(15D);
-        productDTO.setProductID(1L);
+//        product = new ProductBuilder().category(category).productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
+//        productDTO = new ProductDTOBuilder().category(category).productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();
+
+        product = new ProductBuilder().productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
+        productDTO = new ProductDTOBuilder().productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();
 
         productList.add(product);
         productListDTO.add(productDTO);
@@ -67,7 +60,6 @@ public class ProductServiceTest {
 
     @Test
     public void shouldDeleteProduct() {
-        long id = 111;
 
         String res = service.deleteProduct(id);
 
@@ -77,7 +69,6 @@ public class ProductServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldNotDeleteProductWhenThrownException() {
-        long id = 111;
 
         doThrow(new RuntimeException("Cant delete here")).when(repository).deleteById(id);
         String res = service.deleteProduct(id);
@@ -85,6 +76,7 @@ public class ProductServiceTest {
 
     @Test
     public void shouldUpdateProduct() {
+
         when(repository.saveAndFlush(product)).thenReturn(product);
 
         ProductDTO productDTO2 = service.updateProduct(productDTO);
@@ -95,6 +87,7 @@ public class ProductServiceTest {
 
     @Test
     public void shouldListProduct() {
+
         when(repository.findAll()).thenReturn(productList);
 
         List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);

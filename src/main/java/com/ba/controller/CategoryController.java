@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list-products/{id}")
-    public Set<ProductDTO> listProductsById(@PathVariable Long id){
+    public List<ProductDTO> listProductsById(@PathVariable Long id){
         return categoryService.listProductsById(id);
     }
 

@@ -1,5 +1,8 @@
 package com.ba.controller;
 
+import com.ba.builder.CategoryBuilder;
+import com.ba.builder.ProductBuilder;
+import com.ba.builder.ProductDTOBuilder;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
@@ -35,24 +38,14 @@ public class ProductControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        category.setId(1L);
-        category.setDescription("denemeDesc");
-        category.setName("denemeName");
-        category.setImageToUrl("denemeImg");
 
-        product.setCategory(category);
-        product.setProductName("mercimek");
-        product.setProductDesc("mercimek çorbası");
-        product.setProductCategory("çorba");
-        product.setProductPrice(15D);
-        product.setProductID(1L);
+        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").imageToUrl("denemeImg").build();
 
-        productDTO.setCategory(category);
-        productDTO.setProductName("mercimekDTO");
-        productDTO.setProductDesc("mercimek çorbasıDTO");
-        productDTO.setProductCategory("çorbaDTO");
-        productDTO.setProductPrice(15D);
-        productDTO.setProductID(1L);
+//        product = new ProductBuilder().category(category).productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
+//        productDTO = new ProductDTOBuilder().category(category).productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();
+
+        product = new ProductBuilder().productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
+        productDTO = new ProductDTOBuilder().productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();
 
         productList.add(product);
         productListDTO.add(productDTO);

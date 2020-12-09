@@ -1,5 +1,9 @@
 package com.ba.service;
 
+import com.ba.builder.CategoryBuilder;
+import com.ba.builder.CategoryDTOBuilder;
+import com.ba.builder.ProductBuilder;
+import com.ba.builder.ProductDTOBuilder;
 import com.ba.converter.CategoryConvertor;
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
@@ -36,38 +40,23 @@ public class CategoryServiceTest {
     private Category category = new Category();
     private CategoryDTO categoryDTO = new CategoryDTO();
     private List<Category> categoryList = new ArrayList<>();
-    private Set<Product> productSet = new HashSet<>();
+    private List<Product> productSet = new ArrayList<>();
     private Product product = new Product();
     private ProductDTO productDTO = new ProductDTO();
+    private Long id = 1L;
 
     @Before
     public void setUp() throws Exception {
-        category.setImageToUrl("img");
-        category.setName("Çorba");
-        category.setDescription("Sıcak Çorba");
-        category.setId(1L);
 
-        categoryDTO.setImageToUrl("imgDTO");
-        categoryDTO.setName("ÇorbaDTO");
-        categoryDTO.setDescription("Sıcak ÇorbaDTO");
-        categoryDTO.setId(2L);
+        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).imageToUrl("img").build();
+        categoryDTO = new CategoryDTOBuilder().id(2L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").imageToUrl("imgDTO").build();
 
         categoryList.add(category);
 
-        product.setProductID(1L);
-        product.setProductPrice(15D);
-        product.setProductCategory("Çorba");
-        product.setProductDesc("desc");
-        product.setProductName("Mercimek");
-        product.setCategory(category);
-
-        productDTO.setProductID(1L);
-        productDTO.setProductPrice(15D);
-        productDTO.setProductCategory("ÇorbaDTO");
-        productDTO.setProductDesc("descDTO");
-        productDTO.setProductName("MercimekDTO");
-        productDTO.setCategory(category);
-
+//        product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").category(category).build();
+//        productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").category(category).build();
+        product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").build();
+        productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").build();
     }
 
     @Test
@@ -82,7 +71,6 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldDeleteCategory() {
-        long id = 111;
 
         String res = service.deleteCategory(id);
 
@@ -92,7 +80,6 @@ public class CategoryServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldNotDeleteCategoryWhenThrownException() {
-        long id = 111;
 
         doThrow(new RuntimeException("Cant delete here")).when(repository).deleteById(id);
         String res = service.deleteCategory(id);
@@ -100,6 +87,7 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldUpdateCategory() {
+
         when(repository.saveAndFlush(category)).thenReturn(category);
 
         CategoryDTO categoryDTO2 = service.updateCategory(categoryDTO);
@@ -120,8 +108,8 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldAddProductIntoCategory() {
-        Long id = 1L;
-        productSet.add(product);
+
+        //productSet.add(product);
         category.setProducts(productSet);
         Optional<Category> optionalCategoryList = Optional.of(category);
 
@@ -134,15 +122,15 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldListProductsByCategoryId() {
-        Long id = 1L;
-        productSet.add(product);
+
+        //productSet.add(product);
         category.setProducts(productSet);
         Optional<Category> optionalCategoryList = Optional.of(category);
 
         when(repository.findById(id)).thenReturn(optionalCategoryList);
 
-        Set<ProductDTO> tempDTOList = CategoryConvertor.convertOptionalCategoryToSetDTO(optionalCategoryList);
-        Set<ProductDTO> tempDTOList2 = service.listProductsById(id);
+        List<ProductDTO> tempDTOList = CategoryConvertor.convertOptionalCategoryToSetDTO(optionalCategoryList);
+        List<ProductDTO> tempDTOList2 = service.listProductsById(id);
 
         assertEquals(tempDTOList.iterator().next().getProductID(), tempDTOList2.iterator().next().getProductID());
     }

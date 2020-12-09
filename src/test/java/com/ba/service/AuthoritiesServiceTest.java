@@ -1,5 +1,7 @@
 package com.ba.service;
 
+import com.ba.builder.AuthoritiesBuilder;
+import com.ba.builder.AuthoritiesDTOBuilder;
 import com.ba.dto.AuthoritiesDTO;
 import com.ba.entity.Authorities;
 import com.ba.repository.AuthoritiesRepository;
@@ -31,14 +33,13 @@ public class AuthoritiesServiceTest {
 
     private Authorities auth = new Authorities();
     private AuthoritiesDTO authDTO = new AuthoritiesDTO();
+    private String username = "omer";
 
     @Before
     public void setUp() throws Exception {
-        auth.setAuthority("ROLE_USER");
-        auth.setUsername("omer");
+        auth = new AuthoritiesBuilder().username("omer").authority("ROLE_USER").build();
 
-        authDTO.setUsername("omerdto");
-        authDTO.setAuthority("ROLE_USER");
+        authDTO = new AuthoritiesDTOBuilder().username("omerDTO").authority("ROLE_USER").build();
     }
 
     @Test
@@ -51,7 +52,6 @@ public class AuthoritiesServiceTest {
 
     @Test
     public void shouldDeleteAuth() {
-        String username = "omer";
         String res = authoritiesService.deleteAuth(username);
         assertEquals(res, "Auth Deleted");
         verify(authoritiesRepository, times(1)).deleteById(username);
@@ -60,7 +60,6 @@ public class AuthoritiesServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldNotDeleteAuthWhenThrownException() {
-        String username = "omer";
         doThrow(new RuntimeException("Cant delete here")).when(authoritiesRepository).deleteById(username);
         String res = authoritiesService.deleteAuth(username);
     }

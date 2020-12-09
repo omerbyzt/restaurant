@@ -19,4 +19,5 @@
     <include file="/db-changelog/changes/insert-waiter-table.xml"/>
     <include file="/db-changelog/changes/insert-product-table.xml"/>
     <include file="/db-changelog/changes/create-media-table.xml"/>
+    <include file="/db-changelog/changes/create-category-product-table.xml"/>
 </databaseChangeLog>

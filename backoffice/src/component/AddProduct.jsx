@@ -49,10 +49,16 @@ class AddProduct extends Component {
             productDesc: desc,
             productCategory: btnCategoryName,
             productPrice: price,
+            categories:[]
         }
-        axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
+        // axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
+        //     {headers:{Authorization: sessionStorage.getItem('token')}}
+        //     );
+
+        axios.post("http://localhost:8080/category/add-product/"+"1", newProduct,
             {headers:{Authorization: sessionStorage.getItem('token')}}
-            );
+        );
+        e.preventDefault();
     }
 
     onClickItem = (e) => {

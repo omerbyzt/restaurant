@@ -35,7 +35,7 @@ public class MediaService {
 
     public String addFile(MultipartFile file ,String imageName) throws IOException {
 
-        Files.createDirectories(Paths.get(uploadDir));
+        Files.createDirectories(Paths.get("C:/Users/omerb/IdeaProjects/rest-api/target/media/"));
         String filePath = generateFullFilePath(file);
 
         Path targetLocation = FileSystems.getDefault().getPath(filePath);

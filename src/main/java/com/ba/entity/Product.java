@@ -1,8 +1,13 @@
 package com.ba.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -15,11 +20,15 @@ public class Product {
     private String productCategory;
     private Double productPrice;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "category_id"
-    )
-    private Category category;
+//    @ManyToOne
+//    @JoinColumn(
+//            name = "category_id"
+//    )
+//    private Category category;
+
+    @JsonBackReference
+    @ManyToMany(mappedBy = "products")
+    private List<Category> categories = new ArrayList<>();
 
     public Product(String productName, String productDesc, String productCategory, Double productPrice) {
         this.productName = productName;
@@ -28,17 +37,25 @@ public class Product {
         this.productPrice = productPrice;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
     public Product() {
 
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+//    public Category getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
 
     public Long getProductID() {
         return productID;

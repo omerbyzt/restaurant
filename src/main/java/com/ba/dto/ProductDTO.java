@@ -2,6 +2,11 @@ package com.ba.dto;
 
 import com.ba.entity.Category;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class ProductDTO {
 
     private Long productID;
@@ -11,7 +16,9 @@ public class ProductDTO {
     private Double productPrice;
 
     //
-    private Category category;
+    //private Category category;
+    //private Set<Category>categories  = new HashSet<>();
+    private List<Category> categories = new ArrayList();
 
     public Long getProductID() {
         return productID;
@@ -53,11 +60,18 @@ public class ProductDTO {
         this.productPrice = productPrice;
     }
 
-    public Category getCategory() {
-        return category;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
+//    public Category getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
 }

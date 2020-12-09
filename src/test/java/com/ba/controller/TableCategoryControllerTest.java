@@ -1,5 +1,7 @@
 package com.ba.controller;
 
+import com.ba.builder.TableCategoryBuilder;
+import com.ba.builder.TableCategoryDTOBuilder;
 import com.ba.dto.TableCategoryDTO;
 import com.ba.entity.TableCategory;
 import com.ba.service.TableCategoryService;
@@ -33,13 +35,9 @@ public class TableCategoryControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        tableCategory.setId(1);
-        tableCategory.setName("Bahçe");
-        tableCategory.setNumber(15);
 
-        tableCategoryDTO.setId(2);
-        tableCategoryDTO.setName("BahçeDTO");
-        tableCategoryDTO.setNumber(25);
+        tableCategory = new TableCategoryBuilder().id(1L).name("Bahçe").number(15).build();
+        tableCategoryDTO = new TableCategoryDTOBuilder().id(2L).name("BahçeDTO").number(25).build();
 
         tableCategoryDTOList.add(tableCategoryDTO);
         tableCategoriesList.add(tableCategory);

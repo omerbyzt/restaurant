@@ -20,7 +20,7 @@ public class CategoryConvertor {
             categoryDTO.setId(categoryListItem.getId());
             categoryDTO.setImageToUrl(categoryListItem.getImageToUrl());
             categoryDTO.setName(categoryListItem.getName());
-            categoryDTO.setProducts(categoryListItem.getProducts());
+            categoryDTO.setProducts( categoryListItem.getProducts());
 
             categoryListDTO.add(categoryDTO);
         }
@@ -31,7 +31,7 @@ public class CategoryConvertor {
     public static Category convertDTOtoCategory(CategoryDTO categoryDTO){
         Category category = new Category();
 
-        category.setProducts(categoryDTO.getProducts());
+        category.setProducts( categoryDTO.getProducts());
         category.setImageToUrl(categoryDTO.getImageToUrl());
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
@@ -40,13 +40,14 @@ public class CategoryConvertor {
         return category;
     }
 
-    public static Set<ProductDTO> convertOptionalCategoryToSetDTO(Optional<Category> category){
-        Set<ProductDTO> dto = new HashSet<>();
+    public static List<ProductDTO> convertOptionalCategoryToSetDTO(Optional<Category> category){
+        List<ProductDTO> dto = new ArrayList();
 
         for(Product prod: category.get().getProducts() ){
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductID(prod.getProductID());
-            productDTO.setCategory(prod.getCategory());
+            //productDTO.setCategory(prod.getCategory());
+            productDTO.setCategories(prod.getCategories());
             productDTO.setProductCategory(prod.getProductCategory());
             productDTO.setProductDesc(prod.getProductDesc());
             productDTO.setProductName(prod.getProductName());

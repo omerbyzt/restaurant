@@ -1,5 +1,7 @@
 package com.ba.controller;
 
+import com.ba.builder.WaiterBuilder;
+import com.ba.builder.WaiterDTOBuilder;
 import com.ba.dto.WaiterDTO;
 import com.ba.entity.Waiter;
 import com.ba.service.WaiterService;
@@ -33,21 +35,9 @@ public class WaiterControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        waiter.setUrlToImage("img");
-        waiter.setSalary(1000L);
-        waiter.setPhoneNumber("112");
-        waiter.setName("Omer");
-        waiter.setMail("mail");
-        waiter.setId(1L);
-        waiter.setAddress("address");
 
-        waiterDTO.setUrlToImage("imgDTO");
-        waiterDTO.setSalary(1000L);
-        waiterDTO.setPhoneNumber("112");
-        waiterDTO.setName("OmerDTO");
-        waiterDTO.setMail("mailDTO");
-        waiterDTO.setId(1L);
-        waiterDTO.setAddress("addressDTO");
+        waiter = new WaiterBuilder().urlToImage("img").salary(1000L).phoneNumber("112").name("Omer").mail("mail").id(1L).address("address").build();
+        waiterDTO = new WaiterDTOBuilder().urlToImage("imgDTO").salary(1000L).phoneNumber("112").name("OmerDTO").mail("mailDTO").id(1L).address("addressDTO").build();
 
         waiterList.add(waiter);
         waiterListDTO.add(waiterDTO);
