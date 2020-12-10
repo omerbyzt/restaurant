@@ -19,10 +19,10 @@ import java.util.Set;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     public List<CategoryDTO> listCategory() {
         return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());

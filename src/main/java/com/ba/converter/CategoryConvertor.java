@@ -57,6 +57,7 @@ public class CategoryConvertor {
             categoryDTO.setId(categoryListItem.getId());
             categoryDTO.setImageToUrl(categoryListItem.getImageToUrl());
             categoryDTO.setName(categoryListItem.getName());
+            categoryDTO.setMedia(categoryListItem.getMedia());
             //categoryDTO.setProducts( CategoryConvertor.convertListtoDTOList(categoryListItem.getProducts()));
 
             categoryListDTO.add(categoryDTO);
@@ -73,6 +74,7 @@ public class CategoryConvertor {
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
         category.setId(categoryDTO.getId());
+        category.setMedia(categoryDTO.getMedia());
 
         return category;
     }

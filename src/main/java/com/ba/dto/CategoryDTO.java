@@ -1,5 +1,6 @@
 package com.ba.dto;
 
+import com.ba.entity.Media;
 import com.ba.entity.Product;
 
 import java.util.List;
@@ -12,6 +13,15 @@ public class CategoryDTO {
     private String description;
     private String imageToUrl;
     private List<ProductDTO> products;
+    private Media media;
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }
 
     public Long getId() {
         return id;

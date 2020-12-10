@@ -1,10 +1,23 @@
 package com.ba.dto;
 
+import com.ba.entity.Category;
+
+import java.util.List;
+
 public class MediaDTO {
 
     private Long id;
     private String name;
     private byte[] fileContent;
+//    private List<Category> categories;
+//
+//    public List<Category> getCategories() {
+//        return categories;
+//    }
+//
+//    public void setCategories(List<Category> categories) {
+//        this.categories = categories;
+//    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,9 @@
 package com.ba.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Media {
@@ -12,6 +15,21 @@ public class Media {
 
     @Column(length = 1000000)
     private byte[] fileContent;
+
+//    @JsonIgnore
+//    @OneToMany(
+//            mappedBy = "category",//ilişkiyi kuracağımız değişkenin adı verilecek!!
+//            cascade = CascadeType.ALL
+//    )
+//    private List<Category> categories;
+
+//    public List<Category> getCategories() {
+//        return categories;
+//    }
+//
+//    public void setCategories(List<Category> categories) {
+//        this.categories = categories;
+//    }
 
     public Long getId() {
         return id;

@@ -27,12 +27,20 @@ public class Category{
     @JoinTable(name="CATEGORY_PRODUCT" , joinColumns = @JoinColumn(name="category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
 
-//    @JsonIgnore
-//    @ManyToOne
-//    @JoinColumn(
-//            name = "media_id"
-//    )
-//    private Media mediaID;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(
+            name = "media_id"
+    )
+    private Media media;
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }
 
     public Category(String name, String description, String imageToUrl) {
         this.name = name;

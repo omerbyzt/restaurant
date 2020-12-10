@@ -1,6 +1,5 @@
-package com.ba.repository;
+package com.ba.unused;
 
-import com.ba.unused.Tables;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

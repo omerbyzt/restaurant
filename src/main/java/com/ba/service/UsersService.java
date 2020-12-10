@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UsersService {
 
     @Autowired
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
 
     public void loadAdmin(Users users) {

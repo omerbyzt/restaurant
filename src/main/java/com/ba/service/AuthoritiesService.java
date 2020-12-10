@@ -14,7 +14,7 @@ import java.util.List;
 public class AuthoritiesService {
 
     @Autowired
-    AuthoritiesRepository authoritiesRepository;
+    private AuthoritiesRepository authoritiesRepository;
 
     public void loadAdmin(Authorities auth){
         authoritiesRepository.save(auth);

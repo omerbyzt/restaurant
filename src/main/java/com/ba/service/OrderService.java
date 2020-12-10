@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderService {
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     public List<OrderDTO> listAllOrders(){
         return OrderConverter.convertOrderListToOrderListDTO(orderRepository.findAll());
