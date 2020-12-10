@@ -28,7 +28,7 @@ public class Category{
     private List<Product> products;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(
             name = "media_id"
     )

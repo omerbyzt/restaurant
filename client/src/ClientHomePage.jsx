@@ -99,7 +99,6 @@ class ClientHomePage extends Component {
 
     onClickCategoryName = (category) => {
         const {token} = this.context;
-        console.log(category)
 
         let uri = 'http://localhost:8080/category/list-products/' + category.id;
         console.log(uri);
@@ -254,8 +253,12 @@ class ClientHomePage extends Component {
                                     {
                                         categoryList.map(v => {
                                                 return (
-                                                    <button className="btn btn-info btn-block mb-1"
-                                                            onClick={() => this.onClickCategoryName(v)}>{v.name}</button>
+                                                    <button className="btn btn-info btn-block mb-1 categoryButtonCss"
+                                                            onClick={() => this.onClickCategoryName(v)}>
+                                                        {v.name}
+                                                            <br/>
+                                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="87" style={{margin:10}}/>
+                                                    </button>
                                                 )
                                             }
                                         )

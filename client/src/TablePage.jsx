@@ -294,7 +294,8 @@ class TablePage extends Component {
                                         tableCategoryList.map(v => {
                                             return (
                                                 <button className="btn btn-info btn-block mb-1"
-                                                        onClick={() => this.onClickTableCategoryName(v)}>{v.name}</button>
+                                                        onClick={() => this.onClickTableCategoryName(v)}>{v.name}
+                                                </button>
                                             )
                                         })
                                     }

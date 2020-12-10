@@ -1,8 +1,10 @@
 package com.ba.converter;
 
 import com.ba.dto.CategoryDTO;
+import com.ba.dto.MediaDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
+import com.ba.entity.Media;
 import com.ba.entity.Product;
 import liquibase.pro.packaged.C;
 import org.springframework.security.core.parameters.P;
@@ -57,7 +59,7 @@ public class CategoryConvertor {
             categoryDTO.setId(categoryListItem.getId());
             categoryDTO.setImageToUrl(categoryListItem.getImageToUrl());
             categoryDTO.setName(categoryListItem.getName());
-            categoryDTO.setMedia(categoryListItem.getMedia());
+            categoryDTO.setMedia(MediaConverter.convertMediaToMediaDTO(categoryListItem.getMedia()));
             //categoryDTO.setProducts( CategoryConvertor.convertListtoDTOList(categoryListItem.getProducts()));
 
             categoryListDTO.add(categoryDTO);
@@ -74,10 +76,10 @@ public class CategoryConvertor {
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
         category.setId(categoryDTO.getId());
-        category.setMedia(categoryDTO.getMedia());
-
+        category.setMedia(MediaConverter.convertMediaDTOToMedia(categoryDTO.getMedia()));
         return category;
     }
+
 
     public static Category convertDTOToCategorywithProducts(CategoryDTO categoryDTO,Optional<Category> optionalCategory){
         Category category = new Category();

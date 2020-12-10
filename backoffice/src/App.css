@@ -120,5 +120,8 @@
 
 .submitButton{
   width: 49%;
+}
 
+.dropdownCss{
+  width: 200px;
 }

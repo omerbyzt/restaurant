@@ -29,4 +29,9 @@ public class MediaController {
         return "File Added";
     }
 
+    @GetMapping("/list/{id}")
+    public MediaDTO getMediaByID(@PathVariable Long id){
+        return mediaService.getMediaByID(id);
+    }
+
 }

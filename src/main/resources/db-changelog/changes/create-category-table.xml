@@ -14,7 +14,9 @@
             <column name="name" type="VARCHAR(255)"/>
             <column name="description" type="VARCHAR(255)"/>
             <column name="image_to_url" type="VARCHAR(255)"/>
-            <column name="media_id" type="int(10)"/>
+            <column name="media_id" type="int(10)">
+                <constraints nullable="false" foreignKeyName="media_id_fk" references="media(id)"></constraints>
+            </column>
         </createTable>
 
     </changeSet>

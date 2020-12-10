@@ -12,6 +12,7 @@
             <column name="name" value="Çorba"/>
             <column name="description" value="Sıcak Sıcak"/>
             <column name="image_to_url" value="img"/>
+            <column name="media_id" value="1"/>
         </insert>
 
         <insert tableName="category">
@@ -19,14 +20,15 @@
             <column name="name" value="Pizza"/>
             <column name="description" value="İtalyano Pizzao"/>
             <column name="image_to_url" value="img"/>
+            <column name="media_id" value="2"/>
         </insert>
 
-        <insert tableName="category">
-            <column name="id" valueNumeric="3"/>
-            <column name="name" value="Et Yemeği"/>
-            <column name="description" value="Bol Etli"/>
-            <column name="image_to_url" value="img"/>
-        </insert>
+<!--        <insert tableName="category">-->
+<!--            <column name="id" valueNumeric="3"/>-->
+<!--            <column name="name" value="Et Yemeği"/>-->
+<!--            <column name="description" value="Bol Etli"/>-->
+<!--            <column name="image_to_url" value="img"/>-->
+<!--        </insert>-->
 
     </changeSet>
 </databaseChangeLog>

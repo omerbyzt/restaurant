@@ -13,14 +13,14 @@ public class CategoryDTO {
     private String description;
     private String imageToUrl;
     private List<ProductDTO> products;
-    private Media media;
+    private MediaDTO mediaDTO;
 
-    public Media getMedia() {
-        return media;
+    public MediaDTO getMedia() {
+        return mediaDTO;
     }
 
-    public void setMedia(Media media) {
-        this.media = media;
+    public void setMedia(MediaDTO mediaDTO) {
+        this.mediaDTO = mediaDTO;
     }
 
     public Long getId() {

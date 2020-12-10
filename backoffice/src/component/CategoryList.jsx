@@ -144,13 +144,14 @@ class CategoryList extends Component {
                             </div>
                         </div> : null
                 }
-                <Table striped bordered hover className="usersTable">
+                <Table striped bordered hover className="usersTable" >
                     <thead>
                     <tr>
                         <th>Category ID</th>
                         <th>Category Name</th>
                         <th>Category Description</th>
                         <th>Category ImageUrl</th>
+                        <td>Category Image</td>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -158,11 +159,14 @@ class CategoryList extends Component {
                     {
                         categoryList.map(v => {
                             return (
-                                <tr>
+                                <tr align="center">
                                     <td>{v.id}</td>
                                     <td>{v.name}</td>
                                     <td>{v.description}</td>
                                     <td>{v.imageToUrl}</td>
+                                    <td>
+                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="100" style={{margin:10}}/>
+                                    </td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2"
                                                 onClick={this.onClickUpdateBtn.bind(this, v)}>Update

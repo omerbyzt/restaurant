@@ -21,4 +21,24 @@ public class MediaConverter {
 
         return dtoList;
     }
+
+    public static Media convertMediaDTOToMedia(MediaDTO mediaDTO){
+        Media media = new Media();
+
+        media.setId(mediaDTO.getId());
+        media.setName(mediaDTO.getName());
+        media.setFileContent(mediaDTO.getFileContent());
+
+        return media;
+    }
+
+    public static MediaDTO convertMediaToMediaDTO(Media media){
+        MediaDTO mediaDTO = new MediaDTO();
+
+        mediaDTO.setName(media.getName());
+        mediaDTO.setId(media.getId());
+        mediaDTO.setFileContent(media.getFileContent());
+
+        return mediaDTO;
+    }
 }

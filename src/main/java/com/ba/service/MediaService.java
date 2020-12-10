@@ -33,6 +33,10 @@ public class MediaService {
         return MediaConverter.convertListToListDTO(mediaRepository.findAll());
     }
 
+    public MediaDTO getMediaByID(Long id){
+        return MediaConverter.convertMediaToMediaDTO(mediaRepository.findById(id).get());
+    }
+
     public String addFile(MultipartFile file ,String imageName) throws IOException {
 
         Files.createDirectories(Paths.get("C:/Users/omerb/IdeaProjects/rest-api/target/media/"));

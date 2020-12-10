@@ -138,7 +138,6 @@ class AddProduct extends Component {
                                                                 </label>
                                                             </div>
 
-                                                            // <a className="dropdown-item" onClick={this.onClickItem.bind(this,v)}>{v.name}</a>
                                                         )
                                                     })
                                                 }
