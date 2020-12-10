@@ -8,13 +8,18 @@
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
         <insert tableName="media">
-            <column name="name" value="mandalina"/>
-            <column name ="file_Content" valueBlobFile="./mandalina.png"/>
+            <column name="name" value="corba "/>
+            <column name ="file_Content" valueBlobFile="./corba1.png"/>
         </insert>
 
         <insert tableName="media">
-            <column name="name" value="zar"/>
-            <column name ="file_Content" valueBlobFile="./zar.png"/>
+            <column name="name" value="pizza"/>
+            <column name ="file_Content" valueBlobFile="./pizza.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="name" value="et yemeği"/>
+            <column name ="file_Content" valueBlobFile="./yemek.png"/>
         </insert>
 
     </changeSet>

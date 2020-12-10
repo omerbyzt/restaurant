@@ -81,14 +81,15 @@ public class CategoryConvertor {
     }
 
 
-    public static Category convertDTOToCategorywithProducts(CategoryDTO categoryDTO,Optional<Category> optionalCategory){
+    public static Category convertDTOToCategorywithProducts(CategoryDTO categoryDTO,Category category2){
         Category category = new Category();
 
         category.setImageToUrl(categoryDTO.getImageToUrl());
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
         category.setId(categoryDTO.getId());
-        category.setProducts(optionalCategory.get().getProducts());
+        category.setProducts(category2.getProducts());
+        category.setMedia(MediaConverter.convertMediaDTOToMedia(categoryDTO.getMedia()));
 
         return category;
     }

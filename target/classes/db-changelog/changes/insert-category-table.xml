@@ -16,6 +16,14 @@
         </insert>
 
         <insert tableName="category">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Et Yemeği"/>
+            <column name="description" value="Bol Etli"/>
+            <column name="image_to_url" value="img"/>
+            <column name="media_id" value="3"/>
+        </insert>
+
+        <insert tableName="category">
             <column name="id" valueNumeric="2"/>
             <column name="name" value="Pizza"/>
             <column name="description" value="İtalyano Pizzao"/>

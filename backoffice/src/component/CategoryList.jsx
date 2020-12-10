@@ -3,6 +3,8 @@ import Table from "react-bootstrap/Table";
 import Header from "./Header";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class CategoryList extends Component {
     state = {
@@ -11,7 +13,11 @@ class CategoryList extends Component {
         id: "",
         name: "",
         description: "",
-        imageToUrl: ""
+        imageToUrl: "",
+        selectedMediaID: "",
+        selectedMediaName: "Select Media",
+        selectedMediaFileContent: "",
+        mediaList:[]
     }
 
     componentDidMount() {
@@ -29,6 +35,21 @@ class CategoryList extends Component {
             .then(data => {
                 this.setState({
                     categoryList: data
+                })
+            })
+
+        //For all media
+        uri = "http://localhost:8080/file/list";
+        fetch(uri, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem('token'),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    mediaList: data
                 })
             })
     }
@@ -56,21 +77,37 @@ class CategoryList extends Component {
     }
 
     categoryUpdate = () => {
-        const {id,name, description, imageToUrl} = this.state;
+        const {id, name, description, imageToUrl} = this.state;
 
-        const putCategory = {
-            id:id,
-            name:name,
-            description: description,
-            imageToUrl: imageToUrl
+        const newMedia = {
+            id:this.state.selectedMediaID,
+            name:this.state.selectedMediaName,
+            fileContent:this.state.selectedMediaFileContent
         }
+        console.log(newMedia);
+        const putCategory = {
+            id: id,
+            name: name,
+            description: description,
+            imageToUrl: imageToUrl,
+            products:[],
+            media:newMedia
+        }
+        console.log(putCategory)
+        axios.put('http://localhost:8080/category/update-category', putCategory,
+            {headers: {Authorization: sessionStorage.getItem('token')}})
+    }
 
-        axios.put('http://localhost:8080/category/update-category',putCategory,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+    onClickItem = (e) => {
+        this.setState({
+            selectedMediaName: e.name,
+            selectedMediaFileContent:e.fileContent,
+            selectedMediaID:e.id
+        })
     }
 
     render() {
-        const {categoryList, isUpdate, id, name, description, imageToUrl} = this.state;
+        const {categoryList, isUpdate, id, name, description, imageToUrl,selectedMediaName,mediaList} = this.state;
         return (
             <div>
                 <Header></Header>
@@ -135,7 +172,20 @@ class CategoryList extends Component {
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
-                                            <button className="btn btn-warning btn-block"
+
+                                            <div>
+                                                <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
+                                                    {
+                                                        mediaList.map(v => {
+                                                            return (
+                                                                <Dropdown.Item onClick={this.onClickItem.bind(this, v)}>{v.name}</Dropdown.Item>
+                                                            )
+                                                        })
+                                                    }
+                                                </DropdownButton>
+                                            </div>
+
+                                            <button className="btn btn-warning btn-block mt-3"
                                                     onClick={this.categoryUpdate}>Update
                                             </button>
                                         </form>
@@ -144,7 +194,7 @@ class CategoryList extends Component {
                             </div>
                         </div> : null
                 }
-                <Table striped bordered hover className="usersTable" >
+                <Table striped bordered hover className="usersTable">
                     <thead>
                     <tr>
                         <th>Category ID</th>
@@ -165,7 +215,8 @@ class CategoryList extends Component {
                                     <td>{v.description}</td>
                                     <td>{v.imageToUrl}</td>
                                     <td>
-                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="100" style={{margin:10}}/>
+                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="100"
+                                             style={{margin: 10}}/>
                                     </td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2"

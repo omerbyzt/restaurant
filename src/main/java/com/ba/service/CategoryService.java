@@ -39,8 +39,9 @@ public class CategoryService {
     }
 
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        Optional<Category> tempOptionalList = categoryRepository.findById(categoryDTO.getId());
-        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempOptionalList));
+        Category tempCategory = categoryRepository.findById(categoryDTO.getId()).get();
+        //Optional<Category> tempOptionalList = categoryRepository.findById(categoryDTO.getId());
+        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempCategory));
         return categoryDTO;
     }
 

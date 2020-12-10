@@ -10,7 +10,7 @@ class LoginPage extends Component {
         username: "",
         password: "",
         userList: "",
-        isChecked:false
+        isChecked:true
     }
 
     changeInput = (e) => {
