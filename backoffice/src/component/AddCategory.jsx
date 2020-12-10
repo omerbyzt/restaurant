@@ -21,7 +21,8 @@ class AddCategory extends Component {
         const newCategory = {
             name : name,
             description: description,
-            imageToUrl: imageToUrl
+            imageToUrl: imageToUrl,
+            products:[]
         }
 
         axios.post("http://localhost:8080/category/add-category", newCategory,

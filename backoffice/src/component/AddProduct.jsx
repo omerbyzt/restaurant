@@ -11,9 +11,10 @@ class AddProduct extends Component {
         desc: "",
         category: "",
         price: "",
-        categoryList:[],
-        btnCategoryName:"Select Category Name",
-        selectedCategoryId : ""
+        categoryList: [],
+        btnCategoryName: "Select Category Name",
+        selectedCategoryId: "",
+        multiCategory:[]
     }
 
     componentDidMount() {
@@ -42,37 +43,36 @@ class AddProduct extends Component {
     }
 
     addProduct = (e) => {
-        const {name, desc, price,selectedCategoryId,btnCategoryName} = this.state;
+        const {name, desc, price, selectedCategoryId, btnCategoryName} = this.state;
 
         const newProduct = {
             productName: name,
             productDesc: desc,
             productCategory: btnCategoryName,
             productPrice: price,
-            categories:[]
+            categoriesIds: this.state.multiCategory
         }
         // axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
         //     {headers:{Authorization: sessionStorage.getItem('token')}}
         //     );
-
-        axios.post("http://localhost:8080/category/add-product/"+"1", newProduct,
-            {headers:{Authorization: sessionStorage.getItem('token')}}
+        axios.post("http://localhost:8080/category/add-product/" + "1", newProduct,
+            {headers: {Authorization: sessionStorage.getItem('token')}}
         );
-        e.preventDefault();
     }
 
     onClickItem = (e) => {
         this.setState({
             btnCategoryName: e.name,
-            selectedCategoryId:e.id
+            selectedCategoryId: e.id,
         })
+        this.state.multiCategory.push(e.id)
     }
 
     render() {
-        const {name, desc, category, price, isShowCard,categoryList,btnCategoryName} = this.state;
+        const {name, desc, category, price, isShowCard, categoryList, btnCategoryName} = this.state;
         return (
             <div>
-            <Header></Header>
+                <Header></Header>
 
                 <div className="col-md-6 mr-auto mb-4 mt-4">
                     {
@@ -128,16 +128,26 @@ class AddProduct extends Component {
                                             </button>
                                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 {
-                                                    categoryList.map(v=>{
-                                                        return(
-                                                            <a className="dropdown-item" onClick={this.onClickItem.bind(this,v)}>{v.name}</a>
+                                                    categoryList.map(v => {
+                                                        return (
+
+                                                            <div className="row col-md -12">
+                                                                <label>
+                                                                    <input type="checkbox" value=""
+                                                                           onClick={this.onClickItem.bind(this, v)}/>{v.name}
+                                                                </label>
+                                                            </div>
+
+                                                            // <a className="dropdown-item" onClick={this.onClickItem.bind(this,v)}>{v.name}</a>
                                                         )
                                                     })
                                                 }
                                             </div>
                                         </div>
 
-                                        <button className="btn btn-warning btn-block addProductButtonCss" onClick={this.addProduct}>Add Product</button>
+                                        <button className="btn btn-warning btn-block addProductButtonCss"
+                                                onClick={this.addProduct}>Add Product
+                                        </button>
                                     </form>
                                 </div>
                             </div> : null

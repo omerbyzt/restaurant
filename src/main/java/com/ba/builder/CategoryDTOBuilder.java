@@ -12,7 +12,7 @@ public class CategoryDTOBuilder extends Builder{
     private String name;
     private String description;
     private String imageToUrl;
-    private List<Product> products;
+    private List<ProductDTO> products;
 
     public CategoryDTOBuilder id(Long id){
         this.setId(id);
@@ -34,7 +34,7 @@ public class CategoryDTOBuilder extends Builder{
         return this;
     }
 
-    public CategoryDTOBuilder products(List<Product> products){
+    public CategoryDTOBuilder products(List<ProductDTO> products){
         this.products = products;
         return this;
     }

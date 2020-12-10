@@ -15,7 +15,6 @@
             <column name="product_desc" type="VARCHAR(255)"/>
             <column name="product_category" type="VARCHAR(255)"/>
             <column name="product_price" type="double"/>
-
         </createTable>
 
     </changeSet>

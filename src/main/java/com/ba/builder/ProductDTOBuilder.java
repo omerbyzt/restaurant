@@ -1,5 +1,6 @@
 package com.ba.builder;
 
+import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 
@@ -16,7 +17,7 @@ public class ProductDTOBuilder {
     private String productCategory;
     private Double productPrice;
     //private Category category;
-    private List<Category> categories = new ArrayList<>();
+    private List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTOBuilder productID(Long productID){
         this.productID = productID;
@@ -48,7 +49,7 @@ public class ProductDTOBuilder {
 //        return this;
 //    }
 
-    public ProductDTOBuilder categories(List<Category> categories){
+    public ProductDTOBuilder categories(List<CategoryDTO> categories){
         this.categories = categories;
         return this;
     }

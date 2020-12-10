@@ -1,7 +1,6 @@
 package com.ba.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Product {
 //    private Category category;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.DETACH)
     private List<Category> categories = new ArrayList<>();
 
     public Product(String productName, String productDesc, String productCategory, Double productPrice) {

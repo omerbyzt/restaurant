@@ -4,8 +4,10 @@ import Table from 'react-bootstrap/Table';
 import nextId from "react-id-generator";
 import axios from 'axios';
 import {Link} from "react-router-dom";
+import UserContext from "./Context";
 
 class ClientHomePage extends Component {
+    static contextType = UserContext;
 
     state = {
         content: [],
@@ -21,9 +23,9 @@ class ClientHomePage extends Component {
             amount: 0,
             pId: 0,
             totalPrice: 0,
-            tableName:""
+            tableName: ""
         },
-        selectedCategoryName:"",
+        selectedCategoryName: "",
 
     }
 
@@ -32,56 +34,71 @@ class ClientHomePage extends Component {
     }
 
     componentDidMount() {
+        if(localStorage.getItem("token") !== null){
+            //TODO:seçilmiş odadan f5 yapınca wiater ve seçili masa?
 
-        let uri = "http://localhost:8080/category/list-category/";
+            const{setUserName,setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
 
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    categoryList: data
-                })
+            console.log("null değil")
+            const {token, table} = this.context;
+
+            let uri = "http://localhost:8080/category/list-category/";
+
+            fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    'Authorization': token,
+                }),
             })
-
-        //
-        let uri2 = 'http://localhost:8080/product/listall';
-
-        fetch(uri2, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    content: data
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        categoryList: data
+                    })
                 })
-            })
-        //
 
-        let allOrders = ClientHomePage.getOrderListFromStorage();
-        let table = sessionStorage.getItem("table")
-        if(allOrders.length>0){
-            for(let i = 0 ; i<allOrders.length;i++){
-                if(allOrders[i][0].tableName.indexOf(table) !==-1){
-                    for (let j = 0 ; j<allOrders[0].length; j++){
-                        this.state.shoppingList.push(allOrders[i][j]);
-                        this.state.totalPayment += allOrders[i][j].totalPrice;
+            //
+            let uri2 = 'http://localhost:8080/product/listall';
+
+            fetch(uri2, {
+                method: 'get',
+                headers: new Headers({
+                    'Authorization': token,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        content: data
+                    })
+                })
+            //
+
+            let allOrders = ClientHomePage.getOrderListFromStorage();
+            let tableName = table
+            if (allOrders.length > 0) {
+                for (let i = 0; i < allOrders.length; i++) {
+                    if (allOrders[i][0].tableName.indexOf(tableName) !== -1) {
+                        for (let j = 0; j < allOrders[0].length; j++) {
+                            this.state.shoppingList.push(allOrders[i][j]);
+                            this.state.totalPayment += allOrders[i][j].totalPrice;
+                        }
+                        allOrders.splice(i, 1);
                     }
-                    allOrders.splice(i,1);
                 }
+                localStorage.setItem("orderList", JSON.stringify(allOrders))
             }
-            localStorage.setItem("orderList",JSON.stringify(allOrders))
+        }else{
+            console.log("null geldi")
+            this.props.history.push('/');
         }
+
     }
 
     onClickCategoryName = (category) => {
+        const {token} = this.context;
         console.log(category)
 
         let uri = 'http://localhost:8080/category/list-products/' + category.id;
@@ -90,7 +107,7 @@ class ClientHomePage extends Component {
         fetch(uri, {
             method: 'get',
             headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
+                'Authorization': token,
             }),
         })
             .then(response => response.json())
@@ -103,7 +120,7 @@ class ClientHomePage extends Component {
 
     onClickAddShoppingList = (param) => {
         const {shoppingList, totalPayment, shoppingListAmounts} = this.state;
-
+        const {table, waiterID} = this.context;
         this.state.totalPayment += param.productPrice;
 
         if (this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.productID).length > 0) {
@@ -124,8 +141,8 @@ class ClientHomePage extends Component {
                         price: param.productPrice,
                         amount: 1,
                         totalPrice: param.productPrice,
-                        tableName:sessionStorage.getItem("table"),
-                        waiterID:sessionStorage.getItem("waiterID")
+                        tableName: table,
+                        waiterID: waiterID
                     }
                 }, () => this.setState({shoppingList: [...this.state.shoppingList, this.state.shoppingListObj]})
             )
@@ -134,7 +151,7 @@ class ClientHomePage extends Component {
     }
 
     clickPlusAmountBtn = (value) => {
-        const {totalPrice,totalPayment} = this.state;
+        const {totalPrice, totalPayment} = this.state;
 
         this.state.totalPayment += value.price;
 
@@ -145,7 +162,7 @@ class ClientHomePage extends Component {
     }
 
     clickMinusAmountBtn = (value) => {
-        const{totalPayment} = this.state;
+        const {totalPayment} = this.state;
         this.state.totalPayment -= value.price;
 
         value.amount -= 1;
@@ -162,16 +179,17 @@ class ClientHomePage extends Component {
     }
 
     clickPayButton = (value) => {
+        const{token,setTable,setWaiterID,setWaiterName} = this.context
         // CREATE TABLE OR PAY DIRECTLY
         // if(sessionStorage.getItem("table") === "No Table"){
-            console.log(value);
+        console.log(value);
 
-            axios.post('http://localhost:8080/order/add', value, {
-                headers: {
-                    Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
-                }
-            })
-            window.alert("Ödeme Alındı");
+        axios.post('http://localhost:8080/order/add', value, {
+            headers: {
+                Authorization: token //the token is a variable which holds the token
+            }
+        })
+        window.alert("Ödeme Alındı");
         // }else{
         //     let orderList = ClientHomePage.getOrderListFromStorage();
         //     if (this.state.shoppingList.length>0){
@@ -181,18 +199,22 @@ class ClientHomePage extends Component {
         //     window.alert("Table Created");
         // }
 
-        sessionStorage.setItem("table","No Table");
-        sessionStorage.setItem("waiterID","-1");
-        sessionStorage.setItem("waiterName","No Waiter");
+        // sessionStorage.setItem("table", "No Table");
+        // sessionStorage.setItem("waiterID", "-1");
+        // sessionStorage.setItem("waiterName", "No Waiter");
+
+        setTable("No Table");
+        setWaiterName("No Waiter");
+        setWaiterID("-1");
         this.props.history.push("/menu")
     }
 
     static getOrderListFromStorage = () => {
         let orderList;
 
-        if(localStorage.getItem("orderList") === null){
-            orderList=[];
-        }else{
+        if (localStorage.getItem("orderList") === null) {
+            orderList = [];
+        } else {
             orderList = JSON.parse(localStorage.getItem("orderList"));
         }
 
@@ -200,18 +222,24 @@ class ClientHomePage extends Component {
     }
 
     onClickBackToMenuButton = () => {
+        const{setTable,setWaiterID,setWaiterName} = this.context
         let orderList = ClientHomePage.getOrderListFromStorage();
-        if (this.state.shoppingList.length>0){
+        if (this.state.shoppingList.length > 0) {
             orderList.push(this.state.shoppingList);
-            localStorage.setItem("orderList",JSON.stringify(orderList));
+            localStorage.setItem("orderList", JSON.stringify(orderList));
         }
-        sessionStorage.setItem("table","No Table")
-        sessionStorage.setItem("waiterID","-1")
-        sessionStorage.setItem("waiterName","No Waiter")
+        // sessionStorage.setItem("table", "No Table")
+        // sessionStorage.setItem("waiterID", "-1")
+        // sessionStorage.setItem("waiterName", "No Waiter")
+
+        setTable("No Table");
+        setWaiterName("No Waiter");
+        setWaiterID("-1");
     }
 
     render() {
         const {content, categoryList, shoppingList, totalPayment} = this.state;
+        const{waiterName,table} = this.context;
         return (
             <div className="App">
                 <Table bordered>
@@ -234,9 +262,17 @@ class ClientHomePage extends Component {
                                     }
                                 </div>
                             </div>
-                            <button className="btn btn-default btnPay"><b>Waiter : </b>{sessionStorage.getItem("waiterName")}</button>
-                            <Link to="/tablepage"><button className="btn btn-default btnPay" ><b>Selected Table : </b>{sessionStorage.getItem("table")}</button></Link>
-                            <Link to="/menu"><button className="btn btn-danger btnPay" onClick={this.onClickBackToMenuButton}>Back to Menu</button></Link>
+                            <button className="btn btn-default btnPay"><b>Waiter
+                                : </b>{waiterName}</button>
+                            <Link to="/tablepage">
+                                <button className="btn btn-default btnPay"><b>Selected Table
+                                    : </b>{table}</button>
+                            </Link>
+                            <Link to="/menu">
+                                <button className="btn btn-danger btnPay" onClick={this.onClickBackToMenuButton}>Back to
+                                    Menu
+                                </button>
+                            </Link>
                         </th>
                         <th className="col-md-6">
                             <div className="card productBigCard">

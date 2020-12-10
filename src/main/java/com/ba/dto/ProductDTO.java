@@ -1,6 +1,7 @@
 package com.ba.dto;
 
 import com.ba.entity.Category;
+import liquibase.pro.packaged.A;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +19,17 @@ public class ProductDTO {
     //
     //private Category category;
     //private Set<Category>categories  = new HashSet<>();
-    private List<Category> categories = new ArrayList();
+    private List<CategoryDTO> categories = new ArrayList();
+
+    private List<Long> categoriesIds = new ArrayList<>();
+
+    public List<Long> getCategoriesIds() {
+        return categoriesIds;
+    }
+
+    public void setCategoriesIds(List<Long> categoriesIds) {
+        this.categoriesIds = categoriesIds;
+    }
 
     public Long getProductID() {
         return productID;
@@ -60,11 +71,11 @@ public class ProductDTO {
         this.productPrice = productPrice;
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<CategoryDTO> categories) {
         this.categories = categories;
     }
 //    public Category getCategory() {

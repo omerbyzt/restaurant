@@ -4,10 +4,47 @@ import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import liquibase.pro.packaged.C;
+import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 
 public class CategoryConvertor {
+
+    public static List<ProductDTO> convertListtoDTOList(List<Product> products){
+        List<ProductDTO> dtoList = new ArrayList<>();
+
+        for(Product product:products){
+            ProductDTO dto = new ProductDTO();
+            dto.setProductPrice(product.getProductPrice());
+            dto.setProductName(product.getProductName());
+            dto.setProductDesc(product.getProductDesc());
+            dto.setProductCategory(product.getProductCategory());
+            dto.setProductID(product.getProductID());
+            dto.setCategories(ProductConverter.convertListToDTOList(product.getCategories()));
+
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    public static List<Product> convertDTOListToList(List<ProductDTO> productDTOList){
+        List<Product> list = new ArrayList<>();
+
+        for(ProductDTO dto:productDTOList){
+            Product product = new Product();
+
+            product.setProductPrice(dto.getProductPrice());
+            product.setProductCategory(dto.getProductCategory());
+            product.setProductDesc(dto.getProductDesc());
+            product.setProductName(dto.getProductName());
+            product.setProductID(dto.getProductID());
+            product.setCategories(ProductConverter.convertDTOListToList(dto.getCategories()));
+
+            list.add(product);
+        }
+        return list;
+    }
 
     public static List<CategoryDTO> convertListToCategoryListDTO(List<Category> categoryList){
 
@@ -20,7 +57,7 @@ public class CategoryConvertor {
             categoryDTO.setId(categoryListItem.getId());
             categoryDTO.setImageToUrl(categoryListItem.getImageToUrl());
             categoryDTO.setName(categoryListItem.getName());
-            categoryDTO.setProducts( categoryListItem.getProducts());
+            //categoryDTO.setProducts( CategoryConvertor.convertListtoDTOList(categoryListItem.getProducts()));
 
             categoryListDTO.add(categoryDTO);
         }
@@ -31,11 +68,23 @@ public class CategoryConvertor {
     public static Category convertDTOtoCategory(CategoryDTO categoryDTO){
         Category category = new Category();
 
-        category.setProducts( categoryDTO.getProducts());
+        category.setProducts( CategoryConvertor.convertDTOListToList(categoryDTO.getProducts()));
         category.setImageToUrl(categoryDTO.getImageToUrl());
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
         category.setId(categoryDTO.getId());
+
+        return category;
+    }
+
+    public static Category convertDTOToCategorywithProducts(CategoryDTO categoryDTO,Optional<Category> optionalCategory){
+        Category category = new Category();
+
+        category.setImageToUrl(categoryDTO.getImageToUrl());
+        category.setName(categoryDTO.getName());
+        category.setDescription(categoryDTO.getDescription());
+        category.setId(categoryDTO.getId());
+        category.setProducts(optionalCategory.get().getProducts());
 
         return category;
     }
@@ -47,7 +96,7 @@ public class CategoryConvertor {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductID(prod.getProductID());
             //productDTO.setCategory(prod.getCategory());
-            productDTO.setCategories(prod.getCategories());
+            productDTO.setCategories(CategoryConvertor.convertListToCategoryListDTO(prod.getCategories()));
             productDTO.setProductCategory(prod.getProductCategory());
             productDTO.setProductDesc(prod.getProductDesc());
             productDTO.setProductName(prod.getProductName());

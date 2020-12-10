@@ -5,22 +5,10 @@ import MenuPage from "./MenuPage";
 import ClientHomePage from "./ClientHomePage";
 import TablePage from "./TablePage";
 
-export const AppContext = React.createContext("defaultValue");
-
 class App extends Component {
-
-    state = {
-        token: null,
-        setToken: this.setToken,
-    }
-    //This is the method to set the context data.
-    setToken = (token) => {
-        this.setState({ token });
-    }
 
     render() {
         return (
-            <AppContext.Provider value={this.state}>
                 <div>
                     <Router>
                         <Switch>
@@ -31,9 +19,7 @@ class App extends Component {
                         </Switch>
                     </Router>
                 </div>
-            </AppContext.Provider>
         );
     }
 }
-
 export default App;

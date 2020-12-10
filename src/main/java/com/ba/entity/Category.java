@@ -1,8 +1,7 @@
 package com.ba.entity;
 
 import com.ba.dto.ProductDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,6 +26,13 @@ public class Category{
     @ManyToMany
     @JoinTable(name="CATEGORY_PRODUCT" , joinColumns = @JoinColumn(name="category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
+
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(
+//            name = "media_id"
+//    )
+//    private Media mediaID;
 
     public Category(String name, String description, String imageToUrl) {
         this.name = name;

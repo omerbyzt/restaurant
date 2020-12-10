@@ -10,6 +10,7 @@ import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,7 +39,8 @@ public class CategoryService {
     }
 
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOtoCategory(categoryDTO));
+        Optional<Category> tempOptionalList = categoryRepository.findById(categoryDTO.getId());
+        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempOptionalList));
         return categoryDTO;
     }
 
@@ -48,12 +50,17 @@ public class CategoryService {
     }
 
     public String addProduct(ProductDTO productDTO, Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
+        List<Long> categoriesIdsList = productDTO.getCategoriesIds();
+        List<Category> categoryList = new ArrayList<>();
         Product product = CategoryConvertor.convertDTOToProduct(productDTO);
+        for(int i = 0 ; i<categoriesIdsList.size() ; i++){
+            Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
+            category.getProducts().add(product);
+            categoryList.add(category);
+        }
 
-       // product.setCategory(category.get());
-//        category.get().getProducts().add(product);
-//        categoryRepository.save(category.get());
+        product.setCategories(categoryList);
+        productRepository.save(product);
 
         return "Product Added";
     }

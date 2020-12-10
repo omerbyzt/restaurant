@@ -11,7 +11,7 @@ public class CategoryDTO {
     private String name;
     private String description;
     private String imageToUrl;
-    private List<Product> products;
+    private List<ProductDTO> products;
 
     public Long getId() {
         return id;
@@ -45,11 +45,11 @@ public class CategoryDTO {
         this.imageToUrl = imageToUrl;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductDTO> products) {
         this.products = products;
     }
 }

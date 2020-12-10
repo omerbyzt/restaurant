@@ -4,8 +4,11 @@ import axios from 'axios';
 import {Link} from "react-router-dom";
 import {Modal} from "react-bootstrap";
 import ClientHomePage from "./ClientHomePage";
+import UserContext from "./Context";
 
 class TablePage extends Component {
+    static contextType = UserContext;
+
     state = {
         tableCategoryList: [],
         tableList: [],
@@ -17,22 +20,39 @@ class TablePage extends Component {
         selectedTable: "",
         showClearTableModal: false,
         modalObjectList: [],
-        tableOrderList:[]
+        tableOrderList: []
     }
 
     componentDidMount() {
-        const {tableCategoryList, waiterList} = this.state;
-        axios.get('http://localhost:8080/table-category/listall',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({tableCategoryList: res.data})
-            });
+        //TODO buralar hep gözden geçecek
+        const {token} = this.context
+        if (localStorage.getItem("token") !== null) {
 
-        axios.get('http://localhost:8080/waiter/list-waiters',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({waiterList: res.data})
-            });
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            const {tableCategoryList, waiterList} = this.state;
+            const {token} = this.context;
+            axios.get('http://localhost:8080/table-category/listall',
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({tableCategoryList: res.data})
+                });
+
+            axios.get('http://localhost:8080/waiter/list-waiters',
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({waiterList: res.data})
+                });
+        } else {
+            if (token !== "No Token") {
+
+            } else {
+                this.props.history.push('/');
+            }
+        }
+
 
     }
 
@@ -100,24 +120,26 @@ class TablePage extends Component {
     }
 
     fullTableModal = (e) => {
-        const {modalObjectList,tableOrderList} = this.state;
-
+        const {modalObjectList, tableOrderList} = this.state;
+        const {table, setTable} = this.context;
         this.setState({
             showClearTableModal: !this.state.showClearTableModal
         })
         this.state.selectedTable = e;
-        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable)
+
+        setTable(this.state.categoryName + " " + this.state.selectedTable);
 
         let orderList = JSON.parse(localStorage.getItem("orderList"))
 
         modalObjectList.length = 0;
 
-        let table = sessionStorage.getItem("table")
+        //let tableString = sessionStorage.getItem("table")
+        let tableString = table;
         for (let i = 0; i < orderList.length; i++) {
             for (let j = 0; j < orderList[i].length; j++) {
-                if(orderList[i][j].tableName === table){
+                if (orderList[i][j].tableName === tableString) {
                     tableOrderList.push(orderList[i][j])
-                    let asd = {name: orderList[i][j].name, amount: orderList[i][j].amount,price : orderList[i][j].price}
+                    let asd = {name: orderList[i][j].name, amount: orderList[i][j].amount, price: orderList[i][j].price}
                     modalObjectList.push(asd);
                 }
             }
@@ -125,46 +147,58 @@ class TablePage extends Component {
     }
 
     goShoppingList = (e) => {
+        const {setTable, setWaiterID, setWaiterName} = this.context;
         this.props.history.push("/home")
-        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable)
-        sessionStorage.setItem("waiterID", e.id)
-        sessionStorage.setItem("waiterName", e.name)
+        // sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable)
+        // sessionStorage.setItem("waiterID", e.id)
+        // sessionStorage.setItem("waiterName", e.name)
+
+        setTable(this.state.categoryName + " " + this.state.selectedTable);
+        setWaiterID(e.id);
+        setWaiterName(e.name);
     }
 
     onClickBackToMenuButton = () => {
-        sessionStorage.setItem("table", "No Table")
+        const {setTable} = this.context;
+        // sessionStorage.setItem("table", "No Table")
+        setTable("No Table");
     }
 
     clearTable = () => {
+        const {table} = this.context;
         let orderList = ClientHomePage.getOrderListFromStorage();
 
         orderList.forEach(function (order, index) {
             let firstOrderString = JSON.stringify(order[0])
-            let sessionTableString = "\"" + sessionStorage.getItem("table") + "\"";
+            let sessionTableString = "\"" + table + "\"";
             if (firstOrderString.indexOf(sessionTableString) !== -1) {
                 orderList.splice(index, 1);
             }
         })
         localStorage.setItem("orderList", JSON.stringify(orderList))
-        window.location.reload()
+        //TODO: masa silinmesi için onay al silindi mesajı ver.
+        this.props.history.push("/menu")
     }
 
     payTable = (value) => {
+        const {token, setWaiterID, setWaiterName, table, setTable} = this.context;
         console.log(value);
 
         axios.post('http://localhost:8080/order/add', value, {
             headers: {
-                Authorization: sessionStorage.getItem('token') //the token is a variable which holds the token
+                Authorization: token //the token is a variable which holds the token
             }
         })
-         let orderList = ClientHomePage.getOrderListFromStorage();
+        let orderList = ClientHomePage.getOrderListFromStorage();
 
-        sessionStorage.setItem("waiterID","-1");
-        sessionStorage.setItem("waiterName","No Waiter");
+        // sessionStorage.setItem("waiterID","-1");
+        // sessionStorage.setItem("waiterName","No Waiter");
+        setWaiterID("-1");
+        setWaiterName("No Waiter");
 
         orderList.forEach(function (order, index) {
             let firstOrderString = JSON.stringify(order[0])
-            let sessionTableString = "\"" + sessionStorage.getItem("table") + "\"";
+            let sessionTableString = "\"" + table + "\"";
             if (firstOrderString.indexOf(sessionTableString) !== -1) {
                 orderList.splice(index, 1);
             }
@@ -172,14 +206,17 @@ class TablePage extends Component {
 
         localStorage.setItem("orderList", JSON.stringify(orderList))
         window.alert("Payment Received");
-        sessionStorage.setItem("table","No Table");
+        // sessionStorage.setItem("table","No Table");
+        setTable("No Table");
         this.props.history.push("/menu")
     }
 
     goTable = () => {
-        sessionStorage.setItem("table" ,this.state.categoryName + " " + this.state.selectedTable)
+        const {setTable} = this.context;
+        // sessionStorage.setItem("table" ,this.state.categoryName + " " + this.state.selectedTable)
+        setTable(this.state.categoryName + " " + this.state.selectedTable);
         this.setState({
-            showModal:!this.state.showModal
+            showModal: !this.state.showModal
         })
         //this.props.history.push("/home")
     }
@@ -225,7 +262,7 @@ class TablePage extends Component {
                                         <tr>
                                             <td>{v.name}</td>
                                             <td>{v.amount}</td>
-                                            <td>{v.price*v.amount}</td>
+                                            <td>{v.price * v.amount}</td>
                                         </tr>
                                     )
                                 })
@@ -233,7 +270,9 @@ class TablePage extends Component {
                             </tbody>
                         </Table>
                         <button className="btn btn-warning btn-lg mr-2" onClick={() => this.goTable()}>Go Table</button>
-                        <button className="btn btn-success btn-lg mr-2" onClick={() => this.payTable(this.state.tableOrderList)}>Pay Table</button>
+                        <button className="btn btn-success btn-lg mr-2"
+                                onClick={() => this.payTable(this.state.tableOrderList)}>Pay Table
+                        </button>
                         <button className="btn btn-danger btn-lg" onClick={() => this.clearTable()}> Clear Table
                         </button>
                     </Modal.Body>

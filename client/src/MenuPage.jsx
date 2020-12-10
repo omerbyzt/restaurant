@@ -1,14 +1,39 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Link} from "react-router-dom";
+import UserContext from "./Context";
 
 class MenuPage extends Component {
+    static contextType = UserContext;
+
+    componentDidMount() {
+        const {token, setToken, setUserName} = this.context;
+        if (localStorage.getItem("token") !== null) {
+            setToken(localStorage.getItem("token"));
+            setUserName(localStorage.getItem("username"))
+            console.log("null gelmiyor");
+        } else {
+            if (token !== "No Token") {
+
+            } else {
+                console.log("null geliyor");
+                this.props.history.push('/');
+            }
+        }
+    }
+
     clickSignOutButton = () => {
+        const {setToken , setUserName} = this.context;
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
+        setToken("No Token");
+        setUserName("No User");
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
     }
 
     render() {
+        const {username} = this.context;
         return (
             <div>
                 <Link to="/home"><button className="btn btn-success menuBtn"><h1>Shopping</h1></button></Link>
@@ -20,7 +45,7 @@ class MenuPage extends Component {
                 <button className="btn btn-success menuBtn">Card 7</button>
                 <button className="btn btn-success menuBtn">Card 8</button>
                 <Link to="/">
-                    <button className="btn btn-danger menuBtn" onClick={this.clickSignOutButton}><h1>Sign Out : {sessionStorage.getItem('username')}</h1></button>
+                    <button className="btn btn-danger menuBtn" onClick={this.clickSignOutButton}><h1>Sign Out : {username}</h1></button>
                 </Link>
 
             </div>

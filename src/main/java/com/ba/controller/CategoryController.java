@@ -2,6 +2,7 @@ package com.ba.controller;
 
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
+import com.ba.entity.Product;
 import com.ba.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

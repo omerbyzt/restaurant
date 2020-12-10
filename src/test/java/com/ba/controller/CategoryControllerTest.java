@@ -96,10 +96,10 @@ public class CategoryControllerTest {
         assertEquals(tempDTOList, productSetListDTO);
     }
 
-    @Test
-    public void shouldVerifyAddProduct() {
-        when(service.addProduct(productDTO, id)).thenReturn("Product Added");
-        String res = controller.addProduct(productDTO, id);
-        assertEquals(res, "Product Added");
-    }
+//    @Test
+//    public void shouldVerifyAddProduct() {
+//        when(service.addProduct(productDTO, id)).thenReturn("Product Added");
+//        String res = controller.addProduct(productDTO, id);
+//        assertEquals(res, "Product Added");
+//    }
 }
