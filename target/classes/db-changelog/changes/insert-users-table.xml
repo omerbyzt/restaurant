@@ -7,17 +7,17 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
-        <insert tableName="users">
-            <column name="username" value="omer"/>
-            <column name="password" value="{noop}123"/>
-            <column name="enabled" value="true"/>
-        </insert>
+<!--        <insert tableName="users">-->
+<!--            <column name="username" value="omer"/>-->
+<!--            <column name="password" value="{noop}123"/>-->
+<!--            <column name="enabled" value="true"/>-->
+<!--        </insert>-->
 
-        <insert tableName="users">
-            <column name="username" value="ibo"/>
-            <column name="password" value="{noop}321"/>
-            <column name="enabled" value="true"/>
-        </insert>
+<!--        <insert tableName="users">-->
+<!--            <column name="username" value="ibo"/>-->
+<!--            <column name="password" value="{noop}321"/>-->
+<!--            <column name="enabled" value="true"/>-->
+<!--        </insert>-->
 
     </changeSet>
 </databaseChangeLog>

@@ -5,7 +5,6 @@ import com.ba.builder.UsersDTOBuilder;
 import com.ba.dto.UsersDTO;
 import com.ba.entity.Users;
 import com.ba.repository.UsersRepository;
-import com.ba.unused.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

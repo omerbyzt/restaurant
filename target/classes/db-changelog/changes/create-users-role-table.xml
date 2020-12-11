@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="omer" id="1">
+
+        <createTable tableName="user_roles">
+            <column name="user_id" type="int(10)">
+                <constraints nullable="false" foreignKeyName="users_id_fk" references="users(id)" primaryKey="true"></constraints>
+            </column>
+            <column name="role_id" type="int(10)">
+                <constraints nullable="false" foreignKeyName="roles_id_fk" references="roles(id)" primaryKey="true"></constraints>
+            </column>
+        </createTable>
+
+        <insert tableName="user_roles">
+            <column name="user_id" valueNumeric="1"></column>
+            <column name="role_id" valueNumeric="1"></column>
+        </insert>
+
+        <insert tableName="user_roles">
+            <column name="user_id" valueNumeric="1"></column>
+            <column name="role_id" valueNumeric="2"></column>
+        </insert>
+
+<!--        <insert tableName="product">-->
+<!--            <column name="productID" value="1"/>-->
+<!--            <column name="product_name" value="Mercimek Çorbası"/>-->
+<!--            <column name="product_desc" value="Süzme Mercimek Çorbası"/>-->
+<!--            <column name="product_category" value="Çorba"/>-->
+<!--            <column name="product_price" value="10"/>-->
+<!--        </insert>-->
+
+
+
+    </changeSet>
+
+</databaseChangeLog>
