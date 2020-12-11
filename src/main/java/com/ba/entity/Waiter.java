@@ -1,9 +1,8 @@
 package com.ba.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 
 @Entity
 public class Waiter {
@@ -18,6 +17,11 @@ public class Waiter {
     private String urlToImage;
     private Long salary;
 
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "media_id")
+    private Media media;
+
     public Waiter(Long id, String name, String phoneNumber, String mail, String address, String urlToImage, Long salary) {
         this.id = id;
         this.name = name;
@@ -30,6 +34,14 @@ public class Waiter {
 
     public Waiter() {
 
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
     }
 
     public Long getId() {

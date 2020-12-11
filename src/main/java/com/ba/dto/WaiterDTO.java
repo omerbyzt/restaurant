@@ -9,6 +9,15 @@ public class WaiterDTO {
     private String address;
     private String urlToImage;
     private Long salary;
+    private MediaDTO mediaDTO;
+
+    public MediaDTO getMediaDTO() {
+        return mediaDTO;
+    }
+
+    public void setMediaDTO(MediaDTO mediaDTO) {
+        this.mediaDTO = mediaDTO;
+    }
 
     public Long getId() {
         return id;

@@ -21,7 +21,7 @@ public class WaiterConverter {
             waiterDTO.setPhoneNumber(waiterListItem.getPhoneNumber());
             waiterDTO.setSalary(waiterListItem.getSalary());
             waiterDTO.setUrlToImage(waiterListItem.getUrlToImage());
-
+            waiterDTO.setMediaDTO(MediaConverter.convertMediaToMediaDTO(waiterListItem.getMedia()));
             waiterListDTO.add(waiterDTO);
         }
         return waiterListDTO;
@@ -37,6 +37,22 @@ public class WaiterConverter {
         waiter.setPhoneNumber(waiterDTO.getPhoneNumber());
         waiter.setSalary(waiterDTO.getSalary());
         waiter.setUrlToImage(waiterDTO.getUrlToImage());
+        waiter.setMedia(MediaConverter.convertMediaDTOToMedia(waiterDTO.getMediaDTO()));
+
+        return waiter;
+    }
+
+    public static Waiter addWaiterConverter(WaiterDTO waiterDTO){
+        Waiter waiter = new Waiter();
+
+        waiter.setAddress(waiterDTO.getAddress());
+        waiter.setId(waiterDTO.getId());
+        waiter.setMail(waiterDTO.getMail());
+        waiter.setName(waiterDTO.getName());
+        waiter.setPhoneNumber(waiterDTO.getPhoneNumber());
+        waiter.setSalary(waiterDTO.getSalary());
+        waiter.setUrlToImage(waiterDTO.getUrlToImage());
+        waiter.setMedia(MediaConverter.convertMediaDTOToMediaOneToOne(waiterDTO.getMediaDTO()));
 
         return waiter;
     }

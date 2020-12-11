@@ -1,6 +1,8 @@
 package com.ba.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,9 +18,21 @@ public class Media {
     @Column(length = 1000000)
     private byte[] fileContent;
 
+//    @JsonBackReference
+//    @OneToOne(mappedBy = "media")
+//    private Waiter waiter;
+//
+//    public Waiter getWaiter() {
+//        return waiter;
+//    }
+//
+//    public void setWaiter(Waiter waiter) {
+//        this.waiter = waiter;
+//    }
+
 //    @JsonIgnore
 //    @OneToMany(
-//            mappedBy = "category",//ilişkiyi kuracağımız değişkenin adı verilecek!!
+//            mappedBy = "category",//ilişkiyi kuracağımız değişkenin adı verilecek!! (categories olacaktı!)
 //            cascade = CascadeType.ALL
 //    )
 //    private List<Category> categories;

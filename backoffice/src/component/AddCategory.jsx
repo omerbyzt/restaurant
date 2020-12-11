@@ -180,6 +180,7 @@ class AddCategory extends Component {
                                             })
                                         }
                                     </DropdownButton>
+
                                 </div>
                                 <button className="btn btn-link ml-2" onClick={()=>this.showMedia()}>Show Media</button>
                                 <button className="btn btn-warning btn-block" type="submit">Add Category</button>

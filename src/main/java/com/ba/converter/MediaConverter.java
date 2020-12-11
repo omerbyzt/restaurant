@@ -28,6 +28,18 @@ public class MediaConverter {
         media.setId(mediaDTO.getId());
         media.setName(mediaDTO.getName());
         media.setFileContent(mediaDTO.getFileContent());
+        //media.setWaiter(media.getWaiter());
+
+        return media;
+    }
+
+    public static Media convertMediaDTOToMediaOneToOne(MediaDTO mediaDTO){
+        Media media = new Media();
+
+        //media.setId(mediaDTO.getId());
+        media.setName(mediaDTO.getName());
+        media.setFileContent(mediaDTO.getFileContent());
+        //media.setWaiter(media.getWaiter());
 
         return media;
     }

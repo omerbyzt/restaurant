@@ -201,6 +201,7 @@ class WaiterList extends Component {
                         <th>Waiter Address</th>
                         <th>Waiter Image Url</th>
                         <th>Waiter Salary</th>
+                        <th>Waiter Image</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -216,6 +217,9 @@ class WaiterList extends Component {
                                     <td>{v.address}</td>
                                     <td>{v.urlToImage}</td>
                                     <td>{v.salary}</td>
+                                    <td>
+                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100" style={{margin:10}}/>
+                                    </td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2" onClick={this.updateWaiterOpenForm.bind(this,v)}>Update</button>
                                         <button className="btn btn-danger mr-2" onClick={this.deleteWaiter.bind(this,v)}>Delete</button>

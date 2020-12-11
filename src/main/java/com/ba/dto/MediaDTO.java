@@ -9,6 +9,7 @@ public class MediaDTO {
     private Long id;
     private String name;
     private byte[] fileContent;
+    //private WaiterDTO waiterDTO;
 //    private List<Category> categories;
 //
 //    public List<Category> getCategories() {
@@ -17,6 +18,15 @@ public class MediaDTO {
 //
 //    public void setCategories(List<Category> categories) {
 //        this.categories = categories;
+//    }
+
+//
+//    public WaiterDTO getWaiterDTO() {
+//        return waiterDTO;
+//    }
+//
+//    public void setWaiterDTO(WaiterDTO waiterDTO) {
+//        this.waiterDTO = waiterDTO;
 //    }
 
     public Long getId() {
