@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import Header from "./Header";
 import {Link} from 'react-router-dom'
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class AddProduct extends Component {
     state = {
@@ -14,7 +16,11 @@ class AddProduct extends Component {
         categoryList: [],
         btnCategoryName: "Select Category Name",
         selectedCategoryId: "",
-        multiCategory:[]
+        multiCategory: [],
+        mediaList: [],
+        selectedMediaID: "",
+        selectedMediaName: "Select Media",
+        selectedMediaURL:""
     }
 
     componentDidMount() {
@@ -34,6 +40,12 @@ class AddProduct extends Component {
                     categoryList: data
                 })
             })
+
+        axios.get('http://localhost:8080/file/list',
+            {headers: {Authorization: sessionStorage.getItem('token')}})
+            .then(res => {
+                this.setState({mediaList: res.data})
+            });
     }
 
     changeInput = (e) => {
@@ -43,14 +55,21 @@ class AddProduct extends Component {
     }
 
     addProduct = (e) => {
-        const {name, desc, price, selectedCategoryId, btnCategoryName} = this.state;
+        const {name, desc, price, selectedCategoryId, btnCategoryName, selectedMediaID,selectedMediaName,selectedMediaURL} = this.state;
+
+        const newMedia = {
+            id: selectedMediaID,
+            name:selectedMediaName,
+            fileContent:selectedMediaURL
+        }
 
         const newProduct = {
             productName: name,
             productDesc: desc,
             productCategory: btnCategoryName,
             productPrice: price,
-            categoriesIds: this.state.multiCategory
+            categoriesIds: this.state.multiCategory,
+            mediaDTO: newMedia
         }
         // axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
         //     {headers:{Authorization: sessionStorage.getItem('token')}}
@@ -68,8 +87,17 @@ class AddProduct extends Component {
         this.state.multiCategory.push(e.id)
     }
 
+    onClickMediaItem = (e) => {
+        console.log(e)
+        this.setState({
+            selectedMediaName: e.name,
+            selectedMediaID: e.id,
+            selectedMediaURL:e.fileContent
+        })
+    }
+
     render() {
-        const {name, desc, category, price, isShowCard, categoryList, btnCategoryName} = this.state;
+        const {name, desc, category, price, isShowCard, categoryList, btnCategoryName, mediaList, selectedMediaName} = this.state;
         return (
             <div>
                 <Header></Header>
@@ -144,6 +172,20 @@ class AddProduct extends Component {
                                             </div>
                                         </div>
 
+                                        <div>
+                                            <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
+                                                {
+                                                    mediaList.map(v => {
+                                                        return (
+                                                            <Dropdown.Item
+                                                                onClick={this.onClickMediaItem.bind(this, v)}
+                                                            >{v.name}</Dropdown.Item>
+                                                        )
+                                                    })
+                                                }
+                                            </DropdownButton>
+                                        </div>
+
                                         <button className="btn btn-warning btn-block addProductButtonCss"
                                                 onClick={this.addProduct}>Add Product
                                         </button>
@@ -153,7 +195,6 @@ class AddProduct extends Component {
                     }
                 </div>
             </div>
-
 
         );
     }

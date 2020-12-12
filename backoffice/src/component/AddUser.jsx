@@ -4,16 +4,19 @@ import Header from "./Header";
 
 class AddUser extends Component {
     state = {
-        userName: "",
-        userPassword: "",
-        userRole: "",
-        userEnabled:"",
-        roleAdmin:"ROLE_ADMIN",
-        roleUser:"ROLE_USER",
-        roleEnabledTrue:"true",
-        roleEnabledFalse:"false",
-        dropDownRoleName:"Select User Role",
-        dropDownEnabledName:"Select User Enabled"
+        //
+        id: "",
+        email: "",
+        username: "",
+        password: "",
+        enabled: "Select Enable",
+        roles: [],
+        //
+        roleEnabledTrue: "true",
+        roleEnabledFalse: "false",
+        dropDownEnabledName: "Select User Enabled",
+        roleList: [],
+        selectedRoleName: "Select Role"
     }
 
     changeInput = (e) => {
@@ -22,54 +25,65 @@ class AddUser extends Component {
         })
     }
 
-    addUser = (e) => {
-        const {userName, userPassword, userRole,userEnabled,dropDownRoleName,dropDownEnabledName} = this.state;
+    componentDidMount() {
+        axios.get('http://localhost:8080/role/list',
+            {headers: {Authorization: sessionStorage.getItem('token')}})
+            .then(res => {
+                this.setState({roleList: res.data})
+            });
+    }
 
-        const newUsers = {
-            username : userName,
-            password : "{noop}"+userPassword,
-            enabled : dropDownEnabledName
+    addUser = () => {
+        const {username, email, password, enabled, roles} = this.state;
+
+        const newUser = {
+            username: username,
+            password: password,
+            email: email,
+            enabled: enabled,
+            roles: roles
         }
 
-        axios.post("http://localhost:8080/users/add", newUsers,
-            {headers:{Authorization:sessionStorage.getItem('token')}});
-
-        const newAuth = {
-            username : userName,
-            authority : dropDownRoleName
-        }
-
-        axios.post("http://localhost:8080/auth/add", newAuth,
-            {headers:{Authorization:sessionStorage.getItem('token')}});
+        axios.post("http://localhost:8080/user/add", newUser,
+            {headers: {Authorization: sessionStorage.getItem('token')}});
 
     }
 
     clickedAdmin = () => {
         this.setState({
-            dropDownRoleName:this.state.roleAdmin
+            dropDownRoleName: this.state.roleAdmin
         })
     }
 
     clickedUser = () => {
         this.setState({
-            dropDownRoleName:this.state.roleUser
+            dropDownRoleName: this.state.roleUser
         })
     }
 
     clickedEnabledTrue = () => {
         this.setState({
-            dropDownEnabledName:this.state.roleEnabledTrue
+            enabled: this.state.roleEnabledTrue
         })
     }
 
     clickedEnabledFalse = () => {
         this.setState({
-            dropDownEnabledName:this.state.roleEnabledFalse
+            enabled: this.state.roleEnabledFalse
         })
     }
 
+    onClickItem = (e) => {
+        this.setState({
+            selectedRoleName: e.name
+        })
+        this.state.roles.push(e)
+        console.log(this.state.roles)
+    }
+
     render() {
-        const {userName, userPassword, userRole,userEnabled,roleAdmin,roleUser,dropDownRoleName,dropDownEnabledName,roleEnabledTrue,roleEnabledFalse} = this.state;
+        const {roleEnabledTrue, roleEnabledFalse, roleList, selectedRoleName} = this.state;
+        const {username, email, password, enabled} = this.state;
         return (
             <div>
                 <Header/>
@@ -80,56 +94,82 @@ class AddUser extends Component {
                             <h4>Add User Panel</h4>
                         </div>
                         <div className="card-body">
-                            <form onSubmit={this.addUser}>
+                            <form onSubmit={()=>this.addUser()}>
                                 <div className="form-group">
-                                    <label htmlFor="name">User Name</label>
+                                    <label htmlFor="nameInput">User Name</label>
                                     <input type="text"
                                            className="form-control"
                                            placeholder="Enter User Name"
-                                           name="userName"
+                                           name="username"
                                            id="nameInput"
-                                           value={userName}
+                                           value={username}
                                            onChange={this.changeInput}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="password">User Password</label>
+                                    <label htmlFor="passwordInput">User Password</label>
                                     <input type="text"
                                            className="form-control"
                                            placeholder="Enter User Password"
-                                           name="userPassword"
+                                           name="password"
                                            id="passwordInput"
-                                           value={userPassword}
+                                           value={password}
+                                           onChange={this.changeInput}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="emailInput">User Email</label>
+                                    <input type="text"
+                                           className="form-control"
+                                           placeholder="Enter User Email"
+                                           name="email"
+                                           id="emailInput"
+                                           value={email}
                                            onChange={this.changeInput}
                                     />
                                 </div>
 
                                 <div className="dropdown">
-                                    <label htmlFor="price">User Role : </label>
-                                    <button className="btn btn-info dropdown-toggle dropdownCss2" type="button"
+                                    <label htmlFor="price">Product Category : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="true">
-                                        {dropDownRoleName}
+                                        {selectedRoleName}
                                     </button>
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {
+                                            roleList.map(v => {
+                                                return (
 
-                                            <a className="dropdown-item" onClick={this.clickedUser} >{roleUser}</a>
-                                            <a className="dropdown-item" onClick={this.clickedAdmin}>{roleAdmin}</a>
+                                                    <div className="row col-md -12">
+                                                        <label>
+                                                            <input type="checkbox" value=""
+                                                                   onClick={this.onClickItem.bind(this, v)}
+                                                            />{v.name}
+                                                        </label>
+                                                    </div>
+
+                                                )
+                                            })
+                                        }
                                     </div>
                                 </div>
 
                                 <div className="dropdown">
-                                    <label htmlFor="price">User Enabled : </label>
+                                    <label htmlFor="enabledInput">User Enabled : </label>
                                     <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            id="enabledInput" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="true">
-                                        {dropDownEnabledName}
+                                        {enabled}
                                     </button>
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                        <a className="dropdown-item" onClick={this.clickedEnabledTrue} >{roleEnabledTrue}</a>
-                                        <a className="dropdown-item" onClick={this.clickedEnabledFalse}>{roleEnabledFalse}</a>
+                                        <a className="dropdown-item"
+                                           onClick={this.clickedEnabledTrue}>{roleEnabledTrue}</a>
+                                        <a className="dropdown-item"
+                                           onClick={this.clickedEnabledFalse}>{roleEnabledFalse}</a>
                                     </div>
                                 </div>
                                 <button className="btn btn-warning btn-block addUserCss" type="submit">Add User</button>

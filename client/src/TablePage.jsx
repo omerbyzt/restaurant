@@ -26,7 +26,7 @@ class TablePage extends Component {
     componentDidMount() {
         //TODO buralar hep gözden geçecek
         const {token} = this.context
-        if (localStorage.getItem("token") !== null) {
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
 
             const {setUserName, setToken} = this.context;
             setUserName(localStorage.getItem("username"));
@@ -45,15 +45,10 @@ class TablePage extends Component {
                 .then(res => {
                     this.setState({waiterList: res.data})
                 });
+
         } else {
-            if (token !== "No Token") {
-
-            } else {
-                this.props.history.push('/');
-            }
+            this.props.history.push('/');
         }
-
-
     }
 
     onClickTableCategoryName = (e) => {
@@ -61,7 +56,7 @@ class TablePage extends Component {
             categoryTableNumber: e.number,
             categoryName: e.name
         })
-
+        console.log(this.state.waiterList)
         this.state.array = [];
 
         let orderString;
@@ -119,7 +114,7 @@ class TablePage extends Component {
         })
     }
 
-    fullTableModal = (e) => {
+    fullTableModal  = async (e) => {
         const {modalObjectList, tableOrderList} = this.state;
         const {table, setTable} = this.context;
         this.setState({
@@ -127,14 +122,17 @@ class TablePage extends Component {
         })
         this.state.selectedTable = e;
 
-        setTable(this.state.categoryName + " " + this.state.selectedTable);
+        sessionStorage.setItem("table",this.state.categoryName + " " + this.state.selectedTable);//session
+        //await setTable(this.state.categoryName + " " + this.state.selectedTable);//context
 
         let orderList = JSON.parse(localStorage.getItem("orderList"))
 
         modalObjectList.length = 0;
 
-        //let tableString = sessionStorage.getItem("table")
-        let tableString = table;
+        let tableString = sessionStorage.getItem("table")//session
+
+        //let tableString = table;//context
+        console.log(table)
         for (let i = 0; i < orderList.length; i++) {
             for (let j = 0; j < orderList[i].length; j++) {
                 if (orderList[i][j].tableName === tableString) {
@@ -144,6 +142,7 @@ class TablePage extends Component {
                 }
             }
         }
+
     }
 
     goShoppingList = (e) => {
@@ -166,11 +165,12 @@ class TablePage extends Component {
 
     clearTable = () => {
         const {table} = this.context;
+        const tableSession = sessionStorage.getItem("table");
         let orderList = ClientHomePage.getOrderListFromStorage();
 
         orderList.forEach(function (order, index) {
             let firstOrderString = JSON.stringify(order[0])
-            let sessionTableString = "\"" + table + "\"";
+            let sessionTableString = "\"" + tableSession + "\"";//table-tableSession
             if (firstOrderString.indexOf(sessionTableString) !== -1) {
                 orderList.splice(index, 1);
             }
@@ -232,7 +232,11 @@ class TablePage extends Component {
                             waiterList.map(v => {
                                 return (
                                     <button className="btn btn-info btn-block mb-1"
-                                            onClick={() => this.goShoppingList(v)}>{v.name}</button>
+                                            onClick={() => this.goShoppingList(v)}>{v.name}
+                                        <br/>
+                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
+                                             style={{margin: 10}}/>
+                                    </button>
                                 )
                             })
                         }

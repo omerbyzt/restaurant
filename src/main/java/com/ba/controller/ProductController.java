@@ -28,7 +28,7 @@ public class ProductController {
         return "Product Deleted";
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
         productService.updateProduct(productDTO);
         return productDTO;

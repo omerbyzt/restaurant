@@ -10,7 +10,7 @@ class LoginPage extends Component {
         username: "",
         password: "",
         userList: "",
-        isChecked:true
+        isChecked: true
     }
 
     changeInput = (e) => {
@@ -20,47 +20,66 @@ class LoginPage extends Component {
     }
 
     componentDidMount() {
+
         const{setUserName,setToken} = this.context;
         if(localStorage.getItem("token") !== null){
             setUserName(localStorage.getItem("username"));
             setToken(localStorage.getItem("token"));
             this.props.history.push('/menu');
-        }else{
-            axios.get('http://localhost:8080/users/listall',
-                {headers: {Authorization: 'Basic ' + btoa('admin:pass3')}})
-                .then((res) => {
-                    this.setState({userList: res.data});
-                    console.log(res.data)
-                });
-
-            const{setTable} = this.context;
-            setTable("No Table");
-            // sessionStorage.setItem("table", "No Table");
         }
+        //     else{
+        //     axios.get('http://localhost:8080/user/list',
+        //         {headers: {Authorization: 'Basic ' + btoa('admin:123')}})
+        //         .then((res) => {
+        //             this.setState({userList: res.data});
+        //             console.log(res.data)
+        //         });
+        //
+        //     const{setTable} = this.context;
+        //     setTable("No Table");
+        //
+        // }
     }
 
-    clickLoginButton = () => {
-        const{setToken,setUserName} = this.context;
+    clickLoginButton = (e) => {
 
-        if (this.state.userList.filter(user => (user.username === this.state.username) && (user.password.substring(6, user.password.size) === this.state.password)).length > 0) {
-            //Session
-            // sessionStorage.setItem("token", 'Basic ' + btoa(this.state.username + ":" + this.state.password));
-            // sessionStorage.setItem("username", this.state.username);
-            //Context
-            setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
+        const {setToken, setUserName} = this.context;
 
-            setUserName(this.state.username);
+        axios.get('http://localhost:8080/user/list',
+            {headers: {Authorization: 'Basic ' + btoa(this.state.username + ":" + this.state.password)}})
+            .then((res) => {
 
-            this.props.history.push('/menu');
-        } else {
+                setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
+                setUserName(this.state.username);
+                this.props.history.push('/menu');
+            }).catch(() => {
             this.props.history.push('/');
             window.alert("USERNAME OR PASSWORD WRONG!")
-        }
+        });
 
         if(this.state.isChecked){
             localStorage.setItem("token" , 'Basic ' + btoa(this.state.username + ":" + this.state.password));
             localStorage.setItem("username",this.state.username);
         }
+
+        // const{setToken,setUserName} = this.context;
+        //
+        // if (this.state.userList.filter(user => (user.username === this.state.username) && (user.password.substring(6, user.password.size) === this.state.password)).length > 0) {
+        //
+        //     setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
+        //
+        //     setUserName(this.state.username);
+        //
+        //     this.props.history.push('/menu');
+        // } else {
+        //     this.props.history.push('/');
+        //     window.alert("USERNAME OR PASSWORD WRONG!")
+        // }
+        //
+        // if(this.state.isChecked){
+        //     localStorage.setItem("token" , 'Basic ' + btoa(this.state.username + ":" + this.state.password));
+        //     localStorage.setItem("username",this.state.username);
+        // }
     }
 
     toggleChange = () => {
@@ -107,14 +126,16 @@ class LoginPage extends Component {
                                     </div>
 
                                     <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rememberme" checked={isChecked} onChange={this.toggleChange}/>
+                                        <input type="checkbox" className="custom-control-input" id="rememberme"
+                                               checked={isChecked} onChange={this.toggleChange}/>
                                         <label className="custom-control-label" for="rememberme">Remember Me</label>
                                     </div>
 
-                                    <button className="btn btn-info btn-block mt-3"
-                                            onClick={() => this.clickLoginButton()}>Login
-                                    </button>
+
                                 </form>
+                                <button className="btn btn-info btn-block mt-3"
+                                        onClick={() => this.clickLoginButton()}>Login
+                                </button>
                             </div>
                         </div>
                     </div>

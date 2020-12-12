@@ -2,18 +2,18 @@ import React, {Component} from 'react';
 import Header from "./Header";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 class AuthList extends Component {
     state = {
         authUpdate : false,
         authList:[],
-        username:"",
+        name:"",
         authority:"",
+        id:""
     }
     componentDidMount() {
-        const{authList} = this.state
-
-        let uri = "http://localhost:8080/auth/listall";
+        let uri = "http://localhost:8080/role/list";
         fetch(uri, {
             method: 'get',
             headers: new Headers({
@@ -35,31 +35,37 @@ class AuthList extends Component {
     }
 
     onClickedUpdateAuthBtn = (e) => {
-        const{authUpdate,username,authority} = this.state;
         this.setState({
             authUpdate: !this.state.authUpdate,
-            username: e.username,
-            authority:e.authority
+            name: e.name,
+            id:e.id
         })
     }
 
     updateAuth = () => {
-        const {username,authority} = this.state;
+        const {name,id} = this.state;
 
         const putAuth = {
-            username : username,
-            authority: authority
+            id:id,
+            name : name
         }
 
-        axios.put('http://localhost:8080/auth/update/',putAuth,
+        axios.put('http://localhost:8080/role/update/',putAuth,
             {headers:{Authorization: sessionStorage.getItem('token')}});
     }
 
+    deleteRole = (e) => {
+        axios.delete('http://localhost:8080/role/delete/'+e.id,
+            {headers:{Authorization: sessionStorage.getItem('token')}})
+            .then(res => {this.setState({authList:this.state.authList.filter(table => table.id!==e.id)})});
+    }
+
     render() {
-        const{authUpdate,authList,username,authority} = this.state;
+        const{authUpdate,authList,name,id} = this.state;
         return (
             <div>
                 <Header/>
+                <Link to = "/addrole"><button className="btn btn-success productListAddProduct">+ Add Role</button></Link>
                 {
                     authUpdate ?
                         <div>
@@ -72,29 +78,32 @@ class AuthList extends Component {
                                         <form>
 
                                             <div className="form-group">
-                                                <label htmlFor="name">User Name</label>
+                                                <label htmlFor="idInput">Role ID</label>
                                                 <input type="text"
                                                        className="form-control"
-                                                       placeholder={username}
-                                                       name="username"
-                                                       id="nameInput"
-                                                       value={username}
-                                                       disabled = {username}
+                                                       placeholder={id}
+                                                       name="id"
+                                                       id="idInput"
+                                                       value={id}
+                                                       disabled = {id}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="authority">Authority</label>
+                                                <label htmlFor="nameInput">Role Name</label>
                                                 <input type="text"
                                                        className="form-control"
-                                                       placeholder={authority}
-                                                       name="authority"
-                                                       id="authInput"
-                                                       value={authority}
+                                                       placeholder={name}
+                                                       name="name"
+                                                       id="nameInput"
+                                                       value={name}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
+
+
+
                                             <button className="btn btn-warning btn-block"
                                                     onClick={this.updateAuth}>Update
                                             </button>
@@ -104,11 +113,11 @@ class AuthList extends Component {
                             </div>
                         </div>:null
                 }
-                <Table striped bordered hover>
+                <Table striped bordered hover className="usersTable">
                     <thead>
                         <tr>
-                            <th>User Name</th>
-                            <th>Auth</th>
+                            <th>#ID</th>
+                            <th>Name</th>
                             <th>Buttons</th>
                         </tr>
                     </thead>
@@ -117,10 +126,11 @@ class AuthList extends Component {
                         authList.map(v => {
                             return(
                                 <tr>
-                                    <td>{v.username}</td>
-                                    <td>{v.authority}</td>
+                                    <td>{v.id}</td>
+                                    <td>{v.name}</td>
                                     <td align="center">
                                         <button className="btn btn-warning mr-2" onClick={this.onClickedUpdateAuthBtn.bind(this,v)}>Update</button>
+                                        <button className="btn btn-danger mr-2" onClick={this.deleteRole.bind(this,v)}>Delete</button>
                                     </td>
                                 </tr>
                             )

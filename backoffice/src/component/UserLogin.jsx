@@ -7,19 +7,20 @@ class LoginPage extends Component {
         username: "",
         password: "",
         userList: [],
-        trueUser : false
+        trueUser: false
     }
+
     componentDidMount() {
 
-        axios.get("http://localhost:8080/auth/loadadminauth");
-        axios.get("http://localhost:8080/users/loadadminusers");
+        // axios.get("http://localhost:8080/auth/loadadminauth");
+        // axios.get("http://localhost:8080/users/loadadminusers");
 
-        axios.get('http://localhost:8080/users/listall' ,
-            {headers:{Authorization:'Basic '+btoa('admin:pass3')}})
-            .then((res)=>{
-                this.setState({userList: res.data});
-                console.log(res.data)
-            });
+        // axios.get('http://localhost:8080/users/listall' ,
+        //     {headers:{Authorization:'Basic '+btoa('admin:pass3')}})
+        //     .then((res)=>{
+        //         this.setState({userList: res.data});
+        //         console.log(res.data)
+        //     });
     }
 
     changeInput = (e) => {
@@ -30,15 +31,18 @@ class LoginPage extends Component {
 
     login = (value) => {
 
-        if(this.state.userList.filter(user => (user.username === this.state.username)&&(user.password.substring(6,user.password.size) === this.state.password)).length>0){
-            sessionStorage.setItem("token",'Basic '+btoa(this.state.username+":"+this.state.password));
-            sessionStorage.setItem("username",this.state.username);
-            this.props.history.push('/home');
-        }
-        else{
-            this.props.history.push('/');
-            window.alert("USERNAME OR PASSWORD WRONG!")
-        }
+        this.props.history.push('/home');
+        sessionStorage.setItem("token",'Basic '+btoa("admin:123"));
+        sessionStorage.setItem("username",this.state.username);
+        // if(this.state.userList.filter(user => (user.username === this.state.username)&&(user.password.substring(6,user.password.size) === this.state.password)).length>0){
+        //     sessionStorage.setItem("token",'Basic '+btoa(this.state.username+":"+this.state.password));
+        //     sessionStorage.setItem("username",this.state.username);
+        //     this.props.history.push('/home');
+        // }
+        // else{
+        //     this.props.history.push('/');
+        //     window.alert("USERNAME OR PASSWORD WRONG!")
+        // }
 
         /*
         sessionStorage.setItem("token",'Basic '+btoa(this.state.username+":"+this.state.password));

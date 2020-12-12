@@ -4,6 +4,7 @@ import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,15 +49,16 @@ public class ProductConverter {
 
         for (Product productListItem : productList){
             ProductDTO productDTO = new ProductDTO();
-            //bu satırı patlaması durumunda açın
-            //productDTO.setCategories(ProductConverter.convertListToDTOList(productListItem.getCategories()));
-            //productDTO.setCategory(productListItem.getCategory());
+
             productDTO.setProductCategory(productListItem.getProductCategory());
             productDTO.setProductDesc(productListItem.getProductDesc());
             productDTO.setProductID(productListItem.getProductID());
             productDTO.setProductName(productListItem.getProductName());
             productDTO.setProductPrice(productListItem.getProductPrice());
-
+            productDTO.setMediaDTO(MediaConverter.convertMediaToMediaDTO(productListItem.getMedia()));
+            //TODO : Patlaması halinde uçurunuz
+            productDTO.setCategories(CategoryConvertor.convertListToCategoryListDTO(productListItem.getCategories()));
+            //
             productListDTO.add(productDTO);
         }
         return productListDTO;
@@ -66,12 +68,29 @@ public class ProductConverter {
         Product product = new Product();
 
         product.setCategories(ProductConverter.convertDTOListToList(productDTO.getCategories()));
-        //product.setCategory(productDTO.getCategory());
         product.setProductName(productDTO.getProductName());
         product.setProductDesc(productDTO.getProductDesc());
         product.setProductCategory(productDTO.getProductCategory());
         product.setProductPrice(productDTO.getProductPrice());
         product.setProductID(productDTO.getProductID());
+        product.setMedia(MediaConverter.convertMediaDTOToMedia(productDTO.getMediaDTO()));
+
+        return product;
+    }
+
+    //Update için yeniden yazılan converterlar
+
+    public static Product updateDTOToEntity(ProductDTO productDTO){
+        Product product = new Product();
+
+        product.setProductID(productDTO.getProductID());
+        product.setProductName(productDTO.getProductName());
+        product.setProductDesc(productDTO.getProductDesc());
+        product.setProductCategory(productDTO.getProductCategory());
+        product.setProductPrice(productDTO.getProductPrice());
+        product.setMedia(MediaConverter.convertMediaDTOToMedia(productDTO.getMediaDTO()));
+
+        product.getCategories().addAll(CategoryConvertor.updateDTOListToList(productDTO.getCategories()));
 
         return product;
     }

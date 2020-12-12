@@ -20,7 +20,7 @@ public class RoleService {
 
     public String addRole(RoleDTO roleDTO){
         roleRepository.save(RoleConverter.convertDTOToEntity(roleDTO));
-        return "User Added";
+        return "Role Added";
     }
 
     public String deleteRole(Long id){

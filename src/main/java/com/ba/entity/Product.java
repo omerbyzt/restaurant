@@ -29,6 +29,18 @@ public class Product {
     @ManyToMany(mappedBy = "products", cascade = CascadeType.DETACH)
     private List<Category> categories = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name="media_id")
+    private Media media;
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }
+
     public Product(String productName, String productDesc, String productCategory, Double productPrice) {
         this.productName = productName;
         this.productDesc = productDesc;

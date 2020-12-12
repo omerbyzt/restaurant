@@ -15,13 +15,23 @@ public class ProductDTO {
     private String productDesc;
     private String productCategory;
     private Double productPrice;
+    private MediaDTO mediaDTO;
+    private List<CategoryDTO> categories = new ArrayList();
+    private List<Long> categoriesIds = new ArrayList<>();
 
     //
     //private Category category;
     //private Set<Category>categories  = new HashSet<>();
-    private List<CategoryDTO> categories = new ArrayList();
 
-    private List<Long> categoriesIds = new ArrayList<>();
+
+    public MediaDTO getMediaDTO() {
+        return mediaDTO;
+    }
+
+    public void setMediaDTO(MediaDTO mediaDTO) {
+        this.mediaDTO = mediaDTO;
+    }
+
 
     public List<Long> getCategoriesIds() {
         return categoriesIds;

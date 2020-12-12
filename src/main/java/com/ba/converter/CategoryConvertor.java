@@ -18,12 +18,14 @@ public class CategoryConvertor {
 
         for(Product product:products){
             ProductDTO dto = new ProductDTO();
+
             dto.setProductPrice(product.getProductPrice());
             dto.setProductName(product.getProductName());
             dto.setProductDesc(product.getProductDesc());
             dto.setProductCategory(product.getProductCategory());
             dto.setProductID(product.getProductID());
             dto.setCategories(ProductConverter.convertListToDTOList(product.getCategories()));
+            dto.setMediaDTO(MediaConverter.convertMediaToMediaDTO(product.getMedia()));
 
             dtoList.add(dto);
         }
@@ -42,6 +44,7 @@ public class CategoryConvertor {
             product.setProductName(dto.getProductName());
             product.setProductID(dto.getProductID());
             product.setCategories(ProductConverter.convertDTOListToList(dto.getCategories()));
+            product.setMedia(MediaConverter.convertMediaDTOToMedia(dto.getMediaDTO()));
 
             list.add(product);
         }
@@ -106,6 +109,7 @@ public class CategoryConvertor {
             productDTO.setProductDesc(prod.getProductDesc());
             productDTO.setProductName(prod.getProductName());
             productDTO.setProductPrice(prod.getProductPrice());
+            productDTO.setMediaDTO(MediaConverter.convertMediaToMediaDTO(prod.getMedia()));
 
             dto.add(productDTO);
         }
@@ -120,8 +124,29 @@ public class CategoryConvertor {
         product.setProductCategory(productDTO.getProductCategory());
         product.setProductDesc(productDTO.getProductDesc());
         product.setProductName(productDTO.getProductName());
+        product.setMedia(MediaConverter.convertMediaDTOToMedia(productDTO.getMediaDTO()));
 
         return product;
+    }
+
+    //for update
+
+    public static List<Category> updateDTOListToList(List<CategoryDTO> dtoList){
+        List<Category> categoryList = new ArrayList<>();
+
+        dtoList.forEach(dtoListItem -> {
+            Category category = new Category();
+
+            category.setMedia(MediaConverter.convertMediaDTOToMedia(dtoListItem.getMedia()));
+            category.setId(dtoListItem.getId());
+            category.setName(dtoListItem.getName());
+            category.setImageToUrl(dtoListItem.getImageToUrl());
+            category.setDescription(dtoListItem.getDescription());
+
+            categoryList.add(category);
+        });
+
+        return categoryList;
     }
 
 

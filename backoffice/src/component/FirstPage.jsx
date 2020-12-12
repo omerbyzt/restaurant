@@ -21,8 +21,6 @@ class FirstPage extends Component {
         this.filterList = this.filterList.bind(this);
     }
 
-
-
     componentDidMount() {
         const {content} = this.state
 
@@ -49,7 +47,7 @@ class FirstPage extends Component {
     }
 
     onClickDeleteBtn = (e) => {
-
+        //delete için filtrelemesini yap
         window.location.reload();
         axios.delete('http://localhost:8080/product/delete/' + e.productID,
             {headers: {Authorization: sessionStorage.getItem('token')}});
@@ -60,6 +58,8 @@ class FirstPage extends Component {
             obj:e,
             isUpdateCard:!this.state.isUpdateCard
         })
+
+        console.log(e)
     }
 
     clickProductList = () => {
@@ -112,13 +112,15 @@ class FirstPage extends Component {
                                 <th>Product Description</th>
                                 <th>Product Category</th>
                                 <th>Product Price</th>
+                                <th>Product Image</th>
+                                <th>Product Categories</th>
                                 <th>Buttons</th>
                             </tr>
                             </thead>
                             <tbody>
                             {
                                 content.map(v => {
-                                    return (<tr align="center">
+                                    return (<tr align="left">
                                         <td>{v.productID}</td>
                                         <td>{v.productName}</td>
                                         <td>{v.productDesc}</td>
@@ -126,6 +128,21 @@ class FirstPage extends Component {
                                             <button className="btn btn-link" onClick={()=> this.filterList(v.productCategory)}>{v.productCategory}</button>
                                         </td>
                                         <td>{v.productPrice}</td>
+                                        <td align="center">
+                                                <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
+                                                     style={{margin: 10}}/>
+                                        </td>
+                                        <td>
+
+                                                {
+                                                    v.categories.map(value => {
+                                                        return (
+                                                            <li>{value.name}</li>
+                                                        )
+                                                    })
+                                                }
+
+                                        </td>
                                         <td align="center">
                                             <button className="btn btn-warning mr-2"
                                                     onClick={this.onClickUpdateBtn.bind(this, v)}>Update

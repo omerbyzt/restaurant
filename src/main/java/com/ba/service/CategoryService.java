@@ -51,6 +51,7 @@ public class CategoryService {
     }
 
     public String addProduct(ProductDTO productDTO, Long id) {
+
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList = new ArrayList<>();
         Product product = CategoryConvertor.convertDTOToProduct(productDTO);

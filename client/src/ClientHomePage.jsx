@@ -34,7 +34,8 @@ class ClientHomePage extends Component {
     }
 
     componentDidMount() {
-        if(localStorage.getItem("token") !== null){
+        const {token} = this.context
+        if(localStorage.getItem("token") !== null || token !== "No Token"){
             //TODO:seçilmiş odadan f5 yapınca wiater ve seçili masa?
 
             const{setUserName,setToken} = this.context;

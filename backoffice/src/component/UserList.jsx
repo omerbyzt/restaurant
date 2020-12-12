@@ -3,6 +3,8 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Header from "./Header";
 import {Link} from "react-router-dom";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class UserList extends Component {
     state = {
@@ -11,14 +13,16 @@ class UserList extends Component {
         username: "",
         password: "",
         enabled: "",
+        email: "",
+        roles: [],
+        id:"",
+        roleList:[],
+        selectedRoleName:"Select Role"
     }
 
     componentDidMount() {
 
-        const {userList} = this.state
-
-        let uri = "http://localhost:8080/users/listall";
-
+        let uri = "http://localhost:8080/user/list";
         fetch(uri, {
             method: 'get',
             headers: new Headers({
@@ -31,6 +35,12 @@ class UserList extends Component {
                     userList: data
                 })
             })
+
+        axios.get('http://localhost:8080/role/list',
+            {headers: {Authorization: sessionStorage.getItem('token')}})
+            .then(res => {
+                this.setState({roleList: res.data})
+            });
     }
 
     changeInput = (e) => {
@@ -44,40 +54,55 @@ class UserList extends Component {
             userUpdate: !this.state.userUpdate,
             username: e.username,
             password: e.password,
-            enabled: e.enabled
+            enabled: e.enabled,
+            id:e.id,
+            email:e.email,
         })
     }
 
     onClickDeleteBtn = (e) => {
         window.location.reload();
         axios.delete('http://localhost:8080/users/delete/' + e.username,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: sessionStorage.getItem('token')}});
 
         axios.delete('http://localhost:8080/auth/delete/' + e.username,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: sessionStorage.getItem('token')}});
 
     }
 
     updateUser = (e) => {
 
-        const {userList, userUpdate, username, password,enabled} = this.state;
+        const { username, password, enabled,id,email,roles} = this.state;
 
         const putUser = {
+            id:id,
+            email: email,
             username: username,
             password: password,
-            enabled: enabled
+            enabled: enabled,
+            roles:roles,
         }
 
-        axios.put('http://localhost:8080/users/update/',putUser,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+        axios.put('http://localhost:8080/user/update', putUser,
+            {headers: {Authorization: sessionStorage.getItem('token')}});
+    }
+
+    onClickItem = (e) => {
+        this.setState({
+            selectedRoleName: e.name
+        })
+        this.state.roles.push(e)
+        console.log(this.state.roles)
     }
 
     render() {
-        const {userList, userUpdate, username, password, enabled} = this.state;
+        const {userList, userUpdate, username, password, enabled,id,email,roleList,selectedRoleName} = this.state;
         return (
             <div>
                 <Header></Header>
-                <Link to = "/adduser"><button className="btn btn-success productListAddProduct">+ Add User</button></Link>
+                <Link to="/adduser">
+                    <button className="btn btn-success productListAddProduct">+ Add User</button>
+                </Link>
                 {
                     userUpdate ?
                         <div>
@@ -89,26 +114,50 @@ class UserList extends Component {
                                     <div className="card-body">
                                         <form>
                                             <div className="form-group">
-                                                <label htmlFor="username">User Name</label>
+                                                <label htmlFor="idInput">User ID</label>
+                                                <input type="text"
+                                                       className="form-control"
+                                                       placeholder={id}
+                                                       name="id"
+                                                       id="idInput"
+                                                       value={id}
+                                                       disabled={id}
+                                                       onChange={this.changeInput}
+                                                />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label htmlFor="nameInput">User Name</label>
                                                 <input type="text"
                                                        className="form-control"
                                                        placeholder={username}
                                                        name="username"
                                                        id="nameInput"
                                                        value={username}
-                                                       disabled = {username}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="password">User Password</label>
+                                                <label htmlFor="passwordInput">User Password</label>
                                                 <input type="text"
                                                        className="form-control"
                                                        placeholder={password}
                                                        name="password"
                                                        id="passwordInput"
                                                        value={password}
+                                                       onChange={this.changeInput}
+                                                />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label htmlFor="emailInput">User EMail</label>
+                                                <input type="text"
+                                                       className="form-control"
+                                                       placeholder={email}
+                                                       name="email"
+                                                       id="emailInput"
+                                                       value={email}
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
@@ -124,8 +173,35 @@ class UserList extends Component {
                                                        onChange={this.changeInput}
                                                 />
                                             </div>
-                                            <button className="btn btn-warning btn-block"
-                                                    onClick={this.updateUser}>Update
+
+                                            <div className="dropdown">
+                                                <label htmlFor="price">Product Category : </label>
+                                                <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="true">
+                                                    {selectedRoleName}
+                                                </button>
+                                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    {
+                                                        roleList.map(v => {
+                                                            return (
+
+                                                                <div className="row col-md -12">
+                                                                    <label>
+                                                                        <input type="checkbox" value=""
+                                                                               onClick={this.onClickItem.bind(this, v)}
+                                                                        />{v.name}
+                                                                    </label>
+                                                                </div>
+
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <button className="btn btn-warning btn-block mt-3"
+                                                    onClick={()=>this.updateUser()}>Update
                                             </button>
                                         </form>
                                     </div>
@@ -138,7 +214,9 @@ class UserList extends Component {
                     <tr>
                         <th>User Name</th>
                         <th>User Password</th>
+                        <th>User Email</th>
                         <th>User Enabled</th>
+                        <th>User Roles</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -149,7 +227,20 @@ class UserList extends Component {
                                 <tr>
                                     <td>{v.username}</td>
                                     <td className="hidePassword">{v.password}</td>
+                                    <td >{v.email}</td>
                                     <td>{v.enabled.toString()}</td>
+                                    <td>
+                                        <ul>
+                                            {
+                                                v.roles.map(value => {
+                                                    return (
+                                                        <li>{value.name}</li>
+                                                    )
+                                                })
+                                            }
+                                        </ul>
+                                    </td>
+
                                     <td align="center">
                                         <button className="btn btn-warning mr-2"
                                                 onClick={this.onClickUpdateBtn.bind(this, v)}>Update

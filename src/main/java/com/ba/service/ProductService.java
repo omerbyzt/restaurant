@@ -1,5 +1,6 @@
 package com.ba.service;
 
+import com.ba.converter.CategoryConvertor;
 import com.ba.converter.ProductConverter;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
@@ -40,7 +41,29 @@ public class ProductService {
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO){
-        productRepository.saveAndFlush(ProductConverter.convertDTOToProduct(productDTO));
+
+        Product product = productRepository.findById(productDTO.getProductID()).get();
+        List<Category> categoryList = product.getCategories();
+
+        for (int i = 0 ;i<categoryList.size();i++){
+            categoryList.get(i).getProducts().remove(product);
+            categoryRepository.save(categoryList.get(i));
+        }
+
+        //productRepository.saveAndFlush(ProductConverter.updateDTOToEntity(productDTO));
+
+        List<Long> categoriesIdsList = productDTO.getCategoriesIds();
+        List<Category> categoryList2 = new ArrayList<>();
+        Product product2 = CategoryConvertor.convertDTOToProduct(productDTO);
+        for(int i = 0 ; i<categoriesIdsList.size() ; i++){
+            Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
+            category.getProducts().add(product2);
+            categoryList2.add(category);
+        }
+        product2.setCategories(categoryList2);
+
+        productRepository.save(product2);
+
         return productDTO;
     }
 

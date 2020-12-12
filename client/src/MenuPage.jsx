@@ -8,18 +8,18 @@ class MenuPage extends Component {
 
     componentDidMount() {
         const {token, setToken, setUserName} = this.context;
+
         if (localStorage.getItem("token") !== null) {
             setToken(localStorage.getItem("token"));
             setUserName(localStorage.getItem("username"))
-            console.log("null gelmiyor");
         } else {
             if (token !== "No Token") {
-
+                //remember me olmadan giriş
             } else {
-                console.log("null geliyor");
                 this.props.history.push('/');
             }
         }
+
     }
 
     clickSignOutButton = () => {

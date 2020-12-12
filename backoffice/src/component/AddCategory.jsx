@@ -72,16 +72,12 @@ class AddCategory extends Component {
         this.setState({
             showModal:!this.state.showModal
         })
-        // eslint-disable-next-line no-restricted-globals
-        event.preventDefault();
     }
 
     handleModal = () => {
         this.setState({
             showModal:!this.state.showModal
         })
-        // eslint-disable-next-line no-restricted-globals
-        event.preventDefault();
     }
 
     render() {
@@ -145,31 +141,6 @@ class AddCategory extends Component {
                                     />
                                 </div>
 
-                                {/*<div className="dropdown">*/}
-                                {/*    <label htmlFor="price">Product Category : </label>*/}
-                                {/*    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"*/}
-                                {/*            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"*/}
-                                {/*            aria-expanded="true">*/}
-                                {/*        {selectedMediaName}*/}
-                                {/*    </button>*/}
-                                {/*    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">*/}
-                                {/*        <div className="row col-md -12">*/}
-
-                                {/*            {*/}
-                                {/*                mediaList.map(v => {*/}
-                                {/*                    return (*/}
-                                {/*                        <label>*/}
-                                {/*                            <input className="ml-2" type="checkbox" value=""*/}
-                                {/*                                   onClick={this.onClickItem.bind(this, v)}/>{v.name}*/}
-                                {/*                        </label>*/}
-                                {/*                    )*/}
-                                {/*                })*/}
-                                {/*            }*/}
-
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*    <button className="btn btn-link ml-2" onClick={()=>this.showMedia()}>Show Media</button>*/}
-                                {/*</div>*/}
                                 <div>
                                     <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
                                         {
@@ -180,8 +151,8 @@ class AddCategory extends Component {
                                             })
                                         }
                                     </DropdownButton>
-
                                 </div>
+
                                 <button className="btn btn-link ml-2" onClick={()=>this.showMedia()}>Show Media</button>
                                 <button className="btn btn-warning btn-block" type="submit">Add Category</button>
                             </form>
