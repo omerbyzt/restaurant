@@ -3,9 +3,11 @@ import Header from "./Header";
 import axios from "axios";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class AddWaiter extends Component {
-
+    static contextType = UserContext;
     state = {
         name:"",
         phoneNumber:"",
@@ -17,22 +19,36 @@ class AddWaiter extends Component {
         selectedMediaName: "Chose Media",
         selectedMediaUrl: "",
         selectedMediaID:"",
+        loadingIsVisible:false
     }
 
-    componentDidMount() {
-        let uri = "http://localhost:8080/file/list";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    mediaList: data
-                })
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/file/list";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        mediaList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -41,28 +57,32 @@ class AddWaiter extends Component {
         })
     }
 
-    addWaiter = () => {
-        const{name,phoneNumber,mail,address,urlToImage,salary,selectedMediaName,selectedMediaUrl,selectedMediaID} = this.state
+    addWaiter = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {name, phoneNumber, mail, address, urlToImage, salary, selectedMediaName, selectedMediaUrl, selectedMediaID} = this.state
 
 
         const newMedia = {
-            id:selectedMediaID,
-            name:selectedMediaName,
-            fileContent:selectedMediaUrl,
+            id: selectedMediaID,
+            name: selectedMediaName,
+            fileContent: selectedMediaUrl,
         }
 
         const newWaiter = {
-            name:name,
+            name: name,
             phoneNumber: phoneNumber,
-            mail:mail,
+            mail: mail,
             address: address,
             urlToImage: urlToImage,
             salary: salary,
-            mediaDTO:newMedia
+            mediaDTO: newMedia
         }
 
-        axios.post("http://localhost:8080/waiter/add-waiter", newWaiter,
-            {headers:{Authorization:sessionStorage.getItem('token')}});
+        await axios.post("http://localhost:8080/waiter/add-waiter", newWaiter,
+            // {headers:{Authorization:sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        this.setState({loadingIsVisible: false});
     }
 
     onClickItem = (e) => {
@@ -182,6 +202,11 @@ class AddWaiter extends Component {
                         </div>
                     </div>
                 </div>
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

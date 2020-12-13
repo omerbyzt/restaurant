@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 //import '../App.css';
 import Header from "./Header";
-import warnAboutDeprecatedESMImport from "react-router-dom/es/warnAboutDeprecatedESMImport";
+import Table from "react-bootstrap/Table";
+import {Link} from "react-router-dom";
 
 function AddImages() {
     const [selectedFile, setSelectedFile] = useState();
@@ -30,7 +31,6 @@ function AddImages() {
         }).then(responce => responce.text())
             .then(result => console.warn("result", result))
             .catch(error => console.warn("error", error))
-
     };
 
     useEffect(() => {
@@ -43,31 +43,70 @@ function AddImages() {
             .catch(error => console.log('error',error));
     },[selectedFile]);
 
-    const getFiles = () => {
-        if(!imageList){
-            return null;
-        }
-
-        let list = [];
-        console.log(imageList)
-        imageList.map(v=> {
-            list.push(<li>
-                <img src={'data:image/png;base64,' + v.fileContent} width="150" style={{margin:10}}/>
-            </li>)
-        })
-        return (
-                <ul>
-                    {list}
-                </ul>
-        )
-    }
+    // const getFiles = () => {
+    //     if(!imageList){
+    //         return null;
+    //     }
+    //
+    //     let list = [];
+    //     console.log(imageList)
+    //     imageList.map(v=> {
+    //         list.push(<li>
+    //             <img src={'data:image/png;base64,' + v.fileContent} width="150" style={{margin:10}}/>
+    //         </li>)
+    //     })
+    //     return (
+    //             <ul>
+    //                 {list}
+    //             </ul>
+    //     )
+    // }
 
     return(
         <div className="App">
             <Header/>
-            <input type="file" name="file" style={{paddingTop:20}} onChange={(e)=> onImageChange(e)}/>
-            <button style={{marginTop:20}} onClick={()=> onFileUpload()}>Upload Image</button>
-            {getFiles()}
+            <div className="col-md-6 mx-auto mt-5">
+                <div className="card">
+                    <div className="card-header">
+                        <h4>Image Page</h4>
+                    </div>
+                    <div className="card-body imageCardBody" align="center">
+                        <input type="file" name="file"  onChange={(e)=> onImageChange(e)}/>
+                        <br/>
+
+                        <Link to="/home"><button className="btn btn-success mb-1 imageUpload" style={{marginTop:20}} onClick={()=> onFileUpload()}>Upload Image</button></Link>
+
+
+                        <hr/>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>Image Name</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                imageList ?
+                                imageList.map(v=> {
+                                    return(
+                                        <tr align="center">
+                                            <td>{v.name}</td>
+                                            <td>
+                                                <img src={'data:image/png;base64,' + v.fileContent} width="100" style={{margin:10}}/>
+                                            </td>
+                                        </tr>
+                                    )
+                                }):null
+                            }
+                            </tbody>
+                        </Table>
+
+                        {/*{getFiles()}*/}
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 

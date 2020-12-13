@@ -1,19 +1,23 @@
 import React, {Component} from 'react';
 import Header from "./Header";
 import axios from "axios";
+import UserContext from "../Context";
 
 class AddTable extends Component {
+    static contextType = UserContext;
     state = {
         tableCategoryList:[],
         number:"",
         category:"Select Category",
-        categoryId:""
+        categoryId:"",
+        token:this.context
     }
     componentDidMount() {
         const{tableCategoryList} = this.state
 
         axios.get('http://localhost:8080/table-category/listall',
-            {headers:{Authorization: sessionStorage.getItem('token')}})
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers:{Authorization: this.state.token}})
             .then(res => {this.setState({tableCategoryList: res.data})});
             console.log(tableCategoryList)
     }
@@ -34,7 +38,8 @@ class AddTable extends Component {
         }
 
         axios.post("http://localhost:8080/table/add/"+categoryId,newTable,
-            {headers:{Authorization:sessionStorage.getItem('token')}})
+            // {headers:{Authorization:sessionStorage.getItem('token')}})
+            {headers:{Authorization:this.state.token}})
             .then(res => {this.setState({tableCategoryList:this.state.tableCategoryList})});
     }
 

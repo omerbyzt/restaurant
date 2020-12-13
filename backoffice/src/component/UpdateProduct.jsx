@@ -3,8 +3,11 @@ import axios from "axios";
 import Header from "./Header";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class UpdateProduct extends Component {
+    static contextType = UserContext;
     state = {
         id: this.props.id,
         name: this.props.name,
@@ -17,21 +20,36 @@ class UpdateProduct extends Component {
         categoryList:[],
         selectedCategoryName:"",
         multiCategory: [],
-        multiCategoryIds:[]
+        multiCategoryIds:[],
+        loadingIsVisible:false
     }
 
-    componentDidMount() {
-        axios.get('http://localhost:8080/file/list',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({mediaList: res.data})
-            });
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        axios.get('http://localhost:8080/category/list-category',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({categoryList: res.data})
-            });
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            await axios.get('http://localhost:8080/file/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({mediaList: res.data})
+                });
+
+            await axios.get('http://localhost:8080/category/list-category',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({categoryList: res.data})
+                });
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -40,28 +58,32 @@ class UpdateProduct extends Component {
         })
     }
 
-    updateProduct = () => {
-        const {id,name,desc,category,price,selectedMediaID,multiCategory,multiCategoryIds} = this.state;
+    updateProduct = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {id, name, desc, category, price, selectedMediaID, multiCategory, multiCategoryIds} = this.state;
 
         const newMedia = {
-            id:selectedMediaID
+            id: selectedMediaID
         }
 
-        const putProduct ={
-            productID : id,
-            productName : name,
-            productDesc : desc,
-            productCategory : category,
-            productPrice : price,
-            mediaDTO : newMedia,
-            categories:multiCategory,
-            categoriesIds:multiCategoryIds
+        const putProduct = {
+            productID: id,
+            productName: name,
+            productDesc: desc,
+            productCategory: category,
+            productPrice: price,
+            mediaDTO: newMedia,
+            categories: multiCategory,
+            categoriesIds: multiCategoryIds
         }
 
-        axios.put('http://localhost:8080/product/update',putProduct,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+        await axios.put('http://localhost:8080/product/update', putProduct,
+            // {headers:{Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
 
         console.log(putProduct);
+        this.setState({loadingIsVisible: false});
 
         // eslint-disable-next-line no-restricted-globals
         event.preventDefault();
@@ -80,7 +102,6 @@ class UpdateProduct extends Component {
         })
         this.state.multiCategory.push(e);
         this.state.multiCategoryIds.push(e.id)
-        console.log(this.state.multiCategory)
     }
 
     render() {
@@ -197,7 +218,10 @@ class UpdateProduct extends Component {
                         </form>
                     </div>
                 </div>
-
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

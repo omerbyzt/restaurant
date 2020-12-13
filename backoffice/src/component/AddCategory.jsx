@@ -5,8 +5,11 @@ import {Modal} from "react-bootstrap";
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import '../App.css'
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class AddCategory extends Component {
+    static contextType = UserContext;
     state = {
         name: "",
         description: "",
@@ -14,25 +17,39 @@ class AddCategory extends Component {
         mediaList: [],
         selectedMediaName: "Chose Media",
         selectedMediaUrl: "",
-        selectedMediaID:"",
+        selectedMediaID: "",
         showModal: false,
-
+        loadingIsVisible: false
     }
 
-    componentDidMount() {
-        let uri = "http://localhost:8080/file/list";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    mediaList: data
-                })
+    async componentDidMount() {
+        const {token} = this.context
+        this.setState({loadingIsVisible: true});
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/file/list";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        mediaList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+
+        //const {token}=this.context;
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -41,8 +58,9 @@ class AddCategory extends Component {
         })
     }
 
-    addCategory = () => {
-        const {name, description, imageToUrl,selectedMediaID} = this.state;
+    addCategory = async () => {
+        const {token} = this.context
+        const {name, description, imageToUrl, selectedMediaID} = this.state;
 
         const newMedia = {
             id: selectedMediaID
@@ -55,28 +73,30 @@ class AddCategory extends Component {
             products: [],
             media: newMedia
         }
-
-        axios.post("http://localhost:8080/category/add-category", newCategory,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
+        this.setState({loadingIsVisible: true});
+        await axios.post("http://localhost:8080/category/add-category", newCategory,
+            // {headers: {Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        this.setState({loadingIsVisible: false});
     }
 
     onClickItem = (e) => {
         this.setState({
             selectedMediaName: e.name,
-            selectedMediaUrl:e.fileContent,
-            selectedMediaID:e.id
+            selectedMediaUrl: e.fileContent,
+            selectedMediaID: e.id
         })
     }
 
     showMedia = () => {
         this.setState({
-            showModal:!this.state.showModal
+            showModal: !this.state.showModal
         })
     }
 
     handleModal = () => {
         this.setState({
-            showModal:!this.state.showModal
+            showModal: !this.state.showModal
         })
     }
 
@@ -90,11 +110,13 @@ class AddCategory extends Component {
                     <Modal.Header closeButton>Image</Modal.Header>
                     <Modal.Body align="center">
                         {
-                            <img src={'data:image/png;base64,' + this.state.selectedMediaUrl} width="250" style={{margin:10}}/>
+                            <img src={'data:image/png;base64,' + this.state.selectedMediaUrl} width="250"
+                                 style={{margin: 10}}/>
                         }
                     </Modal.Body>
                     <Modal.Footer>
-                        <button className="btn btn-danger btn-block" onClick={() => this.handleModal()}>Close Modal</button>
+                        <button className="btn btn-danger btn-block" onClick={() => this.handleModal()}>Close Modal
+                        </button>
                     </Modal.Footer>
                 </Modal>
 
@@ -146,19 +168,25 @@ class AddCategory extends Component {
                                         {
                                             mediaList.map(v => {
                                                 return (
-                                                    <Dropdown.Item onClick={this.onClickItem.bind(this, v)}>{v.name}</Dropdown.Item>
+                                                    <Dropdown.Item
+                                                        onClick={this.onClickItem.bind(this, v)}>{v.name}</Dropdown.Item>
                                                 )
                                             })
                                         }
                                     </DropdownButton>
                                 </div>
 
-                                <button className="btn btn-link ml-2" onClick={()=>this.showMedia()}>Show Media</button>
+                                <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
+                                </button>
                                 <button className="btn btn-warning btn-block" type="submit">Add Category</button>
                             </form>
                         </div>
                     </div>
                 </div>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/> : null
+                }
             </div>
         );
     }

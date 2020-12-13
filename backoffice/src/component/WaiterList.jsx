@@ -3,8 +3,11 @@ import Header from "./Header";
 import Table from "react-bootstrap/Table";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class WaiterList extends Component {
+    static contextType = UserContext;
     state = {
         waiterList:[],
         isVisible:false,
@@ -14,25 +17,38 @@ class WaiterList extends Component {
         mail:"",
         address:"",
         urlToImage:"",
-        salary:""
+        salary:"",
+        loadingIsVisible:false
+
     }
 
-    componentDidMount() {
-        const {waiterList} = this.state
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        let uri = "http://localhost:8080/waiter/list-waiters";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    waiterList: data
-                })
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/waiter/list-waiters";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        waiterList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     updateWaiterOpenForm = (e) => {
@@ -49,10 +65,16 @@ class WaiterList extends Component {
         console.log(this.state.name)
     }
 
-    deleteWaiter = (e) => {
-        axios.delete('http://localhost:8080/waiter/delete-waiter/' + e.id,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
-            .then(res => {this.setState({waiterList:this.state.waiterList.filter(table => table.id!==e.id)})});
+    deleteWaiter = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        await axios.delete('http://localhost:8080/waiter/delete-waiter/' + e.id,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({waiterList: this.state.waiterList.filter(table => table.id !== e.id)})
+            });
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -60,22 +82,28 @@ class WaiterList extends Component {
             [e.target.name]: e.target.value
         })
     }
-    updateWaiter = () => {
-        const{id,name,phoneNumber,mail,address,urlToImage,salary,waiterList}=this.state;
+    updateWaiter = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {id, name, phoneNumber, mail, address, urlToImage, salary, waiterList} = this.state;
 
         const putWaiter = {
-            id:id,
-            name:name,
-            phoneNumber:phoneNumber,
-            mail:mail,
-            address:address,
+            id: id,
+            name: name,
+            phoneNumber: phoneNumber,
+            mail: mail,
+            address: address,
             urlToImage: urlToImage,
             salary: salary
         }
 
-        axios.put('http://localhost:8080/waiter/update-waiter',putWaiter,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
-            .then(res => {this.setState({waiterList: this.state.waiterList})});
+        await axios.put('http://localhost:8080/waiter/update-waiter', putWaiter,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({waiterList: this.state.waiterList})
+            });
+        this.setState({loadingIsVisible: false});
     }
 
     closeUpdate = () => {
@@ -230,7 +258,10 @@ class WaiterList extends Component {
                     }
                     </tbody>
                 </Table>
-
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

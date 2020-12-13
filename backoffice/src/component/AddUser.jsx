@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import Header from "./Header";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class AddUser extends Component {
+    static contextType = UserContext;
     state = {
         //
         id: "",
@@ -16,7 +19,8 @@ class AddUser extends Component {
         roleEnabledFalse: "false",
         dropDownEnabledName: "Select User Enabled",
         roleList: [],
-        selectedRoleName: "Select Role"
+        selectedRoleName: "Select Role",
+        loadingIsVisible:false
     }
 
     changeInput = (e) => {
@@ -25,17 +29,32 @@ class AddUser extends Component {
         })
     }
 
-    componentDidMount() {
-        axios.get('http://localhost:8080/role/list',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({roleList: res.data})
-            });
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            await axios.get('http://localhost:8080/role/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({roleList: res.data})
+                });
+
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
-    addUser = () => {
+    addUser = async () => {
+        this.setState({loadingIsVisible: true});
         const {username, email, password, enabled, roles} = this.state;
-
+        const {token} = this.context
         const newUser = {
             username: username,
             password: password,
@@ -44,9 +63,10 @@ class AddUser extends Component {
             roles: roles
         }
 
-        axios.post("http://localhost:8080/user/add", newUser,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
-
+        await axios.post("http://localhost:8080/user/add", newUser,
+            // {headers: {Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        this.setState({loadingIsVisible: false});
     }
 
     clickedAdmin = () => {
@@ -177,6 +197,11 @@ class AddUser extends Component {
                         </div>
                     </div>
                 </div>
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

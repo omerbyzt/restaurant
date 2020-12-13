@@ -5,8 +5,11 @@ import Header from "./Header";
 import {Link} from "react-router-dom";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class UserList extends Component {
+    static contextType = UserContext;
     state = {
         userList: [],
         userUpdate: false,
@@ -15,32 +18,46 @@ class UserList extends Component {
         enabled: "",
         email: "",
         roles: [],
-        id:"",
-        roleList:[],
-        selectedRoleName:"Select Role"
+        id: "",
+        roleList: [],
+        selectedRoleName: "Select Role",
+        loadingIsVisible: false
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        let uri = "http://localhost:8080/user/list";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    userList: data
-                })
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/user/list";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        userList: data
+                    })
+                })
 
-        axios.get('http://localhost:8080/role/list',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({roleList: res.data})
-            });
+            await axios.get('http://localhost:8080/role/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({roleList: res.data})
+                });
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -55,36 +72,42 @@ class UserList extends Component {
             username: e.username,
             password: e.password,
             enabled: e.enabled,
-            id:e.id,
-            email:e.email,
+            id: e.id,
+            email: e.email,
         })
     }
 
-    onClickDeleteBtn = (e) => {
-        window.location.reload();
-        axios.delete('http://localhost:8080/users/delete/' + e.username,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
-
-        axios.delete('http://localhost:8080/auth/delete/' + e.username,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
-
+    onClickDeleteBtn = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        await axios.delete('http://localhost:8080/user/delete/' + e.id,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({userList: this.state.userList.filter(table => table.id !== e.id)})
+            });
+        this.setState({loadingIsVisible: false});
     }
 
-    updateUser = (e) => {
-
-        const { username, password, enabled,id,email,roles} = this.state;
+    updateUser = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {username, password, enabled, id, email, roles} = this.state;
 
         const putUser = {
-            id:id,
+            id: id,
             email: email,
             username: username,
             password: password,
             enabled: enabled,
-            roles:roles,
+            roles: roles,
         }
 
-        axios.put('http://localhost:8080/user/update', putUser,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
+        await axios.put('http://localhost:8080/user/update', putUser,
+            // {headers: {Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        this.setState({loadingIsVisible: false});
+        e.preventDefault();
     }
 
     onClickItem = (e) => {
@@ -96,7 +119,7 @@ class UserList extends Component {
     }
 
     render() {
-        const {userList, userUpdate, username, password, enabled,id,email,roleList,selectedRoleName} = this.state;
+        const {userList, userUpdate, username, password, enabled, id, email, roleList, selectedRoleName} = this.state;
         return (
             <div>
                 <Header></Header>
@@ -176,8 +199,10 @@ class UserList extends Component {
 
                                             <div className="dropdown">
                                                 <label htmlFor="price">Product Category : </label>
-                                                <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
-                                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                <button className="btn btn-info dropdown-toggle dropdownCss"
+                                                        type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true"
                                                         aria-expanded="true">
                                                     {selectedRoleName}
                                                 </button>
@@ -201,7 +226,7 @@ class UserList extends Component {
                                             </div>
 
                                             <button className="btn btn-warning btn-block mt-3"
-                                                    onClick={()=>this.updateUser()}>Update
+                                                    onClick={() => this.updateUser()}>Update
                                             </button>
                                         </form>
                                     </div>
@@ -227,7 +252,7 @@ class UserList extends Component {
                                 <tr>
                                     <td>{v.username}</td>
                                     <td className="hidePassword">{v.password}</td>
-                                    <td >{v.email}</td>
+                                    <td>{v.email}</td>
                                     <td>{v.enabled.toString()}</td>
                                     <td>
                                         <ul>
@@ -255,6 +280,10 @@ class UserList extends Component {
                     }
                     </tbody>
                 </Table>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/> : null
+                }
             </div>
         );
     }

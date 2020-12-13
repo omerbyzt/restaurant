@@ -5,8 +5,11 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class CategoryList extends Component {
+    static contextType = UserContext;
     state = {
         categoryList: [],
         isUpdate: false,
@@ -17,47 +20,66 @@ class CategoryList extends Component {
         selectedMediaID: "",
         selectedMediaName: "Select Media",
         selectedMediaFileContent: "",
-        mediaList:[]
+        mediaList:[],
+        loadingIsVisible:false
     }
 
-    componentDidMount() {
-        const {categoryList} = this.state
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        let uri = "http://localhost:8080/category/list-category";
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
 
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    categoryList: data
-                })
+            let uri = "http://localhost:8080/category/list-category";
+
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
-
-        //For all media
-        uri = "http://localhost:8080/file/list";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    mediaList: data
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        categoryList: data
+                    })
                 })
+
+            //For all media
+            uri = "http://localhost:8080/file/list";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        mediaList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
-    onClickDeleteBtn = (e) => {
-        window.location.reload();
-        axios.delete('http://localhost:8080/category/delete-category/' + e.id,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
+    onClickDeleteBtn = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        await axios.delete('http://localhost:8080/category/delete-category/' + e.id,
+            // {headers: {Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({categoryList: this.state.categoryList.filter(table => table.id !== e.id)})
+            });
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -76,13 +98,15 @@ class CategoryList extends Component {
         })
     }
 
-    categoryUpdate = () => {
+    categoryUpdate = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
         const {id, name, description, imageToUrl} = this.state;
 
         const newMedia = {
-            id:this.state.selectedMediaID,
-            name:this.state.selectedMediaName,
-            fileContent:this.state.selectedMediaFileContent
+            id: this.state.selectedMediaID,
+            name: this.state.selectedMediaName,
+            fileContent: this.state.selectedMediaFileContent
         }
         console.log(newMedia);
         const putCategory = {
@@ -90,12 +114,14 @@ class CategoryList extends Component {
             name: name,
             description: description,
             imageToUrl: imageToUrl,
-            products:[],
-            media:newMedia
+            products: [],
+            media: newMedia
         }
         console.log(putCategory)
-        axios.put('http://localhost:8080/category/update-category', putCategory,
-            {headers: {Authorization: sessionStorage.getItem('token')}})
+        await axios.put('http://localhost:8080/category/update-category', putCategory,
+            // {headers: {Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+        this.setState({loadingIsVisible: false});
     }
 
     onClickItem = (e) => {
@@ -232,6 +258,11 @@ class CategoryList extends Component {
                     }
                     </tbody>
                 </Table>
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

@@ -3,62 +3,88 @@ import Header from "./Header";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class TableCategoryList extends Component {
+    static contextType = UserContext;
     state = {
         tableCategoryList: [],
-        isUpdate : false,
-        id:"",
-        name:"",
-        number:""
+        isUpdate: false,
+        id: "",
+        name: "",
+        number: "",
+        loadingIsVisible: false
     }
 
-    componentDidMount() {
-        const {tableCategoryList} = this.state
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        let uri = "http://localhost:8080/table-category/listall";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    tableCategoryList: data
-                })
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/table-category/listall";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        tableCategoryList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
-    onClickDeleteTableCategoryBtn = (e) => {
-
-        axios.delete('http://localhost:8080/table-category/delete/' + e.id,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
-            .then(res => {this.setState({tableCategoryList:this.state.tableCategoryList.filter(table => table.id!==e.id)})});
+    onClickDeleteTableCategoryBtn = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        await axios.delete('http://localhost:8080/table-category/delete/' + e.id,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({tableCategoryList: this.state.tableCategoryList.filter(table => table.id !== e.id)})
+            });
+        this.setState({loadingIsVisible: false});
     }
 
     onClickUpdateTableCategoryBtn = (e) => {
         this.setState({
-            isUpdate : !this.state.isUpdate,
-            id:e.id,
-            name:e.name,
-            number:e.number
+            isUpdate: !this.state.isUpdate,
+            id: e.id,
+            name: e.name,
+            number: e.number
         })
     }
 
-    updateTableCategory = (e) => {
-        const{id,name,tableCategoryList,number} = this.state
+    updateTableCategory = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {id, name, tableCategoryList, number} = this.state
 
         const putTableCategory = {
-            id:id,
-            name:name,
-            number:number
+            id: id,
+            name: name,
+            number: number
         }
 
-        axios.put('http://localhost:8080/table-category/update/',putTableCategory,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
-            .then(res => {this.setState({tableCategoryList: this.state.tableCategoryList})});
+        await axios.put('http://localhost:8080/table-category/update/', putTableCategory,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({tableCategoryList: this.state.tableCategoryList})
+            });
+        this.setState({loadingIsVisible: true});
 
     }
 
@@ -68,25 +94,29 @@ class TableCategoryList extends Component {
         })
     }
 
-    filterList = (e) => {
-        this.setState({
-            tableCategoryList:this.state.tableCategoryList.filter(
+    filterList = async (e) => {
+        this.setState({loadingIsVisible: true});
+        await this.setState({
+            tableCategoryList: this.state.tableCategoryList.filter(
                 productByFilter => productByFilter.name == e
             )
         })
+        this.setState({loadingIsVisible: false});
     }
 
     render() {
-        const {tableCategoryList,isUpdate,id,name,number} = this.state
+        const {tableCategoryList, isUpdate, id, name, number} = this.state
         return (
             <div>
                 <Header/>
-                <Link to ="/addtablecategory"><button className="btn btn-success addTableCategoryButton">+ Add Table Category</button></Link>
+                <Link to="/addtablecategory">
+                    <button className="btn btn-success addTableCategoryButton">+ Add Table Category</button>
+                </Link>
                 {
                     isUpdate ?
-                        <div className = "col-md-12 mb-4 mt-2">
+                        <div className="col-md-12 mb-4 mt-2">
                             <div className="card" align="left">
-                                <div className = "card-header" align="center">
+                                <div className="card-header" align="center">
                                     <h4>Update Table Category</h4>
                                 </div>
                                 <div className="card-body">
@@ -135,9 +165,9 @@ class TableCategoryList extends Component {
                                     </form>
                                 </div>
                             </div>
-                        </div>:null
+                        </div> : null
                 }
-                <Table striped bordered hover className = "usersTable">
+                <Table striped bordered hover className="usersTable">
                     <thead>
                     <tr>
                         <th>Table Category ID</th>
@@ -153,14 +183,19 @@ class TableCategoryList extends Component {
                                 <tr align="center">
                                     <td>{v.id}</td>
                                     <td>
-                                        <button className="btn btn-link" onClick={()=> this.filterList(v.name)}>{v.name}</button>
+                                        <button className="btn btn-link"
+                                                onClick={() => this.filterList(v.name)}>{v.name}</button>
                                     </td>
                                     <td>
                                         {v.number}
                                     </td>
                                     <td>
-                                        <button className="btn btn-warning mr-2" onClick={this.onClickUpdateTableCategoryBtn.bind(this,v)}>Update</button>
-                                        <button className="btn btn-danger mr-2" onClick={this.onClickDeleteTableCategoryBtn.bind(this,v)}>Delete</button>
+                                        <button className="btn btn-warning mr-2"
+                                                onClick={this.onClickUpdateTableCategoryBtn.bind(this, v)}>Update
+                                        </button>
+                                        <button className="btn btn-danger mr-2"
+                                                onClick={this.onClickDeleteTableCategoryBtn.bind(this, v)}>Delete
+                                        </button>
                                     </td>
                                 </tr>
                             )
@@ -168,6 +203,10 @@ class TableCategoryList extends Component {
                     }
                     </tbody>
                 </Table>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/> : null
+                }
             </div>
         );
     }

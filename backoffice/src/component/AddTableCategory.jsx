@@ -1,23 +1,43 @@
 import React, {Component} from 'react';
 import Header from "./Header";
 import axios from "axios";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class AddTableCategory extends Component {
+    static contextType = UserContext;
     state = {
         name:"",
-        number:""
+        number:"",
+        loadingIsVisible:false
     }
 
-    addTableCategory = () => {
-        const{name,number} = this.state
+    componentDidMount() {
+        const {token} = this.context
 
-        const newTableCategory = {
-            name:name,
-            number:number
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+        } else {
+            this.props.history.push('/');
         }
 
-        axios.post("http://localhost:8080/table-category/add", newTableCategory,
-            {headers:{Authorization:sessionStorage.getItem('token')}});
+    }
+
+    addTableCategory = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {name, number} = this.state
+
+        const newTableCategory = {
+            name: name,
+            number: number
+        }
+
+        await axios.post("http://localhost:8080/table-category/add", newTableCategory,
+            // {headers:{Authorization:sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
     }
 
     changeInput = (e) => {
@@ -70,7 +90,11 @@ class AddTableCategory extends Component {
                         </div>
                     </div>
                 </div>
-                
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

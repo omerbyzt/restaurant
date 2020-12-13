@@ -8,7 +8,7 @@
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
         <insert tableName="media">
-            <column name="name" value="corba "/>
+            <column name="name" value="corba"/>
             <column name ="file_Content" valueBlobFile="./corba1.png"/>
         </insert>
 

@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {Modal} from "react-bootstrap";
 import ClientHomePage from "./ClientHomePage";
 import UserContext from "./Context";
+import Loading from "./Loading";
 
 class TablePage extends Component {
     static contextType = UserContext;
@@ -20,21 +21,22 @@ class TablePage extends Component {
         selectedTable: "",
         showClearTableModal: false,
         modalObjectList: [],
-        tableOrderList: []
+        tableOrderList: [],
+        loadingIsVisible: false
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         //TODO buralar hep gözden geçecek
         const {token} = this.context
+        this.setState({loadingIsVisible: true});
         if (localStorage.getItem("token") !== null || token !== "No Token") {
-
             const {setUserName, setToken} = this.context;
             setUserName(localStorage.getItem("username"));
             setToken(localStorage.getItem("token"));
 
             const {tableCategoryList, waiterList} = this.state;
             const {token} = this.context;
-            axios.get('http://localhost:8080/table-category/listall',
+            await axios.get('http://localhost:8080/table-category/listall',
                 {headers: {Authorization: token}})
                 .then(res => {
                     this.setState({tableCategoryList: res.data})
@@ -44,17 +46,20 @@ class TablePage extends Component {
                 {headers: {Authorization: token}})
                 .then(res => {
                     this.setState({waiterList: res.data})
+
                 });
 
         } else {
             this.props.history.push('/');
         }
+        this.setState({loadingIsVisible: false});
     }
 
-    onClickTableCategoryName = (e) => {
+    onClickTableCategoryName = async (e) => {
         this.setState({
             categoryTableNumber: e.number,
-            categoryName: e.name
+            categoryName: e.name,
+            loadingIsVisible: true
         })
         console.log(this.state.waiterList)
         this.state.array = [];
@@ -86,14 +91,16 @@ class TablePage extends Component {
                         }
                     }
                 }
-                this.state.array.push(<button className="btn btn-danger tableButtons"
-                                              onClick={() => this.fullTableModal(i)}><h4>{e.name} : {i}</h4> {count}
+                await this.state.array.push(<button className="btn btn-danger tableButtons"
+                                                    onClick={() => this.fullTableModal(i)}>
+                    <h4>{e.name} : {i}</h4> {count}
                 </button>)
             } else {
-                this.state.array.push(<button className="btn btn-success tableButtons"
-                                              onClick={() => this.emptyTableModal(i)}>{e.name} : {i}</button>)
+                await this.state.array.push(<button className="btn btn-success tableButtons"
+                                                    onClick={() => this.emptyTableModal(i)}>{e.name} : {i}</button>)
             }
         }
+        this.setState({loadingIsVisible: false});
         return this.state.array;
     }
 
@@ -114,15 +121,17 @@ class TablePage extends Component {
         })
     }
 
-    fullTableModal  = async (e) => {
+    fullTableModal = async (e) => {
         const {modalObjectList, tableOrderList} = this.state;
+
         const {table, setTable} = this.context;
         this.setState({
-            showClearTableModal: !this.state.showClearTableModal
+            showClearTableModal: !this.state.showClearTableModal,
+            loadingIsVisible: true
         })
         this.state.selectedTable = e;
 
-        sessionStorage.setItem("table",this.state.categoryName + " " + this.state.selectedTable);//session
+        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable);//session
         //await setTable(this.state.categoryName + " " + this.state.selectedTable);//context
 
         let orderList = JSON.parse(localStorage.getItem("orderList"))
@@ -142,7 +151,7 @@ class TablePage extends Component {
                 }
             }
         }
-
+        this.setState({loadingIsVisible: false});
     }
 
     goShoppingList = (e) => {
@@ -168,7 +177,7 @@ class TablePage extends Component {
         const tableSession = sessionStorage.getItem("table");
         let orderList = ClientHomePage.getOrderListFromStorage();
 
-        orderList.forEach(function (order, index) {
+         orderList.forEach(function (order, index) {
             let firstOrderString = JSON.stringify(order[0])
             let sessionTableString = "\"" + tableSession + "\"";//table-tableSession
             if (firstOrderString.indexOf(sessionTableString) !== -1) {
@@ -180,11 +189,12 @@ class TablePage extends Component {
         this.props.history.push("/menu")
     }
 
-    payTable = (value) => {
+    payTable = async (value) => {
+        this.setState({loadingIsVisible: true});
         const {token, setWaiterID, setWaiterName, table, setTable} = this.context;
         console.log(value);
 
-        axios.post('http://localhost:8080/order/add', value, {
+        await axios.post('http://localhost:8080/order/add', value, {
             headers: {
                 Authorization: token //the token is a variable which holds the token
             }
@@ -195,10 +205,11 @@ class TablePage extends Component {
         // sessionStorage.setItem("waiterName","No Waiter");
         setWaiterID("-1");
         setWaiterName("No Waiter");
+        const tableSession = sessionStorage.getItem("table");
 
         orderList.forEach(function (order, index) {
             let firstOrderString = JSON.stringify(order[0])
-            let sessionTableString = "\"" + table + "\"";
+            let sessionTableString = "\"" + tableSession + "\"";//table-tableSession
             if (firstOrderString.indexOf(sessionTableString) !== -1) {
                 orderList.splice(index, 1);
             }
@@ -206,8 +217,9 @@ class TablePage extends Component {
 
         localStorage.setItem("orderList", JSON.stringify(orderList))
         window.alert("Payment Received");
-        // sessionStorage.setItem("table","No Table");
+        sessionStorage.setItem("table", "No Table");//session
         setTable("No Table");
+        this.setState({loadingIsVisible: false});
         this.props.history.push("/menu")
     }
 
@@ -215,6 +227,7 @@ class TablePage extends Component {
         const {setTable} = this.context;
         // sessionStorage.setItem("table" ,this.state.categoryName + " " + this.state.selectedTable)
         setTable(this.state.categoryName + " " + this.state.selectedTable);
+        sessionStorage.setItem("table", this.state.categoryName + " " + this.state.selectedTable);
         this.setState({
             showModal: !this.state.showModal
         })
@@ -231,11 +244,16 @@ class TablePage extends Component {
                         {
                             waiterList.map(v => {
                                 return (
-                                    <button className="btn btn-info btn-block mb-1"
-                                            onClick={() => this.goShoppingList(v)}>{v.name}
-                                        <br/>
-                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
-                                             style={{margin: 10}}/>
+                                    <button className="btn btn-outline-info btn-block mb-1" onClick={() => this.goShoppingList(v)}>
+                                        <div className="row">
+                                            <div className="col-md-6 my-auto" align="left">
+                                                {v.name}
+                                            </div>
+                                            <div className="col-md-6 my-auto" align="right">
+                                                <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="75"
+                                                     style={{margin: 10}}/>
+                                            </div>
+                                        </div>
                                     </button>
                                 )
                             })
@@ -327,6 +345,10 @@ class TablePage extends Component {
                     </tr>
                     </tbody>
                 </Table>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/> : null
+                }
             </div>
         );
     }

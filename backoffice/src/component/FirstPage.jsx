@@ -4,40 +4,55 @@ import UpdateProduct from "./UpdateProduct";
 import {Link} from 'react-router-dom'
 import Header from "./Header";
 import axios from "axios";
-
+import UserContext from "../Context";
 import React, {Component} from 'react';
+import Loading from "./Loading";
 
 class FirstPage extends Component {
+    static contextType = UserContext;
 
     state = {
         content:[],
         isShowCard:"",
         isUpdateCard:"",
         obj:"",
-        productTable:[]
+        productTable:[],
+        loadingIsVisible:false
     }
     constructor(props) {
         super(props);
         this.filterList = this.filterList.bind(this);
     }
 
-    componentDidMount() {
-        const {content} = this.state
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
 
-        let uri = "http://localhost:8080/product/listall";
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
 
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    content: data
-                })
+            let uri = "http://localhost:8080/product/listall";
+
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        content: data
+                    })
+                })
+
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     clickedAddButton = () => {
@@ -46,11 +61,16 @@ class FirstPage extends Component {
         })
     }
 
-    onClickDeleteBtn = (e) => {
+    onClickDeleteBtn = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
         //delete için filtrelemesini yap
         window.location.reload();
-        axios.delete('http://localhost:8080/product/delete/' + e.productID,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
+        await axios.delete('http://localhost:8080/product/delete/' + e.productID,
+            // {headers: {Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        // .then(res => {this.setState({content:this.state.content.filter(table => table.productID!==e.productID)})});
+        this.setState({loadingIsVisible: false});
     }
 
     onClickUpdateBtn = (e) => {
@@ -58,8 +78,6 @@ class FirstPage extends Component {
             obj:e,
             isUpdateCard:!this.state.isUpdateCard
         })
-
-        console.log(e)
     }
 
     clickProductList = () => {
@@ -68,16 +86,18 @@ class FirstPage extends Component {
             })
     }
 
-    filterList = (e) => {
-        this.setState({
-            content:this.state.content.filter(
+    filterList = async (e) => {
+        this.setState({loadingIsVisible: true});
+        await this.setState({
+            content: this.state.content.filter(
                 productByFilter => productByFilter.productCategory == e
             )
         })
+        this.setState({loadingIsVisible: false});
     }
 
-    render() {
-        const {isShowCard,isUpdateCard,productTable,obj,content}=this.state;
+     render() {
+        const {isShowCard, isUpdateCard, productTable, obj, content} = this.state;
         return (
             <div>
                 <Header></Header>
@@ -119,28 +139,29 @@ class FirstPage extends Component {
                             </thead>
                             <tbody>
                             {
-                                content.map(v => {
+                                 content.map(v => {
                                     return (<tr align="left">
                                         <td>{v.productID}</td>
                                         <td>{v.productName}</td>
                                         <td>{v.productDesc}</td>
                                         <td>
-                                            <button className="btn btn-link" onClick={()=> this.filterList(v.productCategory)}>{v.productCategory}</button>
+                                            <button className="btn btn-link"
+                                                    onClick={() => this.filterList(v.productCategory)}>{v.productCategory}</button>
                                         </td>
                                         <td>{v.productPrice}</td>
                                         <td align="center">
-                                                <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
-                                                     style={{margin: 10}}/>
+                                            <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
+                                                 style={{margin: 10}}/>
                                         </td>
                                         <td>
 
-                                                {
-                                                    v.categories.map(value => {
-                                                        return (
-                                                            <li>{value.name}</li>
-                                                        )
-                                                    })
-                                                }
+                                            {
+                                                v.categories.map(value => {
+                                                    return (
+                                                        <li>{value.name}</li>
+                                                    )
+                                                })
+                                            }
 
                                         </td>
                                         <td align="center">
@@ -156,6 +177,11 @@ class FirstPage extends Component {
                             }
                             </tbody>
                         </Table> : null
+                }
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/> : null
                 }
             </div>
         );

@@ -4,8 +4,11 @@ import Header from "./Header";
 import {Link} from 'react-router-dom'
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import UserContext from "../Context"
+import Loading from "./Loading";
 
 class AddProduct extends Component {
+    static contextType = UserContext;
     state = {
         isShowCard: true,
         id: "",
@@ -20,32 +23,44 @@ class AddProduct extends Component {
         mediaList: [],
         selectedMediaID: "",
         selectedMediaName: "Select Media",
-        selectedMediaURL:""
+        selectedMediaURL:"",
+        loadingIsVisible:false
     }
 
-    componentDidMount() {
-        const {categoryList} = this.state
+    async componentDidMount() {
+        const {token} = this.context
+        this.setState({loadingIsVisible: true});
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
 
-        let uri = "http://localhost:8080/category/list-category";
+            let uri = "http://localhost:8080/category/list-category";
 
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    categoryList: data
-                })
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        categoryList: data
+                    })
+                })
 
-        axios.get('http://localhost:8080/file/list',
-            {headers: {Authorization: sessionStorage.getItem('token')}})
-            .then(res => {
-                this.setState({mediaList: res.data})
-            });
+            await axios.get('http://localhost:8080/file/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({mediaList: res.data})
+                });
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -54,13 +69,14 @@ class AddProduct extends Component {
         })
     }
 
-    addProduct = (e) => {
-        const {name, desc, price, selectedCategoryId, btnCategoryName, selectedMediaID,selectedMediaName,selectedMediaURL} = this.state;
-
+    addProduct = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {name, desc, price, selectedCategoryId, btnCategoryName, selectedMediaID, selectedMediaName, selectedMediaURL} = this.state;
+        const {token} = this.context
         const newMedia = {
             id: selectedMediaID,
-            name:selectedMediaName,
-            fileContent:selectedMediaURL
+            name: selectedMediaName,
+            fileContent: selectedMediaURL
         }
 
         const newProduct = {
@@ -74,9 +90,11 @@ class AddProduct extends Component {
         // axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
         //     {headers:{Authorization: sessionStorage.getItem('token')}}
         //     );
-        axios.post("http://localhost:8080/category/add-product/" + "1", newProduct,
-            {headers: {Authorization: sessionStorage.getItem('token')}}
+        await axios.post("http://localhost:8080/category/add-product/" + "1", newProduct,
+            // {headers: {Authorization: sessionStorage.getItem('token')}}
+            {headers: {Authorization: token}}
         );
+        this.setState({loadingIsVisible: false});
     }
 
     onClickItem = (e) => {
@@ -194,6 +212,11 @@ class AddProduct extends Component {
                             </div> : null
                     }
                 </div>
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
 
         );

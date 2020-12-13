@@ -2,15 +2,24 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import '../App.css';
 import UserLogin from './UserLogin'
+import UserContext from "../Context";
 
 class Header extends Component {
+    static contextType = UserContext;
 
     clickSignOut = (e) => {
+        const {setToken,setUserName}=this.context;
+        setUserName("No User")
+        setToken("No Token")
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("username");
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
     }
 
     render() {
+        const{username}=this.context;
         return (
             <div className="headerCss">
                 <Link to="/home">
@@ -51,7 +60,8 @@ class Header extends Component {
 
                 <Link to="/">
                     <button className="btn btn-danger btn-lg signOutBtn" onClick={this.clickSignOut}>Sign Out
-                        : {sessionStorage.getItem('username')}</button>
+                        {/*: {sessionStorage.getItem('username')}</button>*/}
+                        : {username}</button>
                 </Link>
 
             </div>

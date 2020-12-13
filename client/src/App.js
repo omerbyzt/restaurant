@@ -4,6 +4,7 @@ import LoginPage from "./LoginPage";
 import MenuPage from "./MenuPage";
 import ClientHomePage from "./ClientHomePage";
 import TablePage from "./TablePage";
+import Loading from "./Loading";
 
 class App extends Component {
 
@@ -16,6 +17,7 @@ class App extends Component {
                             <Route path="/menu" component={MenuPage}></Route>
                             <Route path="/home" component={ClientHomePage}></Route>
                             <Route path="/tablepage" component={TablePage}></Route>
+                            <Route path="/loading" component={Loading}></Route>
                         </Switch>
                     </Router>
                 </div>

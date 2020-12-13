@@ -5,6 +5,7 @@ import nextId from "react-id-generator";
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import UserContext from "./Context";
+import Loading from "./Loading";
 
 class ClientHomePage extends Component {
     static contextType = UserContext;
@@ -23,22 +24,23 @@ class ClientHomePage extends Component {
             amount: 0,
             pId: 0,
             totalPrice: 0,
-            tableName: ""
+            tableName: "",
         },
         selectedCategoryName: "",
-
+        loadingIsVisible:false,
     }
 
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const {token} = this.context
-        if(localStorage.getItem("token") !== null || token !== "No Token"){
+        this.setState({loadingIsVisible: true});
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
             //TODO:seçilmiş odadan f5 yapınca wiater ve seçili masa?
 
-            const{setUserName,setToken} = this.context;
+            const {setUserName, setToken} = this.context;
             setUserName(localStorage.getItem("username"));
             setToken(localStorage.getItem("token"));
 
@@ -47,7 +49,7 @@ class ClientHomePage extends Component {
 
             let uri = "http://localhost:8080/category/list-category/";
 
-            fetch(uri, {
+            await fetch(uri, {
                 method: 'get',
                 headers: new Headers({
                     'Authorization': token,
@@ -63,7 +65,7 @@ class ClientHomePage extends Component {
             //
             let uri2 = 'http://localhost:8080/product/listall';
 
-            fetch(uri2, {
+            await fetch(uri2, {
                 method: 'get',
                 headers: new Headers({
                     'Authorization': token,
@@ -91,20 +93,21 @@ class ClientHomePage extends Component {
                 }
                 localStorage.setItem("orderList", JSON.stringify(allOrders))
             }
-        }else{
+        } else {
             console.log("null geldi")
             this.props.history.push('/');
         }
-
+        this.setState({loadingIsVisible: false});
     }
 
-    onClickCategoryName = (category) => {
+    onClickCategoryName = async (category) => {
+        this.setState({loadingIsVisible: true});
         const {token} = this.context;
 
         let uri = 'http://localhost:8080/category/list-products/' + category.id;
         console.log(uri);
 
-        fetch(uri, {
+        await fetch(uri, {
             method: 'get',
             headers: new Headers({
                 'Authorization': token,
@@ -116,6 +119,7 @@ class ClientHomePage extends Component {
                     content: data
                 })
             })
+        this.setState({loadingIsVisible: false});
     }
 
     onClickAddShoppingList = (param) => {
@@ -178,13 +182,14 @@ class ClientHomePage extends Component {
         }
     }
 
-    clickPayButton = (value) => {
+    clickPayButton = async (value) => {
+        this.setState({loadingIsVisible: true});
         const{token,setTable,setWaiterID,setWaiterName} = this.context
         // CREATE TABLE OR PAY DIRECTLY
         // if(sessionStorage.getItem("table") === "No Table"){
         console.log(value);
 
-        axios.post('http://localhost:8080/order/add', value, {
+        await axios.post('http://localhost:8080/order/add', value, {
             headers: {
                 Authorization: token //the token is a variable which holds the token
             }
@@ -206,6 +211,7 @@ class ClientHomePage extends Component {
         setTable("No Table");
         setWaiterName("No Waiter");
         setWaiterID("-1");
+        this.setState({loadingIsVisible: false});
         this.props.history.push("/menu")
     }
 
@@ -356,6 +362,10 @@ class ClientHomePage extends Component {
                     </tr>
                     </tbody>
                 </Table>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }

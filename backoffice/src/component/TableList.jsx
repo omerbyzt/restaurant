@@ -3,25 +3,31 @@ import Header from "./Header";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import {Link} from "react-router-dom";
+import UserContext from "../Context";
 
 class TableList extends Component {
+    static contextType = UserContext;
     state = {
         tableList : [],
         isUpdate:false,
         id:"",
         number:"",
-        category:""
+        category:"",
+        token:this.context
     }
     componentDidMount() {
         axios.get('http://localhost:8080/table/listall',
-            {headers:{Authorization: sessionStorage.getItem('token')}})
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers:{Authorization: this.state.token}})
+
             .then(res => {this.setState({tableList: res.data})});
     }
 
     onClickDeleteTableBtn = (e) => {
         console.log(e.id)
         axios.delete('http://localhost:8080/table/delete/' + e.id,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers:{Authorization: this.state.token}})
             .then(res => {this.setState({tableList:this.state.tableList.filter(table => table.id!==e.id)})});
     }
 
@@ -50,7 +56,8 @@ class TableList extends Component {
         }
 
         axios.put('http://localhost:8080/table/update/',putTable,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers:{Authorization: this.state.token}})
             .then(res => {this.setState({tableList: this.state.tableList})});
     }
 

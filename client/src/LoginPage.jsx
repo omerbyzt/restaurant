@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import axios from "axios";
 import UserContext from "./Context";
+import Loading from "./Loading";
 
 class LoginPage extends Component {
     static contextType = UserContext;
@@ -10,7 +11,8 @@ class LoginPage extends Component {
         username: "",
         password: "",
         userList: "",
-        isChecked: true
+        isChecked: true,
+        loadingIsVisible:false
     }
 
     changeInput = (e) => {
@@ -27,6 +29,7 @@ class LoginPage extends Component {
             setToken(localStorage.getItem("token"));
             this.props.history.push('/menu');
         }
+
         //     else{
         //     axios.get('http://localhost:8080/user/list',
         //         {headers: {Authorization: 'Basic ' + btoa('admin:123')}})
@@ -44,6 +47,7 @@ class LoginPage extends Component {
     clickLoginButton = (e) => {
 
         const {setToken, setUserName} = this.context;
+        this.setState({loadingIsVisible:true})
 
         axios.get('http://localhost:8080/user/list',
             {headers: {Authorization: 'Basic ' + btoa(this.state.username + ":" + this.state.password)}})
@@ -51,6 +55,9 @@ class LoginPage extends Component {
 
                 setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
                 setUserName(this.state.username);
+
+                this.setState({loadingIsVisible:false})
+
                 this.props.history.push('/menu');
             }).catch(() => {
             this.props.history.push('/');
@@ -61,25 +68,6 @@ class LoginPage extends Component {
             localStorage.setItem("token" , 'Basic ' + btoa(this.state.username + ":" + this.state.password));
             localStorage.setItem("username",this.state.username);
         }
-
-        // const{setToken,setUserName} = this.context;
-        //
-        // if (this.state.userList.filter(user => (user.username === this.state.username) && (user.password.substring(6, user.password.size) === this.state.password)).length > 0) {
-        //
-        //     setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
-        //
-        //     setUserName(this.state.username);
-        //
-        //     this.props.history.push('/menu');
-        // } else {
-        //     this.props.history.push('/');
-        //     window.alert("USERNAME OR PASSWORD WRONG!")
-        // }
-        //
-        // if(this.state.isChecked){
-        //     localStorage.setItem("token" , 'Basic ' + btoa(this.state.username + ":" + this.state.password));
-        //     localStorage.setItem("username",this.state.username);
-        // }
     }
 
     toggleChange = () => {
@@ -93,6 +81,7 @@ class LoginPage extends Component {
 
         return (
             <div className="cardCss">
+
                 <div className="col-md-6 mb-4 mt-2">
                     <div className="card">
                         <div className="card-header">
@@ -131,7 +120,6 @@ class LoginPage extends Component {
                                         <label className="custom-control-label" for="rememberme">Remember Me</label>
                                     </div>
 
-
                                 </form>
                                 <button className="btn btn-info btn-block mt-3"
                                         onClick={() => this.clickLoginButton()}>Login
@@ -141,6 +129,10 @@ class LoginPage extends Component {
                     </div>
 
                 </div>
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
 
         );

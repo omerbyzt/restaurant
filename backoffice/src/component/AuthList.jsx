@@ -3,29 +3,46 @@ import Header from "./Header";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import UserContext from "../Context";
+import Loading from "./Loading";
 
 class AuthList extends Component {
+    static contextType = UserContext;
     state = {
         authUpdate : false,
         authList:[],
         name:"",
         authority:"",
-        id:""
+        id:"",
+        loadingIsVisible:false
     }
-    componentDidMount() {
-        let uri = "http://localhost:8080/role/list";
-        fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': sessionStorage.getItem('token'),
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    authList: data
-                })
+    async componentDidMount() {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
+            const {setUserName, setToken} = this.context;
+            setUserName(localStorage.getItem("username"));
+            setToken(localStorage.getItem("token"));
+
+            let uri = "http://localhost:8080/role/list";
+            await fetch(uri, {
+                method: 'get',
+                headers: new Headers({
+                    // 'Authorization': sessionStorage.getItem('token'),
+                    'Authorization': token,
+                }),
             })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({
+                        authList: data
+                    })
+                })
+        } else {
+            this.props.history.push('/');
+        }
+        this.setState({loadingIsVisible: false});
     }
 
     changeInput = (e) => {
@@ -42,22 +59,32 @@ class AuthList extends Component {
         })
     }
 
-    updateAuth = () => {
-        const {name,id} = this.state;
+    updateAuth = async () => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        const {name, id} = this.state;
 
         const putAuth = {
-            id:id,
-            name : name
+            id: id,
+            name: name
         }
 
-        axios.put('http://localhost:8080/role/update/',putAuth,
-            {headers:{Authorization: sessionStorage.getItem('token')}});
+        await axios.put('http://localhost:8080/role/update/', putAuth,
+            // {headers:{Authorization: sessionStorage.getItem('token')}});
+            {headers: {Authorization: token}});
+        this.setState({loadingIsVisible: true});
     }
 
-    deleteRole = (e) => {
-        axios.delete('http://localhost:8080/role/delete/'+e.id,
-            {headers:{Authorization: sessionStorage.getItem('token')}})
-            .then(res => {this.setState({authList:this.state.authList.filter(table => table.id!==e.id)})});
+    deleteRole = async (e) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context
+        await axios.delete('http://localhost:8080/role/delete/' + e.id,
+            // {headers:{Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: token}})
+            .then(res => {
+                this.setState({authList: this.state.authList.filter(table => table.id !== e.id)})
+            });
+        this.setState({loadingIsVisible: true});
     }
 
     render() {
@@ -138,6 +165,11 @@ class AuthList extends Component {
                     }
                     </tbody>
                 </Table>
+
+                {
+                    this.state.loadingIsVisible ?
+                        <Loading/>:null
+                }
             </div>
         );
     }
