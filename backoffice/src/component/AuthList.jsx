@@ -84,7 +84,7 @@ class AuthList extends Component {
             .then(res => {
                 this.setState({authList: this.state.authList.filter(table => table.id !== e.id)})
             });
-        this.setState({loadingIsVisible: true});
+        this.setState({loadingIsVisible: false});
     }
 
     render() {

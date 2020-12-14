@@ -141,7 +141,7 @@ class FirstPage extends Component {
                             {
                                  content.map(v => {
                                     return (<tr align="left">
-                                        <td>{v.productID}</td>
+                                        <td align="center">{v.productID}</td>
                                         <td>{v.productName}</td>
                                         <td>{v.productDesc}</td>
                                         <td>

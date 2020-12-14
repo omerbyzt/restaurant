@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import Header from "./Header";
 import axios from "axios";
 import {Modal} from "react-bootstrap";
-import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
 import '../App.css'
 import UserContext from "../Context";
 import Loading from "./Loading";
@@ -78,6 +76,8 @@ class AddCategory extends Component {
             // {headers: {Authorization: sessionStorage.getItem('token')}});
             {headers: {Authorization: token}});
         this.setState({loadingIsVisible: false});
+
+        this.props.history.push("/categorylist")
     }
 
     onClickItem = (e) => {
@@ -105,7 +105,6 @@ class AddCategory extends Component {
         return (
             <div>
                 <Header/>
-
                 <Modal show={this.state.showModal} onHide={() => this.handleModal()}>
                     <Modal.Header closeButton>Image</Modal.Header>
                     <Modal.Body align="center">
@@ -126,7 +125,7 @@ class AddCategory extends Component {
                             <h4>Add Category</h4>
                         </div>
                         <div className="card-body">
-                            <form onSubmit={this.addCategory}>
+                            <form className="d-inline">
                                 <div className="form-group">
                                     <label htmlFor="name">Category Name</label>
                                     <input type="text"
@@ -163,23 +162,39 @@ class AddCategory extends Component {
                                     />
                                 </div>
 
-                                <div>
-                                    <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
+                                <div className="dropdown">
+                                    <label htmlFor="price">Product Category : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                        {selectedMediaName}
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {
                                             mediaList.map(v => {
                                                 return (
-                                                    <Dropdown.Item
-                                                        onClick={this.onClickItem.bind(this, v)}>{v.name}</Dropdown.Item>
+
+                                                    <div className="row col-md -12">
+
+                                                        <a className="dropdown-item"
+                                                           onClick={this.onClickItem.bind(this, v)}>
+                                                            {v.name}
+                                                            {/*<img src={'data:image/png;base64,' + v.fileContent} width="25"*/}
+                                                            {/*     style={{margin: 10}} align="right"/>*/}
+                                                        </a>
+                                                    </div>
+
                                                 )
                                             })
                                         }
-                                    </DropdownButton>
+                                    </div>
                                 </div>
 
-                                <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
-                                </button>
-                                <button className="btn btn-warning btn-block" type="submit">Add Category</button>
                             </form>
+                            <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
+                            </button>
+                            <button className="btn btn-warning btn-block mt-3" onClick={this.addCategory}>Add Category
+                            </button>
                         </div>
                     </div>
                 </div>

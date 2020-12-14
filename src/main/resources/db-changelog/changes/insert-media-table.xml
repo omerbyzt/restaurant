@@ -8,18 +8,93 @@
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
         <insert tableName="media">
-            <column name="name" value="corba"/>
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="corba1"/>
             <column name ="file_Content" valueBlobFile="./corba1.png"/>
         </insert>
 
         <insert tableName="media">
+            <column name="id" valueNumeric="2"/>
             <column name="name" value="pizza"/>
             <column name ="file_Content" valueBlobFile="./pizza.png"/>
         </insert>
 
         <insert tableName="media">
+            <column name="id" valueNumeric="3"/>
             <column name="name" value="et yemeği"/>
             <column name ="file_Content" valueBlobFile="./yemek.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="corba"/>
+            <column name ="file_Content" valueBlobFile="./soup.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="corba2"/>
+            <column name ="file_Content" valueBlobFile="./soup2.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="corba3"/>
+            <column name ="file_Content" valueBlobFile="./soup3.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="corba4"/>
+            <column name ="file_Content" valueBlobFile="./soup4.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="pizza1"/>
+            <column name ="file_Content" valueBlobFile="./pizza1.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="pizza2"/>
+            <column name ="file_Content" valueBlobFile="./pizza2.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="meat"/>
+            <column name ="file_Content" valueBlobFile="./meat.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="11"/>
+            <column name="name" value="meat1"/>
+            <column name ="file_Content" valueBlobFile="./meat1.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="12"/>
+            <column name="name" value="garson"/>
+            <column name ="file_Content" valueBlobFile="./garson.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="13"/>
+            <column name="name" value="garson1"/>
+            <column name ="file_Content" valueBlobFile="./garson1.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="14"/>
+            <column name="name" value="garson2"/>
+            <column name ="file_Content" valueBlobFile="./garson2.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="15"/>
+            <column name="name" value="kral garson"/>
+            <column name ="file_Content" valueBlobFile="./ibrahim_koc.jpg"/>
         </insert>
 
     </changeSet>

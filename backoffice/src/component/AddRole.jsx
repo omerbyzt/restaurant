@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Header from "./Header";
 import axios from "axios";
 import {useHistory} from 'react-router-dom';
+import Loading from "./Loading";
 
 const AddRole = () => {
+    const [loadingIsVisible, setLoadingIsVisible] = useState();
 
     const history = useHistory();
 
@@ -13,15 +15,16 @@ const AddRole = () => {
         name: name
     }
 
-    const addRole = () => {
-        axios.post("http://localhost:8080/role/add", newRole,
-            {headers: {Authorization: sessionStorage.getItem('token')}});
+    const addRole = async (e) => {
+        setLoadingIsVisible(true);
+        await axios.post("http://localhost:8080/role/add", newRole,
+            {headers: {Authorization: sessionStorage.getItem("token")}});
+        setLoadingIsVisible(false);
     }
 
     return (
         <div>
             <Header/>
-
             <div className="col-md-5 mr-auto mb-4 mt-4">
                 <div className="card">
                     <div className="card-header">
@@ -42,9 +45,14 @@ const AddRole = () => {
                             </div>
                             <button className="btn btn-warning btn-block " type="submit">Add Table Category</button>
                         </form>
+
                     </div>
                 </div>
             </div>
+            {
+                loadingIsVisible ?
+                    <Loading/> : null
+            }
         </div>
     )
 

@@ -250,7 +250,7 @@ class TablePage extends Component {
                                                 {v.name}
                                             </div>
                                             <div className="col-md-6 my-auto" align="right">
-                                                <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="75"
+                                                <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
                                                      style={{margin: 10}}/>
                                             </div>
                                         </div>

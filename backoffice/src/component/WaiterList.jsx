@@ -245,7 +245,7 @@ class WaiterList extends Component {
                                     <td>{v.address}</td>
                                     <td>{v.urlToImage}</td>
                                     <td>{v.salary}</td>
-                                    <td>
+                                    <td align="center">
                                         <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100" style={{margin:10}}/>
                                     </td>
                                     <td align="center">

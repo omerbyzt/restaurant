@@ -7,25 +7,38 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
-<!--        <insert tableName="waiter">-->
-<!--            <column name="id" valueNumeric="1"/>-->
-<!--            <column name="name" value="Ömer Beyazit"/>-->
-<!--            <column name="phone_Number" value="05373331244"/>-->
-<!--            <column name="mail" value="byztomer@gmail.com"/>-->
-<!--            <column name="address" value="Arapzade Mahallesi"/>-->
-<!--            <column name="url_To_Image" value="img"/>-->
-<!--            <column name="salary" value="3000"/>-->
-<!--        </insert>-->
+        <insert tableName="waiter">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Ömer Beyazit"/>
+            <column name="phone_Number" value="05373331244"/>
+            <column name="mail" value="byztomer@gmail.com"/>
+            <column name="address" value="Arapzade Mahallesi"/>
+            <column name="url_To_Image" value="img"/>
+            <column name="salary" value="3000"/>
+            <column name="media_id" value="12"/>
+        </insert>
 
-<!--        <insert tableName="waiter">-->
-<!--            <column name="id" valueNumeric="2"/>-->
-<!--            <column name="name" value="İbrahim"/>-->
-<!--            <column name="phone_Number" value="05371352511"/>-->
-<!--            <column name="mail" value="ibolee@gmail.com"/>-->
-<!--            <column name="address" value="Beykent Merkez"/>-->
-<!--            <column name="url_To_Image" value="img"/>-->
-<!--            <column name="salary" value="7500"/>-->
-<!--        </insert>-->
+        <insert tableName="waiter">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="İbrahim"/>
+            <column name="phone_Number" value="05371352511"/>
+            <column name="mail" value="ibolee@gmail.com"/>
+            <column name="address" value="Beykent Merkez"/>
+            <column name="url_To_Image" value="img"/>
+            <column name="salary" value="7500"/>
+            <column name="media_id" value="15"/>
+        </insert>
+
+        <insert tableName="waiter">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Kamil"/>
+            <column name="phone_Number" value="11111111"/>
+            <column name="mail" value="kamil@gmail.com"/>
+            <column name="address" value="Bağcılar Merkez"/>
+            <column name="url_To_Image" value="img"/>
+            <column name="salary" value="300"/>
+            <column name="media_id" value="14"/>
+        </insert>
 
     </changeSet>
 </databaseChangeLog>

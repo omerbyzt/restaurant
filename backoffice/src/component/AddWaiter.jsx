@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import Header from "./Header";
 import axios from "axios";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
 import UserContext from "../Context";
 import Loading from "./Loading";
+import {Modal} from "react-bootstrap";
 
 class AddWaiter extends Component {
     static contextType = UserContext;
@@ -19,6 +18,7 @@ class AddWaiter extends Component {
         selectedMediaName: "Chose Media",
         selectedMediaUrl: "",
         selectedMediaID:"",
+        showModal: false,
         loadingIsVisible:false
     }
 
@@ -93,11 +93,37 @@ class AddWaiter extends Component {
         })
     }
 
+    showMedia = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
+    handleModal = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
     render() {
         const{name,phoneNumber,mail,address,urlToImage,salary,mediaList,selectedMediaID,selectedMediaName,selectedMediaUrl}=this.state
         return (
             <div>
                 <Header/>
+
+                <Modal show={this.state.showModal} onHide={() => this.handleModal()}>
+                    <Modal.Header closeButton>Image</Modal.Header>
+                    <Modal.Body align="center">
+                        {
+                            <img src={'data:image/png;base64,' + this.state.selectedMediaUrl} width="250"
+                                 style={{margin: 10}}/>
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-danger btn-block" onClick={() => this.handleModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
 
                 <div className="container-fluid">
                     <div className="row">
@@ -107,7 +133,7 @@ class AddWaiter extends Component {
                                     <h4>Add Waiter</h4>
                                 </div>
                                 <div className="card-body">
-                                    <form onSubmit={this.addWaiter}>
+                                    <form className="d-inline">
                                         <div className="form-group">
                                             <label htmlFor="input-waiter-name">Waiter Name</label>
                                             <input type="text"
@@ -180,23 +206,33 @@ class AddWaiter extends Component {
                                             />
                                         </div>
 
-                                        <div>
-                                            <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
+                                        <div className="dropdown d-inline">
+                                            <label htmlFor="price">Product Media : </label>
+                                            <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="true">
+                                                {selectedMediaName}
+                                            </button>
+                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 {
                                                     mediaList.map(v => {
                                                         return (
-                                                            <Dropdown.Item
-                                                                onClick={this.onClickItem.bind(this, v)}
-                                                            >{v.name}</Dropdown.Item>
+                                                            <div className="row col-md -12">
+                                                                <a className="dropdown-item"
+                                                                   onClick={this.onClickItem.bind(this, v)}>
+                                                                    {v.name}
+                                                                    {/*<img src={'data:image/png;base64,' + v.fileContent} width="25"*/}
+                                                                </a>
+                                                            </div>
                                                         )
                                                     })
                                                 }
-                                            </DropdownButton>
+                                            </div>
                                         </div>
-
-
-                                        <button className="btn btn-warning btn-block mt-3" type="submit">Add Waiter</button>
                                     </form>
+                                    <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
+                                    </button>
+                                    <button className="btn btn-warning btn-block mt-3" onClick={this.addWaiter}>Add Waiter</button>
                                 </div>
                             </div>
                         </div>
