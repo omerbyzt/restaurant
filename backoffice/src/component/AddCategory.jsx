@@ -162,7 +162,7 @@ class AddCategory extends Component {
                                     />
                                 </div>
 
-                                <div className="dropdown">
+                                <div className="dropdown d-inline">
                                     <label htmlFor="price">Product Category : </label>
                                     <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -189,7 +189,6 @@ class AddCategory extends Component {
                                         }
                                     </div>
                                 </div>
-
                             </form>
                             <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
                             </button>

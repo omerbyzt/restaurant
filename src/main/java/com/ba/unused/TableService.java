@@ -23,7 +23,7 @@ public class TableService {
 
     public List<Tables> addTable(Tables table,Long id){
         Optional<TableCategory> tableCategory = tableCategoryRepository.findById(id);
-        tableCategory.get().getTables().add(table);
+       // tableCategory.get().getTables().add(table);
         tableCategoryRepository.save(tableCategory.get());
         return listAllTables();
     }

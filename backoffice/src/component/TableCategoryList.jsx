@@ -65,6 +65,7 @@ class TableCategoryList extends Component {
             name: e.name,
             number: e.number
         })
+        console.log(e);
     }
 
     updateTableCategory = async (e) => {

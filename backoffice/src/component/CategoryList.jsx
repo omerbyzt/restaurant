@@ -7,6 +7,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import UserContext from "../Context";
 import Loading from "./Loading";
+import {Modal} from "react-bootstrap";
 
 class CategoryList extends Component {
     static contextType = UserContext;
@@ -19,9 +20,10 @@ class CategoryList extends Component {
         imageToUrl: "",
         selectedMediaID: "",
         selectedMediaName: "Select Media",
-        selectedMediaFileContent: "",
-        mediaList:[],
-        loadingIsVisible:false
+        selectedMediaURL: "",
+        mediaList: [],
+        loadingIsVisible: false,
+        showModal: false,
     }
 
     async componentDidMount() {
@@ -106,7 +108,7 @@ class CategoryList extends Component {
         const newMedia = {
             id: this.state.selectedMediaID,
             name: this.state.selectedMediaName,
-            fileContent: this.state.selectedMediaFileContent
+            fileContent: this.state.selectedMediaURL
         }
         console.log(newMedia);
         const putCategory = {
@@ -127,16 +129,43 @@ class CategoryList extends Component {
     onClickItem = (e) => {
         this.setState({
             selectedMediaName: e.name,
-            selectedMediaFileContent:e.fileContent,
-            selectedMediaID:e.id
+            selectedMediaURL: e.fileContent,
+            selectedMediaID: e.id
+        })
+    }
+
+    handleModal = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
+    showMedia = () => {
+        this.setState({
+            showModal: !this.state.showModal
         })
     }
 
     render() {
-        const {categoryList, isUpdate, id, name, description, imageToUrl,selectedMediaName,mediaList} = this.state;
+        const {categoryList, isUpdate, id, name, description, imageToUrl, selectedMediaName, mediaList} = this.state;
         return (
             <div>
-                <Header></Header>
+                <Header/>
+
+                <Modal show={this.state.showModal} onHide={() => this.handleModal()}>
+                    <Modal.Header closeButton><h4>{selectedMediaName}</h4></Modal.Header>
+                    <Modal.Body align="center">
+                        {
+                            <img src={'data:image/png;base64,' + this.state.selectedMediaURL} width="250"
+                                 style={{margin: 10}}/>
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-danger btn-block" onClick={() => this.handleModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
                 <Link to="/addcategory">
                     <button className="btn btn-success addCategoryButton">+ Add Category</button>
                 </Link>
@@ -149,7 +178,7 @@ class CategoryList extends Component {
                                         <h4>Update Category</h4>
                                     </div>
                                     <div className="card-body">
-                                        <form>
+                                        <form className="d-inline">
                                             <div className="form-group">
                                                 <label htmlFor="id">Category ID</label>
                                                 <input type="number"
@@ -199,22 +228,41 @@ class CategoryList extends Component {
                                                 />
                                             </div>
 
-                                            <div>
-                                                <DropdownButton id="dropdown-basic-button" title={selectedMediaName}>
+
+                                            <div className="dropdown d-inline">
+                                                <label htmlFor="price">Category Media : </label>
+                                                <button className="btn btn-info dropdown-toggle dropdownCss"
+                                                        type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="true">
+                                                    {selectedMediaName}
+                                                </button>
+                                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     {
                                                         mediaList.map(v => {
                                                             return (
-                                                                <Dropdown.Item onClick={this.onClickItem.bind(this, v)}>{v.name}</Dropdown.Item>
+                                                                <div className="row col-md -12">
+                                                                    <a className="dropdown-item"
+                                                                       onClick={this.onClickItem.bind(this, v)}>
+                                                                        {v.name}
+                                                                        {/*<img src={'data:image/png;base64,' + v.fileContent} width="25"*/}
+                                                                    </a>
+                                                                </div>
                                                             )
                                                         })
                                                     }
-                                                </DropdownButton>
+                                                </div>
                                             </div>
 
-                                            <button className="btn btn-warning btn-block mt-3"
-                                                    onClick={this.categoryUpdate}>Update
-                                            </button>
+
                                         </form>
+                                        <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show
+                                            Media
+                                        </button>
+                                        <button className="btn btn-warning btn-block mt-3"
+                                                onClick={this.categoryUpdate}>Update
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +309,7 @@ class CategoryList extends Component {
 
                 {
                     this.state.loadingIsVisible ?
-                        <Loading/>:null
+                        <Loading/> : null
                 }
             </div>
         );

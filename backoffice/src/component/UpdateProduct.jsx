@@ -5,6 +5,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import UserContext from "../Context";
 import Loading from "./Loading";
+import {Modal} from "react-bootstrap";
 
 class UpdateProduct extends Component {
     static contextType = UserContext;
@@ -17,11 +18,13 @@ class UpdateProduct extends Component {
         mediaList:[],
         selectedMediaName:"Select Media",
         selectedMediaID:"",
+        selectedMediaURL:"",
         categoryList:[],
         selectedCategoryName:"",
         multiCategory: [],
         multiCategoryIds:[],
-        loadingIsVisible:false
+        loadingIsVisible:false,
+        showModal: false,
     }
 
     async componentDidMount() {
@@ -92,8 +95,10 @@ class UpdateProduct extends Component {
     onClickMediaItem = (e) => {
         this.setState({
             selectedMediaName: e.name,
-            selectedMediaID : e.id
+            selectedMediaID : e.id,
+            selectedMediaURL:e.fileContent
         })
+        console.log(e)
     }
 
     onClickCategoryItem = (e) => {
@@ -104,16 +109,43 @@ class UpdateProduct extends Component {
         this.state.multiCategoryIds.push(e.id)
     }
 
+    handleModal = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
+    showMedia = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
+
     render() {
         const {id, name, desc, category, price,mediaList,selectedMediaName,categoryList} = this.state;
         return (
             <div className="col-md-12 mb-4 mt-2">
+
+                <Modal show={this.state.showModal} onHide={() => this.handleModal()}>
+                    <Modal.Header closeButton><h4>{selectedMediaName}</h4></Modal.Header>
+                    <Modal.Body align="center">
+                        {
+                            <img src={'data:image/png;base64,' + this.state.selectedMediaURL} width="250"
+                                 style={{margin: 10}}/>
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-danger btn-block" onClick={() => this.handleModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
                 <div className="card" align="left">
                     <div className="card-header" align="center">
                         <h4>Update Product</h4>
                     </div>
                     <div className="card-body">
-                        <form>
+                        <form className="d-inline">
                             <div className="form-group">
                                 <label htmlFor="id">Product ID</label>
                                 <input type="number"
@@ -202,20 +234,33 @@ class UpdateProduct extends Component {
                                 </div>
                             </div>
 
-                            <DropdownButton id="dropdown-basic-button" title={selectedMediaName} className="mt-3">
-                                {
-                                    mediaList.map(v => {
-                                        return (
-                                            <Dropdown.Item
-                                                onClick={this.onClickMediaItem.bind(this, v)}
-                                            >{v.name}</Dropdown.Item>
-                                        )
-                                    })
-                                }
-                            </DropdownButton>
-
-                            <button className="btn btn-warning btn-block mt-3" onClick={this.updateProduct}>Update</button>
+                            <div className="dropdown d-inline">
+                                <label htmlFor="price">Product Media : </label>
+                                <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="true">
+                                    {selectedMediaName}
+                                </button>
+                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {
+                                        mediaList.map(v => {
+                                            return (
+                                                <div className="row col-md -12">
+                                                    <a className="dropdown-item"
+                                                       onClick={this.onClickMediaItem.bind(this, v)}>
+                                                        {v.name}
+                                                        {/*<img src={'data:image/png;base64,' + v.fileContent} width="25"*/}
+                                                    </a>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
                         </form>
+                        <button className="btn btn-link ml-2" onClick={() => this.showMedia()}>Show Media
+                        </button>
+                        <button className="btn btn-warning btn-block mt-3" onClick={this.updateProduct}>Update</button>
                     </div>
                 </div>
                 {

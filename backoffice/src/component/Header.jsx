@@ -29,7 +29,7 @@ class Header extends Component {
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">User</button>
                 </Link>
                 <Link to="/authlist">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Auth</button>
+                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Role</button>
                 </Link>
                 <Link to="/orderlist">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Order</button>
@@ -49,9 +49,9 @@ class Header extends Component {
                 <Link to="/addimage">
                     <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Image</button>
                 </Link>
-                <Link to="/addrole">
-                    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Add Role</button>
-                </Link>
+                {/*<Link to="/addrole">*/}
+                {/*    <button className="btn btn-info btn-lg mb-2 mt-2 ml-2 btnCss">Add Role</button>*/}
+                {/*</Link>*/}
 
 
                 {/*<Link to="/tablelist">*/}
