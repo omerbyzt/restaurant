@@ -1,8 +1,9 @@
 package com.ba.builder;
 
+import com.ba.entity.Media;
 import com.ba.entity.Waiter;
 
-public class WaiterBuilder extends Builder{
+public class WaiterBuilder extends Builder {
 
     private String name;
     private String phoneNumber;
@@ -10,39 +11,45 @@ public class WaiterBuilder extends Builder{
     private String address;
     private String urlToImage;
     private Long salary;
+    private Media media;
 
-    public WaiterBuilder id(Long id){
+    public WaiterBuilder id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public WaiterBuilder name(String name){
+    public WaiterBuilder name(String name) {
         this.name = name;
         return this;
     }
 
-    public WaiterBuilder phoneNumber(String phoneNumber){
+    public WaiterBuilder phoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
 
-    public WaiterBuilder mail(String mail){
+    public WaiterBuilder mail(String mail) {
         this.mail = mail;
         return this;
     }
 
-    public WaiterBuilder address(String address){
+    public WaiterBuilder address(String address) {
         this.address = address;
         return this;
     }
 
-    public WaiterBuilder urlToImage(String urlToImage){
+    public WaiterBuilder urlToImage(String urlToImage) {
         this.urlToImage = urlToImage;
         return this;
     }
 
-    public WaiterBuilder salary(Long salary){
+    public WaiterBuilder salary(Long salary) {
         this.salary = salary;
+        return this;
+    }
+
+    public WaiterBuilder media(Media media) {
+        this.media = media;
         return this;
     }
 
@@ -57,6 +64,7 @@ public class WaiterBuilder extends Builder{
         waiter.setAddress(this.address);
         waiter.setUrlToImage(this.urlToImage);
         waiter.setSalary(this.salary);
+        waiter.setMedia(this.media);
 
         return waiter;
     }

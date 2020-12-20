@@ -1,6 +1,7 @@
 package com.ba.builder;
 
 import com.ba.entity.Category;
+import com.ba.entity.Media;
 import com.ba.entity.Product;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ProductBuilder {
     private Double productPrice;
     //private Category category;
     private List<Category> categories;
+    private Media media;
 
     public ProductBuilder productID(Long productID){
         this.productID = productID;
@@ -41,13 +43,13 @@ public class ProductBuilder {
         return this;
     }
 
-//    public ProductBuilder category(Category category){
-//        this.category=category;
-//        return this;
-//    }
-
     public ProductBuilder categories(List<Category> categories){
         this.categories = categories;
+        return this;
+    }
+
+    public ProductBuilder media(Media media){
+        this.media = media;
         return this;
     }
 
@@ -59,8 +61,8 @@ public class ProductBuilder {
         product.setProductDesc(this.productDesc);
         product.setProductCategory(this.productCategory);
         product.setProductPrice(this.productPrice);
-//        product.setCategory(this.category);
         product.setCategories(this.categories);
+        product.setMedia(this.media);
 
         return product;
     }

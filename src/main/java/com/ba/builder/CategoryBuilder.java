@@ -2,6 +2,7 @@ package com.ba.builder;
 
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
+import com.ba.entity.Media;
 import com.ba.entity.Product;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class CategoryBuilder extends Builder{
     private String description;
     private String imageToUrl;
     private List<Product> products;
+    private Media media;
 
     public CategoryBuilder id(Long id){
         this.setId(id);
@@ -39,6 +41,11 @@ public class CategoryBuilder extends Builder{
         return this;
     }
 
+    public CategoryBuilder media(Media media){
+        this.media = media;
+        return this;
+    }
+
     @Override
     public Category build() {
         Category category = new Category();
@@ -48,6 +55,7 @@ public class CategoryBuilder extends Builder{
         category.setDescription(this.description);
         category.setName(this.name);
         category.setId(this.getId());
+        category.setMedia(this.media);
 
         return category;
     }

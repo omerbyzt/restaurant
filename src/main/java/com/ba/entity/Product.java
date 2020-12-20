@@ -60,14 +60,6 @@ public class Product {
 
     }
 
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
-
     public Long getProductID() {
         return productID;
     }

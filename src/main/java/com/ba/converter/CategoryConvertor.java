@@ -74,7 +74,7 @@ public class CategoryConvertor {
     public static Category convertDTOtoCategory(CategoryDTO categoryDTO){
         Category category = new Category();
 
-        category.setProducts( CategoryConvertor.convertDTOListToList(categoryDTO.getProducts()));
+        //category.setProducts( CategoryConvertor.convertDTOListToList(categoryDTO.getProducts()));
         category.setImageToUrl(categoryDTO.getImageToUrl());
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());

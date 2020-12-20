@@ -1,8 +1,10 @@
 package com.ba.builder;
 
 import com.ba.dto.CategoryDTO;
+import com.ba.dto.MediaDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
+import com.ba.entity.Media;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,8 +18,8 @@ public class ProductDTOBuilder {
     private String productDesc;
     private String productCategory;
     private Double productPrice;
-    //private Category category;
     private List<CategoryDTO> categories = new ArrayList<>();
+    private MediaDTO mediaDTO;
 
     public ProductDTOBuilder productID(Long productID){
         this.productID = productID;
@@ -44,13 +46,13 @@ public class ProductDTOBuilder {
         return this;
     }
 
-//    public ProductDTOBuilder category(Category category){
-//        this.category=category;
-//        return this;
-//    }
-
     public ProductDTOBuilder categories(List<CategoryDTO> categories){
         this.categories = categories;
+        return this;
+    }
+
+    public ProductDTOBuilder media(MediaDTO mediaDTO){
+        this.mediaDTO = mediaDTO;
         return this;
     }
 
@@ -63,7 +65,7 @@ public class ProductDTOBuilder {
         productDTO.setProductCategory(this.productCategory);
         productDTO.setProductPrice(this.productPrice);
         productDTO.setCategories(this.categories);
-//        productDTO.setCategory(this.category);
+        productDTO.setMediaDTO(this.mediaDTO);
 
         return productDTO;
     }

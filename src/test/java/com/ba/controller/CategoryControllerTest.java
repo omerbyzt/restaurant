@@ -51,9 +51,6 @@ public class CategoryControllerTest {
 
         categoryList.add(category);
 
-//        product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").category(category).build();
-//        productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").category(category).build();
-
         product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").build();
         productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").build();
 
@@ -96,10 +93,10 @@ public class CategoryControllerTest {
         assertEquals(tempDTOList, productSetListDTO);
     }
 
-//    @Test
-//    public void shouldVerifyAddProduct() {
-//        when(service.addProduct(productDTO, id)).thenReturn("Product Added");
-//        String res = controller.addProduct(productDTO, id);
-//        assertEquals(res, "Product Added");
-//    }
+    @Test
+    public void shouldVerifyAddProductByID() {
+        when(service.addProduct(productDTO, id)).thenReturn("Product Added");
+        String res = controller.addProduct(productDTO, id);
+        assertEquals(res, "Product Added");
+    }
 }

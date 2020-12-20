@@ -1,12 +1,10 @@
 package com.ba.entity;
 
-import com.ba.dto.ProductDTO;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Category{

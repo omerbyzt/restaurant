@@ -75,6 +75,7 @@ public class MediaControllerTest {
 
         }
     };
+    private Long id = 111L;
 
     @Before
     public void setUp() throws Exception {
@@ -87,9 +88,7 @@ public class MediaControllerTest {
 
     @Test
     public void shouldVerifyListWholeMedia() {
-
         when(service.getWholeFiles()).thenReturn(mediaDTOList);
-
         List<MediaDTO> dtoList = controller.getWholeFiles();
 
         assertEquals(mediaDTOList,dtoList);
@@ -98,10 +97,17 @@ public class MediaControllerTest {
 
     @Test
     public void shouldVerifyAddNewMedia() throws IOException {
-
         when(service.addFile(multipartFile,"deneme")).thenReturn("File Added");
         String res = controller.addFile(multipartFile,"deneme");
 
         assertEquals(res,"File Added");
+    }
+
+    @Test
+    public void shouldVerifyGetMediaByID() {
+        when(service.getMediaByID(id)).thenReturn(mediaDTO);
+        MediaDTO tempDTO = controller.getMediaByID(id);
+
+        assertEquals(tempDTO,mediaDTO);
     }
 }

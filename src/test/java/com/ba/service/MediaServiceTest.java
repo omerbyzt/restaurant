@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -38,6 +39,7 @@ public class MediaServiceTest {
     private MediaDTO mediaDTO = new MediaDTO();
     private List<Media> mediaList = new ArrayList<>();
     private List<MediaDTO> mediaDTOList = new ArrayList<>();
+    private Long id = 111L;
 
     byte [] b ={ (byte)0xe0, 0x4f, (byte)0xd0,
             0x20, (byte)0xea, 0x3a, 0x69, 0x10, (byte)0xa2, (byte)0xd8, 0x08, 0x00, 0x2b,
@@ -72,5 +74,14 @@ public class MediaServiceTest {
 
         assertNotNull(res);
         assertEquals(res,"File Added");
+    }
+
+    @Test
+    public void shoulVerifyGetMediaByID() {
+//        when(service.getMediaByID(id)).thenReturn(mediaDTO);
+//        MediaDTO mediaDTO = service.getMediaByID(id);
+//
+//        assertNotNull(mediaDTO);
+
     }
 }

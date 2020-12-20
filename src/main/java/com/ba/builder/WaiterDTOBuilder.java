@@ -1,5 +1,6 @@
 package com.ba.builder;
 
+import com.ba.dto.MediaDTO;
 import com.ba.dto.WaiterDTO;
 
 public class WaiterDTOBuilder extends Builder{
@@ -10,6 +11,7 @@ public class WaiterDTOBuilder extends Builder{
     private String address;
     private String urlToImage;
     private Long salary;
+    private MediaDTO mediaDTO;
 
     public WaiterDTOBuilder id(Long id){
         this.setId(id);
@@ -46,6 +48,11 @@ public class WaiterDTOBuilder extends Builder{
         return this;
     }
 
+    public WaiterDTOBuilder mediaDTO(MediaDTO mediaDTO){
+        this.mediaDTO = mediaDTO;
+        return this;
+    }
+
     @Override
     public WaiterDTO build() {
         WaiterDTO waiterDTO = new WaiterDTO();
@@ -57,6 +64,7 @@ public class WaiterDTOBuilder extends Builder{
         waiterDTO.setAddress(this.address);
         waiterDTO.setUrlToImage(this.urlToImage);
         waiterDTO.setSalary(this.salary);
+        waiterDTO.setMediaDTO(this.mediaDTO);
 
         return waiterDTO;
     }

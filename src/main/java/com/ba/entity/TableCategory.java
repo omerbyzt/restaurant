@@ -14,19 +14,10 @@ public class TableCategory {
     private String name;
     private int number;
 
-//    @OneToMany(
-//            cascade = CascadeType.ALL
-//    )
-//
-//      @JoinColumn(name ="table_category_id")
-//      private Set<Tables> tables;
-
-
-    public TableCategory(String name,int number) {
+    public TableCategory(String name, int number) {
         this.name = name;
         this.number = number;
     }
-
 
     public TableCategory() {
 
@@ -56,11 +47,4 @@ public class TableCategory {
         this.name = name;
     }
 
-//    public Set<Tables> getTables() {
-//        return tables;
-//    }
-//
-//    public void setTables(Set<Tables> tables) {
-//        this.tables = tables;
-//    }
 }

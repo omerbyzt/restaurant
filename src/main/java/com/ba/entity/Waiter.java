@@ -18,7 +18,7 @@ public class Waiter {
     private Long salary;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "media_id")
     private Media media;
 
