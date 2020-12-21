@@ -2,9 +2,9 @@ package com.ba.service;
 
 import com.ba.builder.MediaBuilder;
 import com.ba.builder.MediaDTOBuilder;
-import com.ba.converter.MediaConverter;
 import com.ba.dto.MediaDTO;
 import com.ba.entity.Media;
+import com.ba.mapper.MediaMapper;
 import com.ba.repository.MediaRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,19 +12,15 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +57,8 @@ public class MediaServiceTest {
     public void shouldListMedias() {
         when(repository.findAll()).thenReturn(mediaList);
 
-        List<MediaDTO> tempDTOList = MediaConverter.convertListToListDTO(mediaList);
+        List<MediaDTO> tempDTOList = MediaMapper.INSTANCE.toDTOList(mediaList);
+//        List<MediaDTO> tempDTOList = MediaConverter.convertListToListDTO(mediaList);
         List<MediaDTO> tempDTOList2 = service.getWholeFiles();
 
         assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());

@@ -1,10 +1,11 @@
 package com.ba.service;
 
-import com.ba.converter.CategoryConvertor;
-import com.ba.converter.ProductConverter;
+import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -24,7 +24,13 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     public List<ProductDTO> listAllProducts(){
-        return ProductConverter.convertProductToProductDTO(productRepository.findAll());
+        List<Product> productList = productRepository.findAll();
+        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(productRepository.findAll());
+        for(int i = 0; i<productList.size(); i++){
+            productDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productList.get(i).getCategories()));
+        }
+        return productDTOList;
+//        return ProductConverter.convertProductToProductDTO(productRepository.findAll());
     }
 
     public String deleteProduct(Long id){
@@ -54,7 +60,12 @@ public class ProductService {
 
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList2 = new ArrayList<>();
-        Product product2 = CategoryConvertor.convertDTOToProduct(productDTO);
+
+        Product product2 = ProductMapper.INSTANCE.toEntity(productDTO);
+        List<CategoryDTO> tempCategoryDTOList = productDTO.getCategories();
+        product2.setCategories(CategoryMapper.INSTANCE.toList(tempCategoryDTOList));
+//        Product product2 = CategoryConvertor.convertDTOToProduct(productDTO);
+
         for(int i = 0 ; i<categoriesIdsList.size() ; i++){
             Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
             category.getProducts().add(product2);

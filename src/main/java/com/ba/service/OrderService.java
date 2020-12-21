@@ -1,14 +1,11 @@
 package com.ba.service;
 
-import com.ba.converter.OrderConverter;
 import com.ba.dto.OrderDTO;
-import com.ba.entity.Orderr;
-import com.ba.entity.Product;
+import com.ba.mapper.OrderMapper;
 import com.ba.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,11 +15,13 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public List<OrderDTO> listAllOrders(){
-        return OrderConverter.convertOrderListToOrderListDTO(orderRepository.findAll());
+        return OrderMapper.INSTANCE.toDTOList(orderRepository.findAll());
+//        return OrderConverter.convertOrderListToOrderListDTO(orderRepository.findAll());
     }
 
     public String addOrder(List<OrderDTO> orderDTO){
-        orderRepository.saveAll(OrderConverter.convertOrderListDTOToOrderList(orderDTO));
+        orderRepository.saveAll(OrderMapper.INSTANCE.toList(orderDTO));
+//        orderRepository.saveAll(OrderConverter.convertOrderListDTOToOrderList(orderDTO));
         return "Order Added";
     }
 

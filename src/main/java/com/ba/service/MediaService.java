@@ -1,8 +1,8 @@
 package com.ba.service;
 
-import com.ba.converter.MediaConverter;
 import com.ba.dto.MediaDTO;
 import com.ba.entity.Media;
+import com.ba.mapper.MediaMapper;
 import com.ba.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,11 +30,15 @@ public class MediaService {
     private MediaRepository mediaRepository;
 
     public List<MediaDTO> getWholeFiles(){
-        return MediaConverter.convertListToListDTO(mediaRepository.findAll());
+        List<MediaDTO> mediaDTOList = MediaMapper.INSTANCE.toDTOList(mediaRepository.findAll());
+        return mediaDTOList;
+//        return MediaConverter.convertListToListDTO(mediaRepository.findAll());
     }
 
     public MediaDTO getMediaByID(Long id){
-        return MediaConverter.convertMediaToMediaDTO(mediaRepository.findById(id).get());
+        MediaDTO mediaDTO = MediaMapper.INSTANCE.toDTO(mediaRepository.findById(id).get());
+        return mediaDTO;
+//        return MediaConverter.convertMediaToMediaDTO(mediaRepository.findById(id).get());
     }
 
     public String addFile(MultipartFile file ,String imageName) throws IOException {

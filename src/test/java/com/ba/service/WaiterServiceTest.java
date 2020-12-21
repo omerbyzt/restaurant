@@ -4,11 +4,11 @@ import com.ba.builder.MediaBuilder;
 import com.ba.builder.MediaDTOBuilder;
 import com.ba.builder.WaiterBuilder;
 import com.ba.builder.WaiterDTOBuilder;
-import com.ba.converter.WaiterConverter;
 import com.ba.dto.MediaDTO;
 import com.ba.dto.WaiterDTO;
 import com.ba.entity.Media;
 import com.ba.entity.Waiter;
+import com.ba.mapper.WaiterMapper;
 import com.ba.repository.MediaRepository;
 import com.ba.repository.WaiterRepository;
 import org.junit.Before;
@@ -20,7 +20,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
@@ -96,7 +95,8 @@ public class WaiterServiceTest {
     public void shouldListWaiters() {
         when(repository.findAll()).thenReturn(waiterList);
 
-        List<WaiterDTO> tempDTOList = WaiterConverter.convertListToDTOList(waiterList);
+        List<WaiterDTO> tempDTOList = WaiterMapper.INSTANCE.toDTOList(waiterList);
+//        List<WaiterDTO> tempDTOList = WaiterConverter.convertListToDTOList(waiterList);
         List<WaiterDTO> tempDTOList2 = service.listAllWaiters();
 
         assertEquals(tempDTOList.get(0).getId(), tempDTOList2.get(0).getId());

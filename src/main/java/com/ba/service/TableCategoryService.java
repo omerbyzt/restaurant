@@ -1,7 +1,7 @@
 package com.ba.service;
 
-import com.ba.converter.TableCategoryConverter;
 import com.ba.dto.TableCategoryDTO;
+import com.ba.mapper.TableCategoryMapper;
 import com.ba.repository.TableCategoryRepository;
 import com.ba.unused.TableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,13 @@ public class TableCategoryService {
     private TableRepository tableRepository;
 
     public List<TableCategoryDTO> listTableCategories() {
-        return TableCategoryConverter.convertDTOListtoList(tableCategoryRepository.findAll());
+        return TableCategoryMapper.INSTANCE.toDTOList(tableCategoryRepository.findAll());
+//        return TableCategoryConverter.convertDTOListtoList(tableCategoryRepository.findAll());
     }
 
     public String addTableCategory(TableCategoryDTO tableCategoryDTO) {
-        tableCategoryRepository.save(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
+        tableCategoryRepository.save(TableCategoryMapper.INSTANCE.toEntity(tableCategoryDTO));
+//        tableCategoryRepository.save(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
         return "Table Category Added";
     }
 
@@ -33,7 +35,8 @@ public class TableCategoryService {
     }
 
     public TableCategoryDTO updateTableCategory(TableCategoryDTO tableCategoryDTO) {
-        tableCategoryRepository.saveAndFlush(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
+        tableCategoryRepository.saveAndFlush( TableCategoryMapper.INSTANCE.toEntity(tableCategoryDTO));
+//        tableCategoryRepository.saveAndFlush(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
         return tableCategoryDTO;
     }
 

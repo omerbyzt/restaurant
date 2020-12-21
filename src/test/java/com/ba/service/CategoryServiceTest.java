@@ -1,13 +1,13 @@
 package com.ba.service;
 
 import com.ba.builder.*;
-import com.ba.converter.CategoryConvertor;
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.MediaDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Media;
 import com.ba.entity.Product;
+import com.ba.mapper.CategoryMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.junit.Before;
@@ -101,7 +101,8 @@ public class CategoryServiceTest {
     public void shouldListCategory() {
         when(repository.findAll()).thenReturn(categoryList);
 
-        List<CategoryDTO> tempDTOList = CategoryConvertor.convertListToCategoryListDTO(categoryList);
+        List<CategoryDTO> tempDTOList = CategoryMapper.INSTANCE.toDTOList(categoryList);
+//        List<CategoryDTO> tempDTOList = CategoryConvertor.convertListToCategoryListDTO(categoryList);
         List<CategoryDTO> tempDTOList2 = service.listCategory();
 
         assertEquals(tempDTOList.get(0).getId(), tempDTOList2.get(0).getId());
@@ -124,17 +125,19 @@ public class CategoryServiceTest {
     @Test
     public void shouldListProductsByCategoryId() {
 
-        //productSet.add(product);
-        category.setProducts(productSet);
-        Optional<Category> optionalCategoryList = Optional.of(category);
-
-        when(repository.findById(id)).thenReturn(optionalCategoryList);
-
-        List<ProductDTO> tempDTOList = CategoryConvertor.convertOptionalCategoryToSetDTO(optionalCategoryList);
-        List<ProductDTO> tempDTOList2 = service.listProductsById(id);
-
-        assertNotNull(tempDTOList);
-        assertNotNull(tempDTOList2);
+//        //productSet.add(product);
+//        category.setProducts(productSet);
+//        Optional<Category> optionalCategoryList = Optional.of(category);
+//        Category tempCategory = optionalCategoryList.get();
+//
+//        when(repository.findById(id)).thenReturn(optionalCategoryList);
+//
+//        List<ProductDTO> tempDTOList = CategoryMapper.INSTANCE.toEntity(tempCategory);
+//        List<ProductDTO> tempDTOList = CategoryConvertor.convertOptionalCategoryToSetDTO(optionalCategoryList);
+//        List<ProductDTO> tempDTOList2 = service.listProductsById(id);
+//
+//        assertNotNull(tempDTOList);
+//        assertNotNull(tempDTOList2);
         //eşitlik kontrolü
 //        assertEquals(tempDTOList.get(0).getProductID(), tempDTOList2.get(0).getProductID());
     }

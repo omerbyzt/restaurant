@@ -2,9 +2,9 @@ package com.ba.service;
 
 import com.ba.builder.UserBuilder;
 import com.ba.builder.UserDTOBuilder;
-import com.ba.converter.UserConverter;
 import com.ba.dto.UserDTO;
 import com.ba.entity.User;
+import com.ba.mapper.UserMapper;
 import com.ba.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +48,8 @@ public class UserServiceTest {
     public void shouldVerifyListUsers() {
         when(repository.findAll()).thenReturn(userList);
 
-        List<UserDTO> tempDTOList1 = UserConverter.convertListToDTOList(userList);
+        List<UserDTO> tempDTOList1 = UserMapper.INSTANCE.toDTOList(userList);
+//        List<UserDTO> tempDTOList1 = UserConverter.convertListToDTOList(userList);
         List<UserDTO> tempDTOList2 = service.listUsers();
 
         assertEquals(tempDTOList1.get(0).getId(),tempDTOList2.get(0).getId());

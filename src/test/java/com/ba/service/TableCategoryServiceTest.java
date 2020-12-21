@@ -2,9 +2,9 @@ package com.ba.service;
 
 import com.ba.builder.TableCategoryBuilder;
 import com.ba.builder.TableCategoryDTOBuilder;
-import com.ba.converter.TableCategoryConverter;
 import com.ba.dto.TableCategoryDTO;
 import com.ba.entity.TableCategory;
+import com.ba.mapper.TableCategoryMapper;
 import com.ba.repository.TableCategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,7 +92,8 @@ public class TableCategoryServiceTest {
 
         when(tableCategoryRepository.findAll()).thenReturn(tableCategoriesList);
 
-        List<TableCategoryDTO> tempDTOList = TableCategoryConverter.convertDTOListtoList(tableCategoriesList);
+        List<TableCategoryDTO> tempDTOList = TableCategoryMapper.INSTANCE.toDTOList(tableCategoriesList);
+//        List<TableCategoryDTO> tempDTOList = TableCategoryConverter.convertDTOListtoList(tableCategoriesList);
         List<TableCategoryDTO> tempDTOList2 = tableCategoryService.listTableCategories();
 
         assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());

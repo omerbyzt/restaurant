@@ -1,12 +1,12 @@
 package com.ba.service;
 
 import com.ba.builder.*;
-import com.ba.converter.ProductConverter;
 import com.ba.dto.MediaDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Media;
 import com.ba.entity.Product;
+import com.ba.mapper.ProductMapper;
 import com.ba.repository.ProductRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,7 +93,8 @@ public class ProductServiceTest {
 
         when(repository.findAll()).thenReturn(productList);
 
-        List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);
+        List<ProductDTO> tempDTOList = ProductMapper.INSTANCE.toDTOList(productList);
+//        List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);
         List<ProductDTO> tempDTOList2 = service.listAllProducts();
 
         assertEquals(tempDTOList.get(0).getProductID(),tempDTOList2.get(0).getProductID());

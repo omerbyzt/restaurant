@@ -2,9 +2,9 @@ package com.ba.service;
 
 import com.ba.builder.RoleBuilder;
 import com.ba.builder.RoleDTOBuilder;
-import com.ba.converter.RoleConverter;
 import com.ba.dto.RoleDTO;
 import com.ba.entity.Role;
+import com.ba.mapper.RoleMapper;
 import com.ba.repository.RoleRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +49,8 @@ public class RoleServiceTest {
     public void shouldVerifyListRoles() {
         when(repository.findAll()).thenReturn(roleList);
 
-        List<RoleDTO> tempDTOList = RoleConverter.convertListToDTOList(roleList);
+        List<RoleDTO> tempDTOList = RoleMapper.INSTANCE.toDTOList(roleList);
+//        List<RoleDTO> tempDTOList = RoleConverter.convertListToDTOList(roleList);
         List<RoleDTO> tempDTOList2 = service.listRoles();
 
         assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());

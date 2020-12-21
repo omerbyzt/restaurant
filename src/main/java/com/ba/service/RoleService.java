@@ -1,7 +1,7 @@
 package com.ba.service;
 
-import com.ba.converter.RoleConverter;
 import com.ba.dto.RoleDTO;
+import com.ba.mapper.RoleMapper;
 import com.ba.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,13 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     public List<RoleDTO> listRoles(){
-        return RoleConverter.convertListToDTOList(roleRepository.findAll());
+        return RoleMapper.INSTANCE.toDTOList(roleRepository.findAll());
+//        return RoleConverter.convertListToDTOList(roleRepository.findAll());
     }
 
     public String addRole(RoleDTO roleDTO){
-        roleRepository.save(RoleConverter.convertDTOToEntity(roleDTO));
+        roleRepository.save(RoleMapper.INSTANCE.toEntity(roleDTO));
+//        roleRepository.save(RoleConverter.convertDTOToEntity(roleDTO));
         return "Role Added";
     }
 
@@ -29,7 +31,8 @@ public class RoleService {
     }
 
     public String updateRole(RoleDTO roleDTO){
-        roleRepository.saveAndFlush(RoleConverter.convertDTOToEntity(roleDTO));
+        roleRepository.saveAndFlush(RoleMapper.INSTANCE.toEntity(roleDTO));
+//        roleRepository.saveAndFlush(RoleConverter.convertDTOToEntity(roleDTO));
         return "Role Updated";
     }
 }

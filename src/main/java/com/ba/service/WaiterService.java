@@ -1,7 +1,9 @@
 package com.ba.service;
 
-import com.ba.converter.WaiterConverter;
 import com.ba.dto.WaiterDTO;
+import com.ba.entity.Media;
+import com.ba.entity.Waiter;
+import com.ba.mapper.WaiterMapper;
 import com.ba.repository.MediaRepository;
 import com.ba.repository.WaiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,21 @@ public class WaiterService {
     private MediaRepository mediaRepository;
 
     public List<WaiterDTO> listAllWaiters(){
-        return WaiterConverter.convertListToDTOList(waiterRepository.findAll());
+        return  WaiterMapper.INSTANCE.toDTOList(waiterRepository.findAll());
+//        return WaiterConverter.convertListToDTOList(waiterRepository.findAll());
     }
 
     public String addWaiter(WaiterDTO waiterDTO){
         mediaRepository.deleteById(waiterDTO.getMediaDTO().getId());
-        waiterRepository.save(WaiterConverter.addWaiterConverter(waiterDTO));
+
+        Waiter tempWaiter = WaiterMapper.INSTANCE.toEntity(waiterDTO);
+
+        Media tempMedia = tempWaiter.getMedia();
+        tempMedia.setId(null);
+        tempWaiter.setMedia(tempMedia);
+
+        waiterRepository.save(tempWaiter);
+//        waiterRepository.save(WaiterConverter.addWaiterConverter(waiterDTO));
         return "Waiter Added";
     }
 
@@ -34,7 +45,8 @@ public class WaiterService {
     }
 
     public WaiterDTO updateWaiter(WaiterDTO waiterDTO){
-        waiterRepository.saveAndFlush(WaiterConverter.convertDTOTOWaiter(waiterDTO));
+        waiterRepository.saveAndFlush(WaiterMapper.INSTANCE.toEntity(waiterDTO));
+//        waiterRepository.saveAndFlush(WaiterConverter.convertDTOTOWaiter(waiterDTO));
         return waiterDTO;
     }
 }

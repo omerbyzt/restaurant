@@ -1,10 +1,9 @@
 package com.ba.service;
 
-import com.ba.converter.MediaConverter;
-import com.ba.converter.UserConverter;
 import com.ba.dto.UserDTO;
 import com.ba.entity.Role;
 import com.ba.entity.User;
+import com.ba.mapper.UserMapper;
 import com.ba.repository.RoleRepository;
 import com.ba.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,13 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     public List<UserDTO> listUsers() {
         List<User> userList = new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(userList::add);
-        return UserConverter.convertListToDTOList(userList);
+        return UserMapper.INSTANCE.toDTOList(userList);
+//        return UserConverter.convertListToDTOList(userList);
     }
 
     public String addUser(UserDTO userDTO) {
@@ -36,7 +38,10 @@ public class UserService {
             roleList.add(role);
         }
 
-        User user = UserConverter.convertDTOToEntity(userDTO,roleList);
+        User user = UserMapper.INSTANCE.toEntity(userDTO);
+        user.setRoles(roleList);
+        user.setPassword(encoder.encode(userDTO.getPassword()));
+//        User user = UserConverter.convertDTOToEntity(userDTO,roleList);
         userRepository.save(user);
 
         return "User Added";
@@ -48,8 +53,10 @@ public class UserService {
             Role role=roleRepository.findById(userDTO.getRoles().get(i).getId()).get();
             roleList.add(role);
         }
-
-        userRepository.saveAndFlush(UserConverter.convertDTOToEntity(userDTO,roleList));
+        User user = UserMapper.INSTANCE.toEntity(userDTO);
+        user.setRoles(roleList);
+        userRepository.saveAndFlush(user);
+//        userRepository.saveAndFlush(UserConverter.convertDTOToEntity(userDTO,roleList));
         return "User Updated";
     }
 

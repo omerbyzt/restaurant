@@ -1,10 +1,11 @@
 package com.ba.service;
 
-import com.ba.converter.CategoryConvertor;
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -25,11 +24,13 @@ public class CategoryService {
     private ProductRepository productRepository;
 
     public List<CategoryDTO> listCategory() {
-        return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
+        return CategoryMapper.INSTANCE.toDTOList(categoryRepository.findAll());
+//        return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
     }
 
     public String addCategory(CategoryDTO categoryDTO) {
-        categoryRepository.save(CategoryConvertor.convertDTOtoCategory(categoryDTO));
+        categoryRepository.save(CategoryMapper.INSTANCE.toEntity(categoryDTO));
+//        categoryRepository.save(CategoryConvertor.convertDTOtoCategory(categoryDTO));
         return "Category Added";
     }
 
@@ -39,22 +40,30 @@ public class CategoryService {
     }
 
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        Category tempCategory = categoryRepository.findById(categoryDTO.getId()).get();
-        //Optional<Category> tempOptionalList = categoryRepository.findById(categoryDTO.getId());
-        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempCategory));
+        List<Product> tempProducts = categoryRepository.findById(categoryDTO.getId()).get().getProducts();
+        Category tempCategory = CategoryMapper.INSTANCE.toEntity(categoryDTO);
+        tempCategory.setProducts(tempProducts);
+        categoryRepository.saveAndFlush(tempCategory);
+//        Category tempCategory = categoryRepository.findById(categoryDTO.getId()).get();
+//        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempCategory));
         return categoryDTO;
     }
 
     public List<ProductDTO> listProductsById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        return CategoryConvertor.convertOptionalCategoryToSetDTO(category);
+        Category category = categoryRepository.findById(id).get();
+        List<ProductDTO> tempProductList = ProductMapper.INSTANCE.toDTOList(category.getProducts());
+
+//        Optional<Category> category = categoryRepository.findById(id);
+//        return CategoryConvertor.convertOptionalCategoryToSetDTO(category.getProducts());
+        return tempProductList;
     }
 
     public String addProduct(ProductDTO productDTO, Long id) {
 
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList = new ArrayList<>();
-        Product product = CategoryConvertor.convertDTOToProduct(productDTO);
+        Product product = ProductMapper.INSTANCE.toEntity(productDTO);
+//        Product product = CategoryConvertor.convertDTOToProduct(productDTO);
         for(int i = 0 ; i<categoriesIdsList.size() ; i++){
             Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
             category.getProducts().add(product);

@@ -97,5 +97,11 @@
             <column name ="file_Content" valueBlobFile="./ibrahim_koc.jpg"/>
         </insert>
 
+        <insert tableName="media">
+            <column name="id" valueNumeric="16"/>
+            <column name="name" value="food"/>
+            <column name ="file_Content" valueBlobFile="./food.png"/>
+        </insert>
+
     </changeSet>
 </databaseChangeLog>
