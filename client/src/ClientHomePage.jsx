@@ -27,11 +27,17 @@ class ClientHomePage extends Component {
             tableName: "",
         },
         selectedCategoryName: "",
-        loadingIsVisible:false,
+        loadingIsVisible: false,
+        scrollPosition: 0,
+        pageNumber: 0,
+        selectedCategoryId: 1,
+        tempArray:[]
     }
+
 
     constructor(props) {
         super(props);
+        this.myRef = React.createRef()
     }
 
     async componentDidMount() {
@@ -100,25 +106,25 @@ class ClientHomePage extends Component {
         this.setState({loadingIsVisible: false});
     }
 
-    onClickCategoryName = async (category) => {
+    onClickCategoryName = async (id) => {
         this.setState({loadingIsVisible: true});
         const {token} = this.context;
 
-        let uri = 'http://localhost:8080/category/list-products/' + category.id;
-        console.log(uri);
-
-        await fetch(uri, {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': token,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
+        await axios.get('http://localhost:8080/product/listslice',
+            {
+                headers: {Authorization: token},
+                params: {page: this.state.pageNumber, size: 10, categoryId: id}
+            }
+        )
+            .then(res => {
                 this.setState({
-                    content: data
+                    content: res.data.productDTOList,
+                    selectedCategoryId:id
                 })
-            })
+            });
+
+        this.state.tempArray.push(this.state.content);
+        console.log(this.state.tempArray)
         this.setState({loadingIsVisible: false});
     }
 
@@ -184,7 +190,7 @@ class ClientHomePage extends Component {
 
     clickPayButton = async (value) => {
         this.setState({loadingIsVisible: true});
-        const{token,setTable,setWaiterID,setWaiterName} = this.context
+        const {token, setTable, setWaiterID, setWaiterName} = this.context
         // CREATE TABLE OR PAY DIRECTLY
         // if(sessionStorage.getItem("table") === "No Table"){
         console.log(value);
@@ -228,7 +234,7 @@ class ClientHomePage extends Component {
     }
 
     onClickBackToMenuButton = () => {
-        const{setTable,setWaiterID,setWaiterName} = this.context
+        const {setTable, setWaiterID, setWaiterName} = this.context
         let orderList = ClientHomePage.getOrderListFromStorage();
         if (this.state.shoppingList.length > 0) {
             orderList.push(this.state.shoppingList);
@@ -243,9 +249,23 @@ class ClientHomePage extends Component {
         setWaiterID("-1");
     }
 
+    onScroll = async () => {
+        const {scrollPosition, selectedCategoryId} = this.state
+        const scrollTop = this.myRef.current.scrollTop
+        this.setState({scrollPosition: scrollTop})
+
+        if (scrollPosition > (this.state.pageNumber+1)*800) {
+            this.state.pageNumber++;
+            await this.onClickCategoryName(selectedCategoryId)
+            this.setState({scrollPosition: 0})
+        }
+        console.log(scrollPosition)
+        console.log(this.state.pageNumber)
+    }
+
     render() {
-        const {content, categoryList, shoppingList, totalPayment} = this.state;
-        const{waiterName,table} = this.context;
+        const {content, categoryList, shoppingList, totalPayment, tempArray} = this.state;
+        const {waiterName, table} = this.context;
         return (
             <div className="App">
                 <Table bordered>
@@ -261,10 +281,11 @@ class ClientHomePage extends Component {
                                         categoryList.map(v => {
                                                 return (
                                                     <button className="btn btn-info btn-block mb-1 categoryButtonCss"
-                                                            onClick={() => this.onClickCategoryName(v)}>
+                                                            onClick={() => this.onClickCategoryName(v.id)}>
                                                         {v.name}
-                                                            <br/>
-                                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="87" style={{margin:10}}/>
+                                                        <br/>
+                                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent}
+                                                             width="87" style={{margin: 10}}/>
                                                     </button>
                                                 )
                                             }
@@ -290,9 +311,10 @@ class ClientHomePage extends Component {
                                     <h4 className="d-inline">Product List
                                     </h4>
                                 </div>
-                                <div className="card-body productBigCardBody">
+                                <div className="card-body productBigCardBody" ref={this.myRef} onScroll={this.onScroll}>
                                     {
                                         content.map(v => {
+                                        // tempArray.map(v => {
                                             return (
                                                 <div className="card productCards">
                                                     <div className="card-header">
@@ -364,7 +386,7 @@ class ClientHomePage extends Component {
                 </Table>
                 {
                     this.state.loadingIsVisible ?
-                        <Loading/>:null
+                        <Loading/> : null
                 }
             </div>
         );

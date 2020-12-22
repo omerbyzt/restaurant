@@ -9,7 +9,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-22T13:00:30+0300",
+    date = "2020-12-22T19:22:18+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class MediaMapperImpl implements MediaMapper {
@@ -28,6 +28,7 @@ public class MediaMapperImpl implements MediaMapper {
         if ( fileContent != null ) {
             media.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
         }
+        media.setDeleted( mediaDTO.isDeleted() );
 
         return media;
     }
@@ -46,6 +47,7 @@ public class MediaMapperImpl implements MediaMapper {
         if ( fileContent != null ) {
             mediaDTO.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
         }
+        mediaDTO.setDeleted( media.isDeleted() );
 
         return mediaDTO;
     }

@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-22T13:00:30+0300",
+    date = "2020-12-22T19:22:18+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class CategoryMapperImpl implements CategoryMapper {
@@ -25,6 +25,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         category.setName( categoryDTO.getName() );
         category.setDescription( categoryDTO.getDescription() );
         category.setImageToUrl( categoryDTO.getImageToUrl() );
+        category.setDeleted( categoryDTO.isDeleted() );
 
         return category;
     }
@@ -41,6 +42,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         categoryDTO.setName( category.getName() );
         categoryDTO.setDescription( category.getDescription() );
         categoryDTO.setImageToUrl( category.getImageToUrl() );
+        categoryDTO.setDeleted( category.isDeleted() );
 
         return categoryDTO;
     }

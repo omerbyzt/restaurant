@@ -289,7 +289,7 @@ class CategoryList extends Component {
                                     <td>{v.description}</td>
                                     <td>{v.imageToUrl}</td>
                                     <td>
-                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="100"
+                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
                                              style={{margin: 10}}/>
                                     </td>
                                     <td align="center">

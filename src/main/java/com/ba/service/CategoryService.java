@@ -5,6 +5,7 @@ import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
 import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
@@ -27,7 +28,12 @@ public class CategoryService {
         List<Category> tempCategoryList = categoryRepository.findAll();
         List<CategoryDTO> tempCategoryDTOList = CategoryMapper.INSTANCE.toDTOList(tempCategoryList);
 
-        return CategoryMapper.INSTANCE.toDTOList(categoryRepository.findAll());
+        for(int i = 0; i<tempCategoryList.size(); i++){
+            tempCategoryDTOList.get(i).setMediaDTO(MediaMapper.INSTANCE.toDTO(tempCategoryList.get(i).getMedia()));
+        }
+
+        return tempCategoryDTOList;
+//        return CategoryMapper.INSTANCE.toDTOList(categoryRepository.findAll());
 //        return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
     }
 
@@ -56,8 +62,6 @@ public class CategoryService {
         Category category = categoryRepository.findById(id).get();
         List<ProductDTO> tempProductList = ProductMapper.INSTANCE.toDTOList(category.getProducts());
 
-//        Optional<Category> category = categoryRepository.findById(id);
-//        return CategoryConvertor.convertOptionalCategoryToSetDTO(category.getProducts());
         return tempProductList;
     }
 

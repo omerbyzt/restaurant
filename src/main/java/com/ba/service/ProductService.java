@@ -2,6 +2,8 @@ package com.ba.service;
 
 import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
+import com.ba.dto.ProductWrapperList;
+import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
 import com.ba.mapper.CategoryMapper;
@@ -9,6 +11,9 @@ import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +35,34 @@ public class ProductService {
             productDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productList.get(i).getCategories()));
         }
         return productDTOList;
+    }
+
+    public ProductWrapperList listProductPage(Pageable pageable){
+        Page<Product> temp = productRepository.findAll(pageable);
+//        List<Product> tempList = productRepository.findAll(pageable).toList();
+
+        List<Product> tempProductList = temp.getContent();
+        List<ProductDTO> tempProductDTOList = ProductMapper.INSTANCE.toDTOList(tempProductList);
+
+        for(int i = 0; i<tempProductList.size(); i++){
+            tempProductDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(tempProductList.get(i).getCategories()));
+        }
+
+        ProductWrapperList productWrapperList = new ProductWrapperList();
+        productWrapperList.setProductList(tempProductDTOList);
+        productWrapperList.setTotalCount(temp.getTotalElements());
+
+        return productWrapperList;
+    }
+
+    public ProductWrapperSlicerList listProductsByCategoryID(Pageable pageable, int id){
+        ProductWrapperSlicerList productWrapperSlicerList = new ProductWrapperSlicerList();
+        Slice<Product> sliceList = productRepository.findProductByCategoriesId(pageable,(long)id);
+        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(sliceList.toList());
+
+        productWrapperSlicerList.setProductDTOList(productDTOList);
+        productWrapperSlicerList.setHasNext(sliceList.hasNext());
+        return productWrapperSlicerList;
     }
 
     public String deleteProduct(Long id){

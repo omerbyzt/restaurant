@@ -5,6 +5,7 @@ import com.ba.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -23,4 +24,5 @@ public interface ProductMapper {
     List<Product> toList(List<ProductDTO> productDTOList);
 
     List<ProductDTO> toDTOList(List<Product> productList);
+
 }

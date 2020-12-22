@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-22T13:00:30+0300",
+    date = "2020-12-22T19:22:18+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class OrderMapperImpl implements OrderMapper {
@@ -56,6 +56,7 @@ public class OrderMapperImpl implements OrderMapper {
         orderr.setTableName( orderDTO.getTableName() );
         orderr.setWaiterID( orderDTO.getWaiterID() );
         orderr.setOrderDate( orderDTO.getOrderDate() );
+        orderr.setDeleted( orderDTO.isDeleted() );
 
         return orderr;
     }
@@ -75,6 +76,7 @@ public class OrderMapperImpl implements OrderMapper {
         orderDTO.setTableName( orderr.getTableName() );
         orderDTO.setOrderDate( orderr.getOrderDate() );
         orderDTO.setWaiterID( orderr.getWaiterID() );
+        orderDTO.setDeleted( orderr.isDeleted() );
 
         return orderDTO;
     }
