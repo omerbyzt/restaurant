@@ -25,12 +25,11 @@ public class ProductService {
 
     public List<ProductDTO> listAllProducts(){
         List<Product> productList = productRepository.findAll();
-        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(productRepository.findAll());
+        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(productList);
         for(int i = 0; i<productList.size(); i++){
             productDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productList.get(i).getCategories()));
         }
         return productDTOList;
-//        return ProductConverter.convertProductToProductDTO(productRepository.findAll());
     }
 
     public String deleteProduct(Long id){

@@ -20,6 +20,10 @@
             <column defaultValueComputed="CURRENT_TIMESTAMP" name="order_Date" type="TIMESTAMP"/>
         </createTable>
 
+        <addColumn tableName="orderr">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
+
     </changeSet>
 
 </databaseChangeLog>

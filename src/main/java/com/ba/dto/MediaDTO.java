@@ -1,14 +1,18 @@
 package com.ba.dto;
 
-import com.ba.entity.Category;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MediaDTO {
 
     private Long id;
     private String name;
     private byte[] fileContent;
+    private boolean deleted;
     //private WaiterDTO waiterDTO;
 //    private List<Category> categories;
 //
@@ -29,27 +33,27 @@ public class MediaDTO {
 //        this.waiterDTO = waiterDTO;
 //    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public byte[] getFileContent() {
-        return fileContent;
-    }
-
-    public void setFileContent(byte[] fileContent) {
-        this.fileContent = fileContent;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public byte[] getFileContent() {
+//        return fileContent;
+//    }
+//
+//    public void setFileContent(byte[] fileContent) {
+//        this.fileContent = fileContent;
+//    }
 }

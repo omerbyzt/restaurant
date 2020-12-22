@@ -24,6 +24,9 @@ public class CategoryService {
     private ProductRepository productRepository;
 
     public List<CategoryDTO> listCategory() {
+        List<Category> tempCategoryList = categoryRepository.findAll();
+        List<CategoryDTO> tempCategoryDTOList = CategoryMapper.INSTANCE.toDTOList(tempCategoryList);
+
         return CategoryMapper.INSTANCE.toDTOList(categoryRepository.findAll());
 //        return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
     }

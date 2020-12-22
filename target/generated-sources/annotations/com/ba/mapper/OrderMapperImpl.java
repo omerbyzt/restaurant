@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-21T15:02:27+0300",
+    date = "2020-12-22T13:00:30+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class OrderMapperImpl implements OrderMapper {
@@ -48,14 +48,14 @@ public class OrderMapperImpl implements OrderMapper {
 
         Orderr orderr = new Orderr();
 
-        orderr.setWaiterID( orderDTO.getWaiterID() );
         orderr.setOrderID( orderDTO.getOrderID() );
-        orderr.setpId( orderDTO.getpId() );
+        orderr.setPId( orderDTO.getPId() );
         orderr.setName( orderDTO.getName() );
         orderr.setPrice( orderDTO.getPrice() );
         orderr.setAmount( orderDTO.getAmount() );
-        orderr.setOrderDate( orderDTO.getOrderDate() );
         orderr.setTableName( orderDTO.getTableName() );
+        orderr.setWaiterID( orderDTO.getWaiterID() );
+        orderr.setOrderDate( orderDTO.getOrderDate() );
 
         return orderr;
     }
@@ -67,14 +67,14 @@ public class OrderMapperImpl implements OrderMapper {
 
         OrderDTO orderDTO = new OrderDTO();
 
-        orderDTO.setWaiterID( orderr.getWaiterID() );
         orderDTO.setOrderID( orderr.getOrderID() );
-        orderDTO.setpId( orderr.getpId() );
+        orderDTO.setPId( orderr.getPId() );
         orderDTO.setName( orderr.getName() );
         orderDTO.setPrice( orderr.getPrice() );
         orderDTO.setAmount( orderr.getAmount() );
         orderDTO.setTableName( orderr.getTableName() );
         orderDTO.setOrderDate( orderr.getOrderDate() );
+        orderDTO.setWaiterID( orderr.getWaiterID() );
 
         return orderDTO;
     }

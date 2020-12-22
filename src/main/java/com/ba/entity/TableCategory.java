@@ -1,10 +1,24 @@
 package com.ba.entity;
 
-import com.ba.unused.Tables;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SQLDelete(sql =
+        "UPDATE TABLE_CATEGORY " +
+                "SET deleted = true " +
+                "WHERE id = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class TableCategory {
 
@@ -13,38 +27,5 @@ public class TableCategory {
     private long id;
     private String name;
     private int number;
-
-    public TableCategory(String name, int number) {
-        this.name = name;
-        this.number = number;
-    }
-
-    public TableCategory() {
-
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    private boolean deleted;
 }

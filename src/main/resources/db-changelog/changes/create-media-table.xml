@@ -15,6 +15,10 @@
             <column name="file_Content" type="LONGVARBINARY"/>
         </createTable>
 
+        <addColumn tableName="media">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
+
     </changeSet>
 
 </databaseChangeLog>

@@ -56,7 +56,7 @@ public class OrderDTOBuilder {
         OrderDTO orderDTO = new OrderDTO();
 
         orderDTO.setOrderID(this.orderID);
-        orderDTO.setpId(this.pId);
+        orderDTO.setPId(this.pId);
         orderDTO.setName(this.name);
         orderDTO.setPrice(this.price);
         orderDTO.setAmount(this.amount);

@@ -54,7 +54,7 @@ public class OrderBuilder {
         Orderr order = new Orderr();
 
         order.setOrderID(this.orderID);
-        order.setpId(this.pId);
+        order.setPId(this.pId);
         order.setName(this.name);
         order.setPrice(this.price);
         order.setAmount(this.amount);

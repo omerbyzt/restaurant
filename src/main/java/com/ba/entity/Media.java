@@ -1,12 +1,21 @@
 package com.ba.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SQLDelete(sql =
+        "UPDATE MEDIA " +
+                "SET deleted = true " +
+                "WHERE id = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class Media {
 
@@ -18,54 +27,5 @@ public class Media {
     @Column(length = 1000000)
     private byte[] fileContent;
 
-//    @JsonBackReference
-//    @OneToOne(mappedBy = "media")
-//    private Waiter waiter;
-//
-//    public Waiter getWaiter() {
-//        return waiter;
-//    }
-//
-//    public void setWaiter(Waiter waiter) {
-//        this.waiter = waiter;
-//    }
-
-//    @JsonIgnore
-//    @OneToMany(
-//            mappedBy = "category",//ilişkiyi kuracağımız değişkenin adı verilecek!! (categories olacaktı!)
-//            cascade = CascadeType.ALL
-//    )
-//    private List<Category> categories;
-
-//    public List<Category> getCategories() {
-//        return categories;
-//    }
-//
-//    public void setCategories(List<Category> categories) {
-//        this.categories = categories;
-//    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public byte[] getFileContent() {
-        return fileContent;
-    }
-
-    public void setFileContent(byte[] fileContent) {
-        this.fileContent = fileContent;
-    }
+    private boolean deleted;
 }

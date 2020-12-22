@@ -55,7 +55,7 @@ public class CategoryDTOBuilder extends Builder{
         categoryDTO.setDescription(this.description);
         categoryDTO.setName(this.name);
         categoryDTO.setId(this.getId());
-        categoryDTO.setMedia(this.mediaDTO);
+        categoryDTO.setMediaDTO(this.mediaDTO);//
 
         return categoryDTO;
     }

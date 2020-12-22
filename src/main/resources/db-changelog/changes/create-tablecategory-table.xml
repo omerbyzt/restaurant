@@ -13,8 +13,11 @@
             </column>
             <column name="name" type="VARCHAR(255)"/>
             <column name="number" type="int(10)"/>
-
         </createTable>
+
+        <addColumn tableName="table_category">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
 
     </changeSet>
 

@@ -22,6 +22,10 @@
             </column>
         </createTable>
 
+        <addColumn tableName="waiter">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
+
     </changeSet>
 
 </databaseChangeLog>

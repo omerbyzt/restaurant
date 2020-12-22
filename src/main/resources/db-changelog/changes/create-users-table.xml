@@ -29,6 +29,10 @@
             <column name="enabled" type="boolean"/>
         </createTable>
 
+        <addColumn tableName="users">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
+
         <insert tableName="users">
             <column name="email" value="aa@bb.cc"></column>
             <column name="username" value="admin"></column>

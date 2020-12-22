@@ -19,6 +19,10 @@
             </column>
         </createTable>
 
+        <addColumn tableName="category">
+            <column name="deleted" type="boolean" defaultValue="false"></column>
+        </addColumn>
+
     </changeSet>
 
 </databaseChangeLog>

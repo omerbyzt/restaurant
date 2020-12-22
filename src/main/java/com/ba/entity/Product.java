@@ -1,13 +1,24 @@
 package com.ba.entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SQLDelete(sql =
+        "UPDATE PRODUCT " +
+                "SET deleted = true " +
+                "WHERE productID = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class Product {
 
@@ -19,84 +30,14 @@ public class Product {
     private String productCategory;
     private Double productPrice;
 
-//    @ManyToOne
-//    @JoinColumn(
-//            name = "category_id"
-//    )
-//    private Category category;
-
     @JsonBackReference
     @ManyToMany(mappedBy = "products", cascade = CascadeType.DETACH)
     private List<Category> categories = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="media_id")
+    @JoinColumn(name = "media_id")
     private Media media;
 
-    public Media getMedia() {
-        return media;
-    }
+    private boolean deleted;
 
-    public void setMedia(Media media) {
-        this.media = media;
-    }
-
-    public Product(String productName, String productDesc, String productCategory, Double productPrice) {
-        this.productName = productName;
-        this.productDesc = productDesc;
-        this.productCategory = productCategory;
-        this.productPrice = productPrice;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public Product() {
-
-    }
-
-    public Long getProductID() {
-        return productID;
-    }
-
-    public void setProductID(Long productID) {
-        this.productID = productID;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getProductDesc() {
-        return productDesc;
-    }
-
-    public void setProductDesc(String productDesc) {
-        this.productDesc = productDesc;
-    }
-
-    public String getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(String productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public Double getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(Double productPrice) {
-        this.productPrice = productPrice;
-    }
 }

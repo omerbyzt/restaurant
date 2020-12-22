@@ -1,9 +1,23 @@
 package com.ba.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.sql.Timestamp;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SQLDelete(sql =
+        "UPDATE ORDERR " +
+                "SET deleted = true " +
+                "WHERE orderID = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class Orderr {
 
@@ -16,71 +30,8 @@ public class Orderr {
     private Long amount;
     private String tableName;
     private Long waiterID;
-
-    public Long getWaiterID() {
-        return waiterID;
-    }
-
-    public void setWaiterID(Long waiterID) {
-        this.waiterID = waiterID;
-    }
-
     @Column
     private Date orderDate = new Timestamp(System.currentTimeMillis());
 
-    public Long getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(Long orderID) {
-        this.orderID = orderID;
-    }
-
-    public Long getpId() {
-        return pId;
-    }
-
-    public void setpId(Long pId) {
-        this.pId = pId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
+    private boolean deleted;
 }
