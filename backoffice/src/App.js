@@ -19,7 +19,9 @@ import WaiterList from "./component/WaiterList";
 import AddWaiter from "./component/AddWaiter";
 import AddImage from "./component/AddImage";
 import AddRole from "./component/AddRole";
-
+import CustomerList from "./component/customer/CustomerList";
+import AddCustomer from "./component/customer/AddCustomer";
+import UpdateCustomer from "./component/customer/UpdateCustomer";
 
 class App extends Component {
     render() {
@@ -45,6 +47,9 @@ class App extends Component {
                         <Route path = "/addwaiter" component={AddWaiter}></Route>
                         <Route path = "/addimage" component={AddImage}></Route>
                         <Route path = "/addrole" component={AddRole}></Route>
+                        <Route path = "/customerlist" component={CustomerList}></Route>
+                        <Route path = "/addcustomer" component={AddCustomer}></Route>
+                        <Route path = "/updatecustomer" component={UpdateCustomer}></Route>
                     </Switch>
                 </Router>
             </div>

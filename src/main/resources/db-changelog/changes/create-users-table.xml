@@ -7,18 +7,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet author="omer" id="1">
 
-<!--        <createTable tableName="users">-->
-<!--            <column name="username" type="VARCHAR(255)">-->
-<!--                <constraints primaryKey="true"/>-->
-<!--            </column>-->
-<!--            <column name="password" type="VARCHAR(255)"/>-->
-<!--            <column name="enabled" type="boolean"/>-->
-<!--        </createTable>-->
-
-<!--        <rollback>-->
-<!--            <dropTable tableName="users"/>-->
-<!--        </rollback>-->
-
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="int(10)">
                 <constraints primaryKey="true"/>
@@ -37,7 +25,7 @@
             <column name="email" value="aa@bb.cc"></column>
             <column name="username" value="admin"></column>
             <column name="password" value="$2a$10$/3Qe9J9UV.SvjNkI0NAh3OBXSPS.OAIa1y0vKJX7kz965j4FO.WSi"></column>
-            <column name="enabled" value="1"></column>
+            <column name="enabled" valueNumeric="1" ></column>
         </insert>
 
     </changeSet>

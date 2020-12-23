@@ -11,7 +11,6 @@ class ClientHomePage extends Component {
     static contextType = UserContext;
 
     state = {
-        content: [],
         categoryList: [],
         shoppingList: [],
         shoppingListAmounts: [],
@@ -26,14 +25,15 @@ class ClientHomePage extends Component {
             totalPrice: 0,
             tableName: "",
         },
+
         selectedCategoryName: "",
         loadingIsVisible: false,
         scrollPosition: 0,
         pageNumber: 0,
         selectedCategoryId: 1,
-        tempArray:[]
+        tempArray:[],
+        hasNext:true
     }
-
 
     constructor(props) {
         super(props);
@@ -43,14 +43,12 @@ class ClientHomePage extends Component {
     async componentDidMount() {
         const {token} = this.context
         this.setState({loadingIsVisible: true});
-        if (localStorage.getItem("token") !== null || token !== "No Token") {
-            //TODO:seçilmiş odadan f5 yapınca wiater ve seçili masa?
 
+        if (localStorage.getItem("token") !== null || token !== "No Token") {
             const {setUserName, setToken} = this.context;
             setUserName(localStorage.getItem("username"));
             setToken(localStorage.getItem("token"));
 
-            console.log("null değil")
             const {token, table} = this.context;
 
             let uri = "http://localhost:8080/category/list-category/";
@@ -64,25 +62,22 @@ class ClientHomePage extends Component {
                 .then(response => response.json())
                 .then(data => {
                     this.setState({
-                        categoryList: data
+                        categoryList: data,
                     })
                 })
 
-            //
-            let uri2 = 'http://localhost:8080/product/listall';
-
-            await fetch(uri2, {
-                method: 'get',
-                headers: new Headers({
-                    'Authorization': token,
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
+            await axios.get('http://localhost:8080/product/listslice',
+                {
+                    headers: {Authorization: token},
+                    params: {page: this.state.pageNumber, size: 10, categoryId: this.state.selectedCategoryId}
+                }
+            )
+                .then(res => {
                     this.setState({
-                        content: data
+                        hasNext:res.data.hasNext,
+                        tempArray : [...this.state.tempArray, ...res.data.productDTOList ]
                     })
-                })
+                });
             //
 
             let allOrders = ClientHomePage.getOrderListFromStorage();
@@ -100,13 +95,38 @@ class ClientHomePage extends Component {
                 localStorage.setItem("orderList", JSON.stringify(allOrders))
             }
         } else {
-            console.log("null geldi")
             this.props.history.push('/');
         }
         this.setState({loadingIsVisible: false});
     }
 
     onClickCategoryName = async (id) => {
+        this.setState({loadingIsVisible: true});
+        const {token} = this.context;
+
+        this.state.tempArray.length = 0;
+        this.state.hasNext = true;
+        this.state.pageNumber = 0;
+        this.myRef.current.scrollTop = 0
+        this.state.scrollPosition = 0
+
+        await axios.get('http://localhost:8080/product/listslice',
+            {
+                headers: {Authorization: token},
+                params: {page: this.state.pageNumber, size: 10, categoryId: id}
+            }
+        )
+            .then(res => {
+                this.setState({
+                    hasNext:res.data.hasNext,
+                    selectedCategoryId:id,
+                    tempArray : [...this.state.tempArray, ...res.data.productDTOList ]
+                })
+            });
+        this.setState({loadingIsVisible: false});
+    }
+
+    categoryNameSlice = async (id) => {
         this.setState({loadingIsVisible: true});
         const {token} = this.context;
 
@@ -118,13 +138,11 @@ class ClientHomePage extends Component {
         )
             .then(res => {
                 this.setState({
-                    content: res.data.productDTOList,
-                    selectedCategoryId:id
+                    hasNext: res.data.hasNext,
+                    selectedCategoryId: id,
+                    tempArray: [...this.state.tempArray, ...res.data.productDTOList]
                 })
             });
-
-        this.state.tempArray.push(this.state.content);
-        console.log(this.state.tempArray)
         this.setState({loadingIsVisible: false});
     }
 
@@ -193,7 +211,6 @@ class ClientHomePage extends Component {
         const {token, setTable, setWaiterID, setWaiterName} = this.context
         // CREATE TABLE OR PAY DIRECTLY
         // if(sessionStorage.getItem("table") === "No Table"){
-        console.log(value);
 
         await axios.post('http://localhost:8080/order/add', value, {
             headers: {
@@ -254,17 +271,16 @@ class ClientHomePage extends Component {
         const scrollTop = this.myRef.current.scrollTop
         this.setState({scrollPosition: scrollTop})
 
-        if (scrollPosition > (this.state.pageNumber+1)*800) {
+        if ((scrollPosition > (this.state.pageNumber+1)*800) && this.state.hasNext) {
             this.state.pageNumber++;
-            await this.onClickCategoryName(selectedCategoryId)
+            await this.categoryNameSlice(selectedCategoryId)
             this.setState({scrollPosition: 0})
+            this.myRef.current.scrollTop = (this.state.pageNumber+1)*400
         }
-        console.log(scrollPosition)
-        console.log(this.state.pageNumber)
     }
 
     render() {
-        const {content, categoryList, shoppingList, totalPayment, tempArray} = this.state;
+        const {categoryList, shoppingList, totalPayment, tempArray} = this.state;
         const {waiterName, table} = this.context;
         return (
             <div className="App">
@@ -313,11 +329,13 @@ class ClientHomePage extends Component {
                                 </div>
                                 <div className="card-body productBigCardBody" ref={this.myRef} onScroll={this.onScroll}>
                                     {
-                                        content.map(v => {
-                                        // tempArray.map(v => {
+                                        tempArray.map(v => {
                                             return (
                                                 <div className="card productCards">
                                                     <div className="card-header">
+                                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
+                                                             style={{margin: 10}}/>
+                                                             <br/>
                                                         <h4 className="d-inline">{v.productName}</h4>
                                                     </div>
                                                     <div className="card-body">

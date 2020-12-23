@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,11 +31,15 @@ public class Product {
     private Double productPrice;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "products", cascade = CascadeType.DETACH)
+    @ManyToMany(
+            mappedBy = "products",
+            fetch = FetchType.EAGER
+//            cascade = CascadeType.DETACH
+    )
     private List<Category> categories = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "media_id")
+    @JoinColumn(name = "media_id")//fetch=Eager
     private Media media;
 
     private boolean deleted;

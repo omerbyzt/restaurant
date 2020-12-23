@@ -5,29 +5,24 @@
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet author="omer" id="1">
-
-        <createTable tableName="users">
+    <changeSet author="omerbyzt" id="23-12-2020_19:23">
+        <createTable tableName="customer">
             <column autoIncrement="true" name="id" type="int(10)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="username" type="VARCHAR(255)"/>
-            <column name="password" type="VARCHAR(255)"/>
-            <column name="enabled" type="boolean"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="surname" type="VARCHAR(255)"/>
+            <column name="phoneNumber" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="deleted" type="boolean" defaultValue="false"></column>
         </createTable>
 
-        <addColumn tableName="users">
-            <column name="deleted" type="boolean" defaultValue="false"></column>
-        </addColumn>
-
-        <insert tableName="users">
-            <column name="email" value="aa@bb.cc"></column>
-            <column name="username" value="admin"></column>
-            <column name="password" value="$2a$10$/3Qe9J9UV.SvjNkI0NAh3OBXSPS.OAIa1y0vKJX7kz965j4FO.WSi"></column>
-            <column name="enabled" valueNumeric="1" ></column>
+        <insert tableName="customer">
+            <column name="name" value="omer"></column>
+            <column name="surname" value="beyazit"></column>
+            <column name="phoneNumber" value="5373331244"></column>
+            <column name="address" value="orhangazi" ></column>
         </insert>
-
     </changeSet>
 
 </databaseChangeLog>
