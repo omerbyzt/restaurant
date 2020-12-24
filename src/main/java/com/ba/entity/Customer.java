@@ -8,9 +8,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 @Getter
@@ -23,15 +20,15 @@ import java.io.Serializable;
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Customer implements Serializable {
+public class Customer extends BaseEntity implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
     private String name;
     private String surname;
     private String phoneNumber;
     private String address;
-    private boolean deleted;
+//    private boolean deleted;
 
 }

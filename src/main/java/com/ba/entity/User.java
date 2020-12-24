@@ -19,10 +19,10 @@ import java.util.List;
 @Where(clause = "deleted = false")
 @Entity
 @Table(name = "USERS")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity{
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     private String email;
     private String username;
@@ -37,6 +37,5 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
-    private boolean deleted;
-
+//    private boolean deleted;
 }

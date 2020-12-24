@@ -10,6 +10,8 @@ import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class CategoryService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Cacheable(value = "CategoryCache")
     public List<CategoryDTO> listCategory() {
         List<Category> tempCategoryList = categoryRepository.findAll();
         List<CategoryDTO> tempCategoryDTOList = CategoryMapper.INSTANCE.toDTOList(tempCategoryList);
@@ -33,28 +36,25 @@ public class CategoryService {
         }
 
         return tempCategoryDTOList;
-//        return CategoryMapper.INSTANCE.toDTOList(categoryRepository.findAll());
-//        return CategoryConvertor.convertListToCategoryListDTO(categoryRepository.findAll());
     }
 
     public String addCategory(CategoryDTO categoryDTO) {
         categoryRepository.save(CategoryMapper.INSTANCE.toEntity(categoryDTO));
-//        categoryRepository.save(CategoryConvertor.convertDTOtoCategory(categoryDTO));
         return "Category Added";
     }
 
+    @CacheEvict(value="CategoryCache", allEntries = true)
     public String deleteCategory(Long id) {
         categoryRepository.deleteById(id);
         return "Category Deleted";
     }
 
+    @CacheEvict(value="CategoryCache", allEntries = true)
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
         List<Product> tempProducts = categoryRepository.findById(categoryDTO.getId()).get().getProducts();
         Category tempCategory = CategoryMapper.INSTANCE.toEntity(categoryDTO);
         tempCategory.setProducts(tempProducts);
         categoryRepository.saveAndFlush(tempCategory);
-//        Category tempCategory = categoryRepository.findById(categoryDTO.getId()).get();
-//        categoryRepository.saveAndFlush(CategoryConvertor.convertDTOToCategorywithProducts(categoryDTO,tempCategory));
         return categoryDTO;
     }
 
@@ -66,11 +66,9 @@ public class CategoryService {
     }
 
     public String addProduct(ProductDTO productDTO, Long id) {
-
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList = new ArrayList<>();
         Product product = ProductMapper.INSTANCE.toEntity(productDTO);
-//        Product product = CategoryConvertor.convertDTOToProduct(productDTO);
         for(int i = 0 ; i<categoriesIdsList.size() ; i++){
             Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
             category.getProducts().add(product);

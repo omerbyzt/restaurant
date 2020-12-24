@@ -12,7 +12,7 @@
             </column>
             <column name="name" type="VARCHAR(255)"/>
             <column name="surname" type="VARCHAR(255)"/>
-            <column name="phoneNumber" type="VARCHAR(255)"/>
+            <column name="phone_Number" type="VARCHAR(255)"/>
             <column name="address" type="VARCHAR(255)"/>
             <column name="deleted" type="boolean" defaultValue="false"></column>
         </createTable>
@@ -20,7 +20,7 @@
         <insert tableName="customer">
             <column name="name" value="omer"></column>
             <column name="surname" value="beyazit"></column>
-            <column name="phoneNumber" value="5373331244"></column>
+            <column name="phone_Number" value="5373331244"></column>
             <column name="address" value="orhangazi" ></column>
         </insert>
     </changeSet>

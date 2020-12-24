@@ -17,11 +17,11 @@ import javax.persistence.*;
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-public class Waiter {
+public class Waiter extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String name;
     private String phoneNumber;
     private String mail;
@@ -34,5 +34,5 @@ public class Waiter {
     @JoinColumn(name = "media_id")
     private Media media;
 
-    private boolean deleted;
+//    private boolean deleted;
 }

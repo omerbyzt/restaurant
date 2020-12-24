@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-23T20:12:24+0300",
+    date = "2020-12-24T22:26:42+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class TableCategoryMapperImpl implements TableCategoryMapper {
@@ -22,9 +22,9 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
         TableCategory tableCategory = new TableCategory();
 
         tableCategory.setId( tableCategoryDTO.getId() );
+        tableCategory.setDeleted( tableCategoryDTO.isDeleted() );
         tableCategory.setName( tableCategoryDTO.getName() );
         tableCategory.setNumber( tableCategoryDTO.getNumber() );
-        tableCategory.setDeleted( tableCategoryDTO.isDeleted() );
 
         return tableCategory;
     }
@@ -37,7 +37,9 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
 
         TableCategoryDTO tableCategoryDTO = new TableCategoryDTO();
 
-        tableCategoryDTO.setId( tableCategory.getId() );
+        if ( tableCategory.getId() != null ) {
+            tableCategoryDTO.setId( tableCategory.getId() );
+        }
         tableCategoryDTO.setName( tableCategory.getName() );
         tableCategoryDTO.setNumber( tableCategory.getNumber() );
         tableCategoryDTO.setDeleted( tableCategory.isDeleted() );

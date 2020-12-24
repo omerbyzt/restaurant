@@ -117,7 +117,7 @@ class CategoryList extends Component {
             description: description,
             imageToUrl: imageToUrl,
             products: [],
-            media: newMedia
+            mediaDTO: newMedia
         }
         console.log(putCategory)
         await axios.put('http://localhost:8080/category/update-category', putCategory,

@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-23T20:12:24+0300",
+    date = "2020-12-24T22:26:42+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class WaiterMapperImpl implements WaiterMapper {
@@ -26,13 +26,13 @@ public class WaiterMapperImpl implements WaiterMapper {
 
         waiter.setMedia( mediaDTOToMedia( waiterDTO.getMediaDTO() ) );
         waiter.setId( waiterDTO.getId() );
+        waiter.setDeleted( waiterDTO.isDeleted() );
         waiter.setName( waiterDTO.getName() );
         waiter.setPhoneNumber( waiterDTO.getPhoneNumber() );
         waiter.setMail( waiterDTO.getMail() );
         waiter.setAddress( waiterDTO.getAddress() );
         waiter.setUrlToImage( waiterDTO.getUrlToImage() );
         waiter.setSalary( waiterDTO.getSalary() );
-        waiter.setDeleted( waiterDTO.isDeleted() );
 
         return waiter;
     }
@@ -94,12 +94,12 @@ public class WaiterMapperImpl implements WaiterMapper {
         Media media = new Media();
 
         media.setId( mediaDTO.getId() );
+        media.setDeleted( mediaDTO.isDeleted() );
         media.setName( mediaDTO.getName() );
         byte[] fileContent = mediaDTO.getFileContent();
         if ( fileContent != null ) {
             media.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
         }
-        media.setDeleted( mediaDTO.isDeleted() );
 
         return media;
     }

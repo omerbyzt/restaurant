@@ -17,12 +17,12 @@ import javax.persistence.*;
 @Where(clause = "deleted = false")
 @Entity
 @Table(name = "ROLES")
-public class Role {
+public class Role extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String name;
 
-    private boolean deleted;
+//    private boolean deleted;
 }

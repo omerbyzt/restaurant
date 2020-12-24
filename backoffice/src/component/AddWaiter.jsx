@@ -82,7 +82,7 @@ class AddWaiter extends Component {
         await axios.post("http://localhost:8080/waiter/add-waiter", newWaiter,
             // {headers:{Authorization:sessionStorage.getItem('token')}});
             {headers: {Authorization: token}});
-        this.props.push("/waiterlist");
+        this.props.history.push("/waiterlist");
         this.setState({loadingIsVisible: false});
     }
 

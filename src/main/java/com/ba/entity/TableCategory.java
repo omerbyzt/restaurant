@@ -19,12 +19,12 @@ import javax.persistence.Id;
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-public class TableCategory {
+public class TableCategory extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
     private String name;
     private int number;
-    private boolean deleted;
+//    private boolean deleted;
 }

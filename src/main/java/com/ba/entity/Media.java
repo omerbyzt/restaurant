@@ -16,15 +16,15 @@ import javax.persistence.*;
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-public class Media {
+public class Media extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String name;
 
     @Column(length = 1000000)
     private byte[] fileContent;
 
-    private boolean deleted;
+//    private boolean deleted;
 }

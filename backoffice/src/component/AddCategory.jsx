@@ -69,7 +69,7 @@ class AddCategory extends Component {
             description: description,
             imageToUrl: imageToUrl,
             products: [],
-            media: newMedia
+            mediaDTO: newMedia
         }
         this.setState({loadingIsVisible: true});
         await axios.post("http://localhost:8080/category/add-category", newCategory,

@@ -19,10 +19,10 @@ import java.util.List;
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Category extends BaseEntity{
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String name;
     private String description;
     private String imageToUrl;
@@ -39,5 +39,5 @@ public class Category {
     )
     private Media media;
 
-    private boolean deleted;
+//    private boolean deleted;
 }

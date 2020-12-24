@@ -14,9 +14,11 @@ public interface CategoryMapper {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     @Mapping(ignore = true, source = "products", target = "products")
+    @Mapping(source = "mediaDTO" , target = "media")
     Category toEntity(CategoryDTO categoryDTO);
 
     @Mapping(ignore = true, source = "products", target = "products")
+    @Mapping(source = "media" , target = "mediaDTO")
     CategoryDTO toDTO(Category category);
 
     List<Category> toList(List<CategoryDTO> categoryDTOList);

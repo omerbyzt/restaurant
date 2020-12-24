@@ -3,7 +3,6 @@ import Header from "../Header";
 import {Link} from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import CustomerService from "../../service/CustomerService";
-import axios from "axios";
 import Loading from "../Loading";
 import UpdateCustomer from "./UpdateCustomer";
 
@@ -34,7 +33,6 @@ class CustomerList extends Component {
         this.setState({loadingIsVisible: true});
         this.setState({selectedPage: e + 1})
 
-
         await CustomerService.getPageCustomer(this.state.token, e).then((res) => {
             this.setState({
                 totalPage: res.data.totalPages,
@@ -55,7 +53,6 @@ class CustomerList extends Component {
             selectedCustomer: e,
             isUpdateCustomer: !this.state.isUpdateCustomer
         })
-        console.log("asışdboaınpsfdşil")
     }
 
     render() {
@@ -137,7 +134,6 @@ class CustomerList extends Component {
                             {buttonArray}
                         </div>
                     </div>
-
                 </div>
                 {
                     this.state.loadingIsVisible ?

@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-23T20:12:24+0300",
+    date = "2020-12-24T22:26:41+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class RoleMapperImpl implements RoleMapper {
@@ -22,8 +22,8 @@ public class RoleMapperImpl implements RoleMapper {
         Role role = new Role();
 
         role.setId( roleDTO.getId() );
-        role.setName( roleDTO.getName() );
         role.setDeleted( roleDTO.isDeleted() );
+        role.setName( roleDTO.getName() );
 
         return role;
     }

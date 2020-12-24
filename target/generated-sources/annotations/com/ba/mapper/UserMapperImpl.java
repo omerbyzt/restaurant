@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-23T20:12:24+0300",
+    date = "2020-12-24T22:26:42+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class UserMapperImpl implements UserMapper {
@@ -24,6 +24,7 @@ public class UserMapperImpl implements UserMapper {
         User user = new User();
 
         user.setId( userDTO.getId() );
+        user.setDeleted( userDTO.isDeleted() );
         user.setEmail( userDTO.getEmail() );
         user.setUsername( userDTO.getUsername() );
         user.setPassword( userDTO.getPassword() );
@@ -31,7 +32,6 @@ public class UserMapperImpl implements UserMapper {
             user.setEnabled( userDTO.getEnabled() );
         }
         user.setRoles( roleDTOListToRoleList( userDTO.getRoles() ) );
-        user.setDeleted( userDTO.isDeleted() );
 
         return user;
     }
@@ -91,8 +91,8 @@ public class UserMapperImpl implements UserMapper {
         Role role = new Role();
 
         role.setId( roleDTO.getId() );
-        role.setName( roleDTO.getName() );
         role.setDeleted( roleDTO.isDeleted() );
+        role.setName( roleDTO.getName() );
 
         return role;
     }
