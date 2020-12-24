@@ -12,7 +12,7 @@
                 <constraints nullable="false" foreignKeyName="category_id_fk" references="category(id)" primaryKey="true"></constraints>
             </column>
             <column name="product_id" type="int(10)">
-                <constraints nullable="false" foreignKeyName="product_id_fk" references="product(productID)" primaryKey="true"></constraints>
+                <constraints nullable="false" foreignKeyName="product_id_fk" references="product(id)" primaryKey="true"></constraints>
             </column>
         </createTable>
 

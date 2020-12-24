@@ -76,8 +76,8 @@ class FirstPage extends Component {
         this.setState({loadingIsVisible: true});
         const {token} = this.context
         //delete için filtrelemesini yap
-        window.location.reload();
-        await axios.delete('http://localhost:8080/product/delete/' + e.productID,
+        //window.location.reload();
+        await axios.delete('http://localhost:8080/product/delete/' + e.id,
             // {headers: {Authorization: sessionStorage.getItem('token')}});
             {headers: {Authorization: token}});
         // .then(res => {this.setState({content:this.state.content.filter(table => table.productID!==e.productID)})});
@@ -171,7 +171,7 @@ class FirstPage extends Component {
                     //Product Güncelleme
                     isUpdateCard ?
                         <UpdateProduct
-                            id={obj.productID}
+                            id={obj.id}
                             name={obj.productName}
                             desc={obj.productDesc}
                             category={obj.productCategory}
@@ -198,7 +198,7 @@ class FirstPage extends Component {
                             {
                                 content.map(v => {
                                     return (<tr align="left">
-                                        <td align="center">{v.productID}</td>
+                                        <td align="center">{v.id}</td>
                                         <td>{v.productName}</td>
                                         <td>{v.productDesc}</td>
                                         <td>

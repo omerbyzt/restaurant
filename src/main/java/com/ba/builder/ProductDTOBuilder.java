@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class ProductDTOBuilder {
 
-    private Long productID;
+    private Long id;
     private String productName;
     private String productDesc;
     private String productCategory;
@@ -22,7 +22,7 @@ public class ProductDTOBuilder {
     private MediaDTO mediaDTO;
 
     public ProductDTOBuilder productID(Long productID){
-        this.productID = productID;
+        this.id = productID;
         return this;
     }
 
@@ -59,7 +59,7 @@ public class ProductDTOBuilder {
     public ProductDTO build(){
         ProductDTO productDTO = new ProductDTO();
 
-        productDTO.setProductID(this.productID);
+        productDTO.setId(this.id);
         productDTO.setProductName(this.productName);
         productDTO.setProductDesc(this.productDesc);
         productDTO.setProductCategory(this.productCategory);

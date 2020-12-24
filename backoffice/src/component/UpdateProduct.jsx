@@ -71,7 +71,7 @@ class UpdateProduct extends Component {
         }
 
         const putProduct = {
-            productID: id,
+            id: id,
             productName: name,
             productDesc: desc,
             productCategory: category,

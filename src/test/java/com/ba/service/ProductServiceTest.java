@@ -97,6 +97,6 @@ public class ProductServiceTest {
 //        List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);
         List<ProductDTO> tempDTOList2 = service.listAllProducts();
 
-        assertEquals(tempDTOList.get(0).getProductID(),tempDTOList2.get(0).getProductID());
+        assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());
     }
 }

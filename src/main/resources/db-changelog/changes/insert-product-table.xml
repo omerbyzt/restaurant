@@ -8,7 +8,7 @@
     <changeSet author="omer.byzt" id="07-12-2020_15:10">
 
         <insert tableName="product">
-            <column name="productID" value="1"/>
+            <column name="id" value="1"/>
             <column name="product_name" value="Mercimek Çorbası"/>
             <column name="product_desc" value="Süzme Mercimek Çorbası"/>
             <column name="product_category" value="Çorba"/>
@@ -17,7 +17,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="2"/>
+            <column name="id" value="2"/>
             <column name="product_name" value="Ezogelin Çorbası"/>
             <column name="product_desc" value="Ezo Mu Gelin?"/>
             <column name="product_category" value="Çorba"/>
@@ -26,7 +26,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="3"/>
+            <column name="id" value="3"/>
             <column name="product_name" value="Domates Çorbası"/>
             <column name="product_desc" value="Domatesli Çorba Mı Olur?"/>
             <column name="product_category" value="Çorba"/>
@@ -35,7 +35,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="4"/>
+            <column name="id" value="4"/>
             <column name="product_name" value="Bulgur Çorbası"/>
             <column name="product_desc" value="Mengen Usulü Bulgur Çorbası"/>
             <column name="product_category" value="Çorba"/>
@@ -44,7 +44,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="5"/>
+            <column name="id" value="5"/>
             <column name="product_name" value="Yayla Çorbası"/>
             <column name="product_desc" value="Yayladan Halka"/>
             <column name="product_category" value="Çorba"/>
@@ -53,7 +53,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="6"/>
+            <column name="id" value="6"/>
             <column name="product_name" value="Zeytinli Pizza"/>
             <column name="product_desc" value="Bol Zeytinli"/>
             <column name="product_category" value="Pizza"/>
@@ -62,7 +62,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="7"/>
+            <column name="id" value="7"/>
             <column name="product_name" value="Sucuklu Pizza"/>
             <column name="product_desc" value="Bol Sucuklu"/>
             <column name="product_category" value="Pizza"/>
@@ -71,7 +71,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="8"/>
+            <column name="id" value="8"/>
             <column name="product_name" value="Bol Malzemos Pizza"/>
             <column name="product_desc" value="Bol Malzemos"/>
             <column name="product_category" value="Pizza"/>
@@ -80,7 +80,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="9"/>
+            <column name="id" value="9"/>
             <column name="product_name" value="Peynirli Pizza"/>
             <column name="product_desc" value="Peynirli"/>
             <column name="product_category" value="Pizza"/>
@@ -89,7 +89,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="10"/>
+            <column name="id" value="10"/>
             <column name="product_name" value="İskender Kebap"/>
             <column name="product_desc" value="Bursa Usulü İskender"/>
             <column name="product_category" value="Et Yemeği"/>
@@ -98,7 +98,7 @@
         </insert>
 
         <insert tableName="product">
-            <column name="productID" value="11"/>
+            <column name="id" value="11"/>
             <column name="product_name" value="Karnı Yarık"/>
             <column name="product_desc" value="Karını mı Yarık"/>
             <column name="product_category" value="Et Yemeği"/>

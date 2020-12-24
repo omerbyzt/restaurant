@@ -17,14 +17,14 @@ import java.util.List;
 @SQLDelete(sql =
         "UPDATE PRODUCT " +
                 "SET deleted = true " +
-                "WHERE productID = ?")
+                "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-public class Product {
+public class Product extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productID;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long productID;
     private String productName;
     private String productDesc;
     private String productCategory;

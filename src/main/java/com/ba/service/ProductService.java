@@ -80,7 +80,7 @@ public class ProductService {
 
     public ProductDTO updateProduct(ProductDTO productDTO){
 
-        Product product = productRepository.findById(productDTO.getProductID()).get();
+        Product product = productRepository.findById(productDTO.getId()).get();
         List<Category> categoryList = product.getCategories();
 
         for (int i = 0 ;i<categoryList.size();i++){

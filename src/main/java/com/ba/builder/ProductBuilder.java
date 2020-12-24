@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ProductBuilder {
 
-    private Long productID;
+    private Long id;
     private String productName;
     private String productDesc;
     private String productCategory;
@@ -19,7 +19,7 @@ public class ProductBuilder {
     private Media media;
 
     public ProductBuilder productID(Long productID){
-        this.productID = productID;
+        this.id = productID;
         return this;
     }
 
@@ -56,7 +56,7 @@ public class ProductBuilder {
     public Product build(){
         Product product = new Product();
 
-        product.setProductID(this.productID);
+        product.setId(this.id);
         product.setProductName(this.productName);
         product.setProductDesc(this.productDesc);
         product.setProductCategory(this.productCategory);
