@@ -51,14 +51,14 @@ public class ProductControllerTest {
         productListDTO.add(productDTO);
     }
 
-    @Test
-    public void shouldVerifyListAllProducts() {
-
-        when(service.listAllProducts()).thenReturn(productListDTO);
-        List<ProductDTO> tempDTOList = controller.listAllProducts();
-
-        assertEquals(tempDTOList,productListDTO);
-    }
+//    @Test
+//    public void shouldVerifyListAllProducts() {
+//
+//        when(service.listAllProducts()).thenReturn(productListDTO);
+//        List<ProductDTO> tempDTOList = controller.listAllProducts();
+//
+//        assertEquals(tempDTOList,productListDTO);
+//    }
 
     @Test
     public void shouldDeleteProduct() {

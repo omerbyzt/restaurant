@@ -32,7 +32,8 @@ class ClientHomePage extends Component {
         pageNumber: 0,
         selectedCategoryId: 1,
         tempArray:[],
-        hasNext:true
+        last:false,
+        temp:""
     }
 
     constructor(props) {
@@ -74,8 +75,9 @@ class ClientHomePage extends Component {
             )
                 .then(res => {
                     this.setState({
-                        hasNext:res.data.hasNext,
-                        tempArray : [...this.state.tempArray, ...res.data.productDTOList ]
+                        last:res.data.last,
+                        tempArray : [...this.state.tempArray, ...res.data.content ],
+                        temp:res.data
                     })
                 });
             //
@@ -105,7 +107,7 @@ class ClientHomePage extends Component {
         const {token} = this.context;
 
         this.state.tempArray.length = 0;
-        this.state.hasNext = true;
+        this.state.last = false;
         this.state.pageNumber = 0;
         this.myRef.current.scrollTop = 0
         this.state.scrollPosition = 0
@@ -118,9 +120,9 @@ class ClientHomePage extends Component {
         )
             .then(res => {
                 this.setState({
-                    hasNext:res.data.hasNext,
+                    last:res.data.last,
                     selectedCategoryId:id,
-                    tempArray : [...this.state.tempArray, ...res.data.productDTOList ]
+                    tempArray : [...this.state.tempArray, ...res.data.content ]
                 })
             });
         this.setState({loadingIsVisible: false});
@@ -138,9 +140,9 @@ class ClientHomePage extends Component {
         )
             .then(res => {
                 this.setState({
-                    hasNext: res.data.hasNext,
+                    last: res.data.last,
                     selectedCategoryId: id,
-                    tempArray: [...this.state.tempArray, ...res.data.productDTOList]
+                    tempArray: [...this.state.tempArray, ...res.data.content]
                 })
             });
         this.setState({loadingIsVisible: false});
@@ -271,7 +273,7 @@ class ClientHomePage extends Component {
         const scrollTop = this.myRef.current.scrollTop
         this.setState({scrollPosition: scrollTop})
 
-        if ((scrollPosition > (this.state.pageNumber+1)*800) && this.state.hasNext) {
+        if ((scrollPosition > (this.state.pageNumber+1)*800) && !this.state.last) {
             this.state.pageNumber++;
             await this.categoryNameSlice(selectedCategoryId)
             this.setState({scrollPosition: 0})

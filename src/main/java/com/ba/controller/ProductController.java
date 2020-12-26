@@ -6,8 +6,10 @@ import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.exception.BusinessRuleException;
 import com.ba.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +22,14 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/listall")
-    public List<ProductDTO> listAllProducts() {
-        return productService.listAllProducts();
-    }
-
     @GetMapping("/listmore")
-    public ProductWrapperList listProductPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+    public Page<ProductDTO> listProductPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productService.listProductPage(pageable);
     }
 
     @GetMapping("/listslice")
-    public ProductWrapperSlicerList listProductsByCategoryID(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "1") int categoryId) {
+    public Slice<ProductDTO> listProductsByCategoryID(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "1") int categoryId) {
         Pageable pageable = PageRequest.of(page, size);
         return productService.listProductsByCategoryID(pageable, categoryId);
     }
@@ -55,20 +52,12 @@ public class ProductController {
         return productDTO;
     }
 
-    @GetMapping("/list-products/{id}")
-    public List<ProductDTO> listProductsById(@PathVariable Long id){
-        if(id == null){
-            throw new BusinessRuleException("Category parameters cannot be empty...!");
-        }
-        return productService.listProductsById(id);
-    }
-
-    @PostMapping("/add-product/{id}")
-    public String  addProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id){
-        if(productDTO == null || id == null){
+    @PostMapping("/add-product")
+    public String  addProduct(@RequestBody ProductDTO productDTO){
+        if(productDTO == null){
             throw new BusinessRuleException("Parameters cannot be empty...!");
         }
-        productService.addProduct(productDTO,id);
+        productService.addProduct(productDTO);
         return "Product Added";
     }
 }

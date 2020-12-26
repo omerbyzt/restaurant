@@ -1,9 +1,6 @@
 package com.ba.helper;
 
-import com.ba.dto.CategoryDTO;
-import com.ba.dto.CustomerDTO;
-import com.ba.dto.RoleDTO;
-import com.ba.dto.TableCategoryDTO;
+import com.ba.dto.*;
 import com.ba.entity.*;
 import com.ba.mapper.MediaMapper;
 
@@ -50,6 +47,24 @@ public class UpdateHelper {
     public static void roleSetCheck(RoleDTO roleDTO, Optional<Role> role) {
         if(role.get().getName().equals(roleDTO.getName())){
             role.get().setName(roleDTO.getName());
+        }
+    }
+
+    public static void waiterSetCheck(WaiterDTO waiterDTO, Optional<Waiter> waiter) {
+        if(!waiter.get().getName().equals(waiterDTO.getName())){
+            waiter.get().setName(waiterDTO.getName());
+        }
+        if(!waiter.get().getAddress().equals(waiterDTO.getAddress())){
+            waiter.get().setAddress(waiterDTO.getAddress());
+        }
+        if(!waiter.get().getMail().equals(waiterDTO.getMail())){
+            waiter.get().setMail(waiterDTO.getMail());
+        }
+        if(!waiter.get().getPhoneNumber().equals(waiterDTO.getPhoneNumber())){
+            waiter.get().setPhoneNumber(waiterDTO.getPhoneNumber());
+        }
+        if(!waiter.get().getSalary().equals(waiterDTO.getSalary())){
+            waiter.get().setSalary(waiterDTO.getSalary());
         }
     }
 }

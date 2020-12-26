@@ -88,15 +88,15 @@ public class ProductServiceTest {
 //        assertEquals(productDTO2,productDTO);
     }
 
-    @Test
-    public void shouldListProduct() {
-
-        when(repository.findAll()).thenReturn(productList);
-
-        List<ProductDTO> tempDTOList = ProductMapper.INSTANCE.toDTOList(productList);
-//        List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);
-        List<ProductDTO> tempDTOList2 = service.listAllProducts();
-
-        assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());
-    }
+//    @Test
+//    public void shouldListProduct() {
+//
+//        when(repository.findAll()).thenReturn(productList);
+//
+//        List<ProductDTO> tempDTOList = ProductMapper.INSTANCE.toDTOList(productList);
+////        List<ProductDTO> tempDTOList = ProductConverter.convertProductToProductDTO(productList);
+//        List<ProductDTO> tempDTOList2 = service.listAllProducts();
+//
+//        assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());
+//    }
 }

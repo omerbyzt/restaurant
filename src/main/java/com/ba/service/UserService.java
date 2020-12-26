@@ -4,6 +4,7 @@ import com.ba.dto.UserDTO;
 import com.ba.entity.Role;
 import com.ba.entity.User;
 import com.ba.exception.SystemException;
+import com.ba.mapper.RoleMapper;
 import com.ba.mapper.UserMapper;
 import com.ba.repository.RoleRepository;
 import com.ba.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,42 +30,38 @@ public class UserService {
 
     public List<UserDTO> listUsers() {
         List<User> user = userRepository.findAll();
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new SystemException("Users cannot be found...!");
         }
         return UserMapper.INSTANCE.toDTOList(user);
     }
 
     public String addUser(UserDTO userDTO) {
-        List<Role> roleList= new ArrayList<>();
-        userDTO.getRoles().forEach(role->{roleList.add(roleRepository.findById(role.getId()).get());});
 
         User user = UserMapper.INSTANCE.toEntity(userDTO);
-        user.setRoles(roleList);
-        user.setPassword(encoder.encode(userDTO.getPassword()));
+
         userRepository.save(user);
 
         return "User Added";
     }
 
     public String updateUser(UserDTO userDTO) {
-        List<Role> roleList= new ArrayList<>();
-        for (int i=0; i<userDTO.getRoles().size(); i++){
-            Role role=roleRepository.findById(userDTO.getRoles().get(i).getId()).get();
-            roleList.add(role);
+        Optional<User> user = userRepository.findById(userDTO.getId());
+        if (user.isEmpty()) {
+            throw new SystemException("User not found...!");
         }
-        User user = UserMapper.INSTANCE.toEntity(userDTO);
-        user.setRoles(roleList);
-        userRepository.saveAndFlush(user);
+        if (user.get().getRoles().isEmpty() && !userDTO.getRoles().isEmpty()) {
+            user.get().setRoles(RoleMapper.INSTANCE.toList(userDTO.getRoles()));
+        }
+
+//        User user2 = UserMapper.INSTANCE.toEntity(userDTO);
+//        user2.setRoles(roleList);
+//        userRepository.saveAndFlush(user2);
 //        userRepository.saveAndFlush(UserConverter.convertDTOToEntity(userDTO,roleList));
         return "User Updated";
     }
 
-    public String deleteUser(Long id){
-        User user = userRepository.findById(id).get();
-        List<Role>tempRoleList = new ArrayList<>();
-        user.setRoles(tempRoleList);
-
+    public String deleteUser(Long id) {
         userRepository.deleteById(id);
         return "User Deleted";
     }

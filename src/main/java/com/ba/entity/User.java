@@ -29,7 +29,9 @@ public class User extends BaseEntity{
     private String password;
     private boolean enabled;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(
+//            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_ROLES",
             joinColumns = @JoinColumn(name = "USER_ID"),

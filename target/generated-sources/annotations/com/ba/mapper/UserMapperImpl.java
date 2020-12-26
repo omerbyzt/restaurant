@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-26T02:59:43+0300",
+    date = "2020-12-26T16:09:07+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class UserMapperImpl implements UserMapper {

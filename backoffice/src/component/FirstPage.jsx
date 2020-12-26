@@ -21,7 +21,8 @@ class FirstPage extends Component {
         loadingIsVisible: false,
         totalCount: "",
         buttonArray: [],
-        pageNumber:1
+        pageNumber:1,
+        temp:""
     }
 
     constructor(props) {
@@ -52,11 +53,12 @@ class FirstPage extends Component {
                 .then(response => response.json())
                 .then(data => {
                     this.setState({
-                        content: data.productList,
-                        totalCount: data.totalCount
+                        temp:data,
+                        content: data.content,
+                        totalCount: data.totalElements
                     })
                 })
-            console.log(this.state.totalCount);
+
 
         } else {
             this.props.history.push('/');
@@ -131,7 +133,7 @@ class FirstPage extends Component {
             }
             )
             .then(res => {
-                this.setState({content: res.data.productList})
+                this.setState({content: res.data.content})
             });
     }
 

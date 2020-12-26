@@ -49,5 +49,4 @@ public class TableCategoryService {
 
         return TableCategoryMapper.INSTANCE.toDTO(tableCategory.get());
     }
-
 }

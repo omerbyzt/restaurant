@@ -6,6 +6,7 @@ import com.ba.dto.ProductWrapperList;
 import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import com.ba.exception.SystemException;
 import com.ba.mapper.CategoryMapper;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -28,58 +30,41 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<ProductDTO> listAllProducts(){
-        List<Product> productList = productRepository.findAll();
-        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(productList);
-        for(int i = 0; i<productList.size(); i++){
-            productDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productList.get(i).getCategories()));
+    @Autowired
+    private ProductMapper productMapper;
+
+    public Page<ProductDTO> listProductPage(Pageable pageable){
+        Page<ProductDTO> productDTOPage = productRepository.findAll(pageable).map(productMapper::toDTO);
+        if(productDTOPage.isEmpty()){
+            throw new SystemException("Products not found...!");
         }
-        return productDTOList;
+        return productDTOPage;
     }
 
-    public ProductWrapperList listProductPage(Pageable pageable){
-        Page<Product> temp = productRepository.findAll(pageable);
-//        List<Product> tempList = productRepository.findAll(pageable).toList();
-
-        List<Product> tempProductList = temp.getContent();
-        List<ProductDTO> tempProductDTOList = ProductMapper.INSTANCE.toDTOList(tempProductList);
-
-        for(int i = 0; i<tempProductList.size(); i++){
-            tempProductDTOList.get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(tempProductList.get(i).getCategories()));
+    public Slice<ProductDTO> listProductsByCategoryID(Pageable pageable, int id){
+        Slice<ProductDTO> productDTOSlice = productRepository.findProductByCategoriesId(pageable, (long) id).map(productMapper::toDTO);
+        if(productDTOSlice.isEmpty()){
+            throw new SystemException("Products not found...!");
         }
-
-        ProductWrapperList productWrapperList = new ProductWrapperList();
-        productWrapperList.setProductList(tempProductDTOList);
-        productWrapperList.setTotalCount(temp.getTotalElements());
-
-        return productWrapperList;
-    }
-
-    public ProductWrapperSlicerList listProductsByCategoryID(Pageable pageable, int id){
-        ProductWrapperSlicerList productWrapperSlicerList = new ProductWrapperSlicerList();
-        Slice<Product> sliceList = productRepository.findProductByCategoriesId(pageable,(long)id);
-        List<ProductDTO> productDTOList = ProductMapper.INSTANCE.toDTOList(sliceList.toList());
-
-        productWrapperSlicerList.setProductDTOList(productDTOList);
-        productWrapperSlicerList.setHasNext(sliceList.hasNext());
-        return productWrapperSlicerList;
+        return productDTOSlice;
     }
 
     public String deleteProduct(Long id){
-        Product product = productRepository.findById(id).get();
-        List<Category> categoryList = product.getCategories();
-
-        for (int i = 0 ;i<categoryList.size();i++){
-            categoryList.get(i).getProducts().remove(product);
-            categoryRepository.save(categoryList.get(i));
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()){
+            throw new SystemException("An error occured...!");
         }
 
-        productRepository.deleteById(id);
+        product.get().getCategories().forEach(category -> {
+           category.getProducts().remove(product.get());
+        });
+
+        productRepository.delete(product.get());
+//        productRepository.deleteById(id);
         return "Product Deleted";
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO){
-
         Product product = productRepository.findById(productDTO.getId()).get();
         List<Category> categoryList = product.getCategories();
 
@@ -88,15 +73,12 @@ public class ProductService {
             categoryRepository.save(categoryList.get(i));
         }
 
-        //productRepository.saveAndFlush(ProductConverter.updateDTOToEntity(productDTO));
-
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList2 = new ArrayList<>();
 
-        Product product2 = ProductMapper.INSTANCE.toEntity(productDTO);
+        Product product2 = productMapper.toEntity(productDTO);
         List<CategoryDTO> tempCategoryDTOList = productDTO.getCategories();
         product2.setCategories(CategoryMapper.INSTANCE.toList(tempCategoryDTOList));
-//        Product product2 = CategoryConvertor.convertDTOToProduct(productDTO);
 
         for(int i = 0 ; i<categoriesIdsList.size() ; i++){
             Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
@@ -110,27 +92,26 @@ public class ProductService {
         return productDTO;
     }
 
-    public List<ProductDTO> listProductsById(Long id) {
-        Category category = categoryRepository.findById(id).get();
-        List<ProductDTO> tempProductList = ProductMapper.INSTANCE.toDTOList(category.getProducts());
-
-        return tempProductList;
-    }
-
-    public String addProduct(ProductDTO productDTO, Long id) {
+    public String addProduct(ProductDTO productDTO) {
+        if(productDTO.getCategoriesIds().isEmpty()){
+            throw new SystemException("An error occured...!");
+        }
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList = new ArrayList<>();
-        Product product = ProductMapper.INSTANCE.toEntity(productDTO);
-        for(int i = 0 ; i<categoriesIdsList.size() ; i++){
-            Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
-            category.getProducts().add(product);
-            categoryList.add(category);
-        }
+        Product product = productMapper.toEntity(productDTO);
+
+        categoriesIdsList.forEach(categoryId -> {
+            Optional<Category> category = categoryRepository.findById(categoryId);
+            if(category.isEmpty()){
+                throw new SystemException("An error occured...!");
+            }
+            category.get().getProducts().add(product);
+            categoryList.add(category.get());
+        });
 
         product.setCategories(categoryList);
         productRepository.save(product);
 
         return "Product Added";
     }
-
 }

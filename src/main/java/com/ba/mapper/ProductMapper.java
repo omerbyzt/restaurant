@@ -9,9 +9,9 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+//    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mapping(ignore = true,source = "categories", target = "categories")
     @Mapping(source = "mediaDTO" ,target = "media")
