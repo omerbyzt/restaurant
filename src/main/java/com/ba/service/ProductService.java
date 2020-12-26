@@ -110,4 +110,27 @@ public class ProductService {
         return productDTO;
     }
 
+    public List<ProductDTO> listProductsById(Long id) {
+        Category category = categoryRepository.findById(id).get();
+        List<ProductDTO> tempProductList = ProductMapper.INSTANCE.toDTOList(category.getProducts());
+
+        return tempProductList;
+    }
+
+    public String addProduct(ProductDTO productDTO, Long id) {
+        List<Long> categoriesIdsList = productDTO.getCategoriesIds();
+        List<Category> categoryList = new ArrayList<>();
+        Product product = ProductMapper.INSTANCE.toEntity(productDTO);
+        for(int i = 0 ; i<categoriesIdsList.size() ; i++){
+            Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
+            category.getProducts().add(product);
+            categoryList.add(category);
+        }
+
+        product.setCategories(categoryList);
+        productRepository.save(product);
+
+        return "Product Added";
+    }
+
 }

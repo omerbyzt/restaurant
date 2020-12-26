@@ -89,7 +89,7 @@ class AddProduct extends Component {
         // axios.post("http://localhost:8080/category/add-product/"+selectedCategoryId, newProduct,
         //     {headers:{Authorization: sessionStorage.getItem('token')}}
         //     );
-        await axios.post("http://localhost:8080/category/add-product/" + "1", newProduct,
+        await axios.post("http://localhost:8080/product/add-product/" + "1", newProduct,
             // {headers: {Authorization: sessionStorage.getItem('token')}}
             {headers: {Authorization: token}}
         );

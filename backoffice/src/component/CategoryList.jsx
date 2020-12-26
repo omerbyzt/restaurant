@@ -96,8 +96,10 @@ class CategoryList extends Component {
             id: e.id,
             name: e.name,
             description: e.description,
-            imageToUrl: e.imageToUrl
+            imageToUrl: e.imageToUrl,
+            products:e.products
         })
+        console.log(e)
     }
 
     categoryUpdate = async () => {
@@ -110,7 +112,7 @@ class CategoryList extends Component {
             name: this.state.selectedMediaName,
             fileContent: this.state.selectedMediaURL
         }
-        console.log(newMedia);
+
         const putCategory = {
             id: id,
             name: name,

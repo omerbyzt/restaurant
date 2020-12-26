@@ -1,13 +1,17 @@
 package com.ba.service;
 
 import com.ba.dto.TableCategoryDTO;
+import com.ba.entity.TableCategory;
+import com.ba.exception.SystemException;
+import com.ba.helper.UpdateHelper;
 import com.ba.mapper.TableCategoryMapper;
 import com.ba.repository.TableCategoryRepository;
-import com.ba.unused.TableRepository;
+import com.mysql.cj.xdevapi.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TableCategoryService {
@@ -15,17 +19,16 @@ public class TableCategoryService {
     @Autowired
     private TableCategoryRepository tableCategoryRepository;
 
-    @Autowired
-    private TableRepository tableRepository;
-
     public List<TableCategoryDTO> listTableCategories() {
-        return TableCategoryMapper.INSTANCE.toDTOList(tableCategoryRepository.findAll());
-//        return TableCategoryConverter.convertDTOListtoList(tableCategoryRepository.findAll());
+        List<TableCategory> categoryDTOList = tableCategoryRepository.findAll();
+        if(categoryDTOList.isEmpty()){
+            throw new SystemException("Table categories not found...!");
+        }
+        return TableCategoryMapper.INSTANCE.toDTOList(categoryDTOList);
     }
 
     public String addTableCategory(TableCategoryDTO tableCategoryDTO) {
         tableCategoryRepository.save(TableCategoryMapper.INSTANCE.toEntity(tableCategoryDTO));
-//        tableCategoryRepository.save(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
         return "Table Category Added";
     }
 
@@ -35,13 +38,16 @@ public class TableCategoryService {
     }
 
     public TableCategoryDTO updateTableCategory(TableCategoryDTO tableCategoryDTO) {
-        tableCategoryRepository.saveAndFlush( TableCategoryMapper.INSTANCE.toEntity(tableCategoryDTO));
-//        tableCategoryRepository.saveAndFlush(TableCategoryConverter.convertDTOToTableCategory(tableCategoryDTO));
-        return tableCategoryDTO;
+        Optional<TableCategory> tableCategory = tableCategoryRepository.findById(tableCategoryDTO.getId());
+        if(tableCategory.isEmpty()){
+            throw new SystemException("Table category not found");
+        }
+
+        UpdateHelper.tableCategorySetCheck(tableCategoryDTO, tableCategory);
+
+        tableCategoryRepository.saveAndFlush(tableCategory.get());
+
+        return TableCategoryMapper.INSTANCE.toDTO(tableCategory.get());
     }
 
-//    public Set<Tables> listTablesById(Long id) {
-//        Optional<TableCategory> tables = tableCategoryRepository.findById(id);
-//        return tables.get().getTables();
-//    }
 }

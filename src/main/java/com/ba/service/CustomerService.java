@@ -2,6 +2,8 @@ package com.ba.service;
 
 import com.ba.dto.CustomerDTO;
 import com.ba.entity.Customer;
+import com.ba.exception.SystemException;
+import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CustomerMapper;
 import com.ba.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,14 +23,6 @@ public class CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
 
-    public List<CustomerDTO> listCustomers() {
-        List<Customer> customerList = customerRepository.findAll();
-        if (customerList.isEmpty()) {
-            return null;
-        }
-        return customerMapper.toDTOList(customerList);
-    }
-
     public String addCustomer(CustomerDTO customerDTO) {
         customerRepository.save(customerMapper.toEntity(customerDTO));
         return "Customer Added";
@@ -40,15 +33,22 @@ public class CustomerService {
         return "Customer Deleted";
     }
 
-    public String updateCustomer(CustomerDTO customerDTO) {
-        customerRepository.saveAndFlush(customerMapper.toEntity(customerDTO));
-        return "Customer Updated";
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        Optional<Customer> customer = customerRepository.findById(customerDTO.getId());
+        if (customer.isEmpty()) {
+            throw new SystemException("Customer not found..!");
+        }
+
+        UpdateHelper.customerSetCheck(customerDTO, customer);
+
+        customerRepository.saveAndFlush(customer.get());
+        return customerMapper.toDTO(customer.get());
     }
 
     public CustomerDTO getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        if (!customer.isPresent()) {
-            return null;
+        if (customer.isEmpty()) {
+            throw new SystemException("Customers not found...!");
         }
         CustomerDTO customerDTO = customerMapper.toDTO(customer.get());
         return customerDTO;
@@ -56,16 +56,16 @@ public class CustomerService {
 
     public Slice<CustomerDTO> getCustomersBySlice(Pageable pageable) {
         Slice<CustomerDTO> customerDTOSlice = customerRepository.findBy(pageable).map(customerMapper::toDTO);
-        if(customerDTOSlice.isEmpty()){
-            return null;
+        if (customerDTOSlice.isEmpty()) {
+            throw new SystemException("Customers not found...!");
         }
         return customerDTOSlice;
     }
 
     public Page<CustomerDTO> getCustomersByPage(Pageable pageable) {
         Page<CustomerDTO> customerDTOPage = customerRepository.findAll(pageable).map(customerMapper::toDTO);
-        if(customerDTOPage.isEmpty()){
-            return null;
+        if (customerDTOPage.isEmpty()) {
+            throw new SystemException("Customers not found...!");
         }
         return customerDTOPage;
     }

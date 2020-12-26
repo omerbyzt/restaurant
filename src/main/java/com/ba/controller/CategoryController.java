@@ -1,14 +1,12 @@
 package com.ba.controller;
 
 import com.ba.dto.CategoryDTO;
-import com.ba.dto.ProductDTO;
-import com.ba.entity.Product;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -25,29 +23,28 @@ public class CategoryController {
 
     @PostMapping("/add-category")
     public String addCategory(@RequestBody CategoryDTO categoryDTO){
+        if(categoryDTO == null){
+            throw new BusinessRuleException("Category parameters cannot be empty...!");
+        }
         categoryService.addCategory(categoryDTO);
         return "Category Added";
     }
 
     @DeleteMapping("/delete-category/{id}")
     public String deleteCategory(@PathVariable Long id){
+        if(id == null){
+            throw new BusinessRuleException("Id cannot be empty...!");
+        }
         categoryService.deleteCategory(id);
         return "Category Deleted";
     }
 
     @PutMapping("/update-category")
     public CategoryDTO updateCategory(@RequestBody CategoryDTO categoryDTO){
+        if(categoryDTO == null){
+            throw new BusinessRuleException("Category parameters cannot be empty...!");
+        }
         return categoryService.updateCategory(categoryDTO);
     }
 
-    @GetMapping("/list-products/{id}")
-    public List<ProductDTO> listProductsById(@PathVariable Long id){
-        return categoryService.listProductsById(id);
-    }
-
-    @PostMapping("/add-product/{id}")
-    public String  addProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id){
-        categoryService.addProduct(productDTO,id);
-        return "Product Added";
-    }
 }

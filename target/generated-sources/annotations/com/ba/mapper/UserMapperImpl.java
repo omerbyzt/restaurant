@@ -1,19 +1,20 @@
 package com.ba.mapper;
 
-import com.ba.dto.RoleDTO;
 import com.ba.dto.UserDTO;
-import com.ba.entity.Role;
 import com.ba.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.mapstruct.factory.Mappers;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-25T00:45:00+0300",
+    date = "2020-12-26T02:59:43+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class UserMapperImpl implements UserMapper {
+
+    private final RoleMapper roleMapper = Mappers.getMapper( RoleMapper.class );
 
     @Override
     public User toEntity(UserDTO userDTO) {
@@ -31,7 +32,7 @@ public class UserMapperImpl implements UserMapper {
         if ( userDTO.getEnabled() != null ) {
             user.setEnabled( userDTO.getEnabled() );
         }
-        user.setRoles( roleDTOListToRoleList( userDTO.getRoles() ) );
+        user.setRoles( roleMapper.toList( userDTO.getRoles() ) );
 
         return user;
     }
@@ -49,7 +50,7 @@ public class UserMapperImpl implements UserMapper {
         userDTO.setUsername( user.getUsername() );
         userDTO.setPassword( user.getPassword() );
         userDTO.setEnabled( user.isEnabled() );
-        userDTO.setRoles( roleListToRoleDTOList( user.getRoles() ) );
+        userDTO.setRoles( roleMapper.toDTOList( user.getRoles() ) );
         userDTO.setDeleted( user.isDeleted() );
 
         return userDTO;
@@ -81,59 +82,5 @@ public class UserMapperImpl implements UserMapper {
         }
 
         return list;
-    }
-
-    protected Role roleDTOToRole(RoleDTO roleDTO) {
-        if ( roleDTO == null ) {
-            return null;
-        }
-
-        Role role = new Role();
-
-        role.setId( roleDTO.getId() );
-        role.setDeleted( roleDTO.isDeleted() );
-        role.setName( roleDTO.getName() );
-
-        return role;
-    }
-
-    protected List<Role> roleDTOListToRoleList(List<RoleDTO> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<Role> list1 = new ArrayList<Role>( list.size() );
-        for ( RoleDTO roleDTO : list ) {
-            list1.add( roleDTOToRole( roleDTO ) );
-        }
-
-        return list1;
-    }
-
-    protected RoleDTO roleToRoleDTO(Role role) {
-        if ( role == null ) {
-            return null;
-        }
-
-        RoleDTO roleDTO = new RoleDTO();
-
-        roleDTO.setId( role.getId() );
-        roleDTO.setName( role.getName() );
-        roleDTO.setDeleted( role.isDeleted() );
-
-        return roleDTO;
-    }
-
-    protected List<RoleDTO> roleListToRoleDTOList(List<Role> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<RoleDTO> list1 = new ArrayList<RoleDTO>( list.size() );
-        for ( Role role : list ) {
-            list1.add( roleToRoleDTO( role ) );
-        }
-
-        return list1;
     }
 }

@@ -22,7 +22,6 @@ public class WaiterService {
 
     public List<WaiterDTO> listAllWaiters(){
         return  WaiterMapper.INSTANCE.toDTOList(waiterRepository.findAll());
-//        return WaiterConverter.convertListToDTOList(waiterRepository.findAll());
     }
 
     public String addWaiter(WaiterDTO waiterDTO){
@@ -35,7 +34,6 @@ public class WaiterService {
         tempWaiter.setMedia(tempMedia);
 
         waiterRepository.save(tempWaiter);
-//        waiterRepository.save(WaiterConverter.addWaiterConverter(waiterDTO));
         return "Waiter Added";
     }
 
@@ -46,7 +44,6 @@ public class WaiterService {
 
     public WaiterDTO updateWaiter(WaiterDTO waiterDTO){
         waiterRepository.saveAndFlush(WaiterMapper.INSTANCE.toEntity(waiterDTO));
-//        waiterRepository.saveAndFlush(WaiterConverter.convertDTOTOWaiter(waiterDTO));
         return waiterDTO;
     }
 }

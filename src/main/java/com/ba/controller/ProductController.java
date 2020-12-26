@@ -3,6 +3,7 @@ package com.ba.controller;
 import com.ba.dto.ProductDTO;
 import com.ba.dto.ProductWrapperList;
 import com.ba.dto.ProductWrapperSlicerList;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -38,13 +39,36 @@ public class ProductController {
 
     @DeleteMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
+        if(id == null){
+            throw new BusinessRuleException("Id cannot be empty...!");
+        }
         productService.deleteProduct(id);
         return "Product Deleted";
     }
 
     @PutMapping("/update")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO) {
+        if(productDTO == null){
+            throw new BusinessRuleException("Product cannot be empty");
+        }
         productService.updateProduct(productDTO);
         return productDTO;
+    }
+
+    @GetMapping("/list-products/{id}")
+    public List<ProductDTO> listProductsById(@PathVariable Long id){
+        if(id == null){
+            throw new BusinessRuleException("Category parameters cannot be empty...!");
+        }
+        return productService.listProductsById(id);
+    }
+
+    @PostMapping("/add-product/{id}")
+    public String  addProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id){
+        if(productDTO == null || id == null){
+            throw new BusinessRuleException("Parameters cannot be empty...!");
+        }
+        productService.addProduct(productDTO,id);
+        return "Product Added";
     }
 }

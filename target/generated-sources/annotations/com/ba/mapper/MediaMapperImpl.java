@@ -9,7 +9,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-25T00:45:01+0300",
+    date = "2020-12-26T01:24:53+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class MediaMapperImpl implements MediaMapper {
@@ -61,6 +61,20 @@ public class MediaMapperImpl implements MediaMapper {
         List<MediaDTO> list = new ArrayList<MediaDTO>( mediaList.size() );
         for ( Media media : mediaList ) {
             list.add( toDTO( media ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Media> toList(List<MediaDTO> mediaDTOList) {
+        if ( mediaDTOList == null ) {
+            return null;
+        }
+
+        List<Media> list = new ArrayList<Media>( mediaDTOList.size() );
+        for ( MediaDTO mediaDTO : mediaDTOList ) {
+            list.add( toEntity( mediaDTO ) );
         }
 
         return list;

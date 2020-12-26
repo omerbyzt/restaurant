@@ -1,6 +1,7 @@
 package com.ba.controller;
 
 import com.ba.dto.CustomerDTO;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,15 +20,10 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
-    public List<CustomerDTO> listCustomers(){
-        return customerService.listCustomers();
-    }
-
     @PostMapping
     public String addCustomer(@RequestBody CustomerDTO customerDTO){
         if(customerDTO == null){
-            return null;
+            throw new BusinessRuleException("Customer parameters cannot be empty...!");
         }
         return customerService.addCustomer(customerDTO);
     }
@@ -35,15 +31,15 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public String deleteCustomer(@PathVariable Long id){
         if(id == null){
-            return null;
+            throw new BusinessRuleException("Id cannot be empty...!");
         }
-        return customerService.deleteCustomer(id);
+            return customerService.deleteCustomer(id);
     }
 
     @PutMapping
-    public String updateCustomer(@RequestBody CustomerDTO customerDTO){
+    public CustomerDTO updateCustomer(@RequestBody CustomerDTO customerDTO){
         if(customerDTO == null){
-            return null;
+            throw new BusinessRuleException("Customer parameters cannot be empty...!");
         }
         return customerService.updateCustomer(customerDTO);
     }
@@ -51,25 +47,19 @@ public class CustomerController {
     @GetMapping("/{id}")
     public CustomerDTO getCustomerById(@PathVariable Long id){
         if(id == null){
-            return null;
+            throw new BusinessRuleException("Id cannot be empty...!");
         }
         return customerService.getCustomerById(id);
     }
 
     @GetMapping("/slice")
     public Slice<CustomerDTO> getCustomersBySlice(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "20") Integer size){
-        if(page == null || size == null){
-            return null;
-        }
         Pageable pageable = PageRequest.of(page,size);
         return customerService.getCustomersBySlice(pageable);
     }
 
     @GetMapping("/page")
     public Page<CustomerDTO> getCustomersByPage(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "20") Integer size){
-        if(page == null || size == null){
-            return null;
-        }
         Pageable pageable = PageRequest.of(page,size);
         return customerService.getCustomersByPage(pageable);
     }
