@@ -3,6 +3,7 @@ package com.ba.controller;
 import com.ba.dto.OrderDTO;
 import com.ba.entity.Orderr;
 import com.ba.exception.BusinessRuleException;
+import com.ba.helper.InternationalizationHelper;
 import com.ba.service.OrderService;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -34,7 +36,7 @@ public class OrderController {
     }
 
     @GetMapping("/")
-    public String temp(HttpServletRequest request){
-        return orderService.temp(request);
+    public String temp(@RequestHeader("Accept-Language") String locale){
+        return InternationalizationHelper.messageSource().getMessage("hello",null,new Locale(locale));
     }
 }

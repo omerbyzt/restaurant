@@ -8,6 +8,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Getter
@@ -22,13 +24,12 @@ import java.io.Serializable;
 @Where(clause = "deleted = false")
 public class Customer extends BaseEntity implements Serializable{
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private long id;
     private String name;
     private String surname;
     private String phoneNumber;
     private String address;
-//    private boolean deleted;
 
+    @ManyToOne
+    @JoinColumn(name = "media_id")//fetch=Eager
+    private Media media;
 }

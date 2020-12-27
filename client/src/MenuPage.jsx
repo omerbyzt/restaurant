@@ -152,7 +152,11 @@ class MenuPage extends Component {
                                 customerList.map(v => {
                                     return (
                                         <button
-                                            className="btn btn-outline-info btn-block customerButton" onClick={()=> this.clickCutomer(v)}>{v.name} {v.surname}</button>
+                                            className="btn btn-outline-info btn-block categoryButtonCss" onClick={()=> this.clickCutomer(v)}>{v.name} {v.surname}
+                                        <br/>
+                                            <img src={'data:image/png;base64,' + v.media.fileContent}
+                                                 width="87" style={{margin: 10}}/>
+                                        </button>
                                     )
                                 })
                             }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Header from "../Header";
 import CustomerService from "../../service/CustomerService";
+import axios from "axios";
 
 class UpdateCustomer extends Component {
     state = {
@@ -9,10 +10,30 @@ class UpdateCustomer extends Component {
         surname: this.props.surname,
         phoneNumber: this.props.phoneNumber,
         address: this.props.address,
+        token: "Basic YWRtaW46MTIz",
+        selectedMediaID:"",
+        selectedMediaName:"Select Media",
+        selectedMediaURL:"",
+        mediaList:[]
+    }
+
+    async componentDidMount() {
+        await axios.get('http://localhost:8080/file/list',
+            // {headers: {Authorization: sessionStorage.getItem('token')}})
+            {headers: {Authorization: this.state.token}})
+            .then(res => {
+                this.setState({mediaList: res.data})
+            });
     }
 
     updateCustomer = () => {
-        const {id,name,surname,phoneNumber,address,token} = this.state;
+        const {id,name,surname,phoneNumber,address,token,selectedMediaName,selectedMediaID,selectedMediaURL} = this.state;
+
+        const updateMedia = {
+            id:selectedMediaID,
+            name:selectedMediaName,
+            fileContent:selectedMediaURL
+        }
 
         const updateCustomer = {
             id:id,
@@ -20,9 +41,8 @@ class UpdateCustomer extends Component {
             surname:surname,
             phoneNumber: phoneNumber,
             address: address,
-            token: "Basic YWRtaW46MTIz"
+            media:updateMedia
         }
-
         CustomerService.updateCustomer(updateCustomer,token)
     }
 
@@ -32,8 +52,17 @@ class UpdateCustomer extends Component {
         })
     }
 
+    onClickMediaItem = (e) => {
+        console.log(e)
+        this.setState({
+            selectedMediaName: e.name,
+            selectedMediaID: e.id,
+            selectedMediaURL:e.fileContent
+        })
+    }
+
     render() {
-        const {id, name, surname, phoneNumber, address} = this.state;
+        const {id, name, surname, phoneNumber, address,mediaList,selectedMediaName} = this.state;
         return (
             <div>
                 <div className="col-md-6 mr-auto mb-4 mt-4">
@@ -103,8 +132,32 @@ class UpdateCustomer extends Component {
                                            onChange={this.changeInput}
                                     />
                                 </div>
+
+                                <div className="dropdown d-inline">
+                                    <label htmlFor="price">Table Category Media : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                        {selectedMediaName}
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {
+                                            mediaList.map(v => {
+                                                return (
+                                                    <div className="row col-md -12">
+                                                        <a className="dropdown-item"
+                                                           onClick={this.onClickMediaItem.bind(this, v)}>
+                                                            {v.name}
+                                                        </a>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+
                             </form>
-                            <button className="btn btn-warning btn-block" onClick={() => this.updateCustomer()}>Update
+                            <button className="btn btn-warning btn-block mt-3" onClick={() => this.updateCustomer()}>Update
                                 Customer
                             </button>
                         </div>

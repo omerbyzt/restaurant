@@ -121,5 +121,11 @@
             <column name ="file_Content" valueBlobFile="./balkon.png"/>
         </insert>
 
+        <insert tableName="media">
+            <column name="id" valueNumeric="20"/>
+            <column name="name" value="customer"/>
+            <column name ="file_Content" valueBlobFile="./customer.png"/>
+        </insert>
+
     </changeSet>
 </databaseChangeLog>

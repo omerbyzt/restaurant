@@ -1,15 +1,18 @@
 package com.ba.mapper;
 
 import com.ba.dto.CustomerDTO;
+import com.ba.dto.MediaDTO;
 import com.ba.entity.Customer;
+import com.ba.entity.Media;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-27T02:34:30+0300",
+    date = "2020-12-27T12:30:31+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +32,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setSurname( customerDTO.getSurname() );
         customer.setPhoneNumber( customerDTO.getPhoneNumber() );
         customer.setAddress( customerDTO.getAddress() );
+        customer.setMedia( mediaDTOToMedia( customerDTO.getMedia() ) );
 
         return customer;
     }
@@ -49,6 +53,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerDTO.setPhoneNumber( customer.getPhoneNumber() );
         customerDTO.setAddress( customer.getAddress() );
         customerDTO.setDeleted( customer.isDeleted() );
+        customerDTO.setMedia( mediaToMediaDTO( customer.getMedia() ) );
 
         return customerDTO;
     }
@@ -79,5 +84,41 @@ public class CustomerMapperImpl implements CustomerMapper {
         }
 
         return list;
+    }
+
+    protected Media mediaDTOToMedia(MediaDTO mediaDTO) {
+        if ( mediaDTO == null ) {
+            return null;
+        }
+
+        Media media = new Media();
+
+        media.setId( mediaDTO.getId() );
+        media.setDeleted( mediaDTO.isDeleted() );
+        media.setName( mediaDTO.getName() );
+        byte[] fileContent = mediaDTO.getFileContent();
+        if ( fileContent != null ) {
+            media.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
+        }
+
+        return media;
+    }
+
+    protected MediaDTO mediaToMediaDTO(Media media) {
+        if ( media == null ) {
+            return null;
+        }
+
+        MediaDTO mediaDTO = new MediaDTO();
+
+        mediaDTO.setId( media.getId() );
+        mediaDTO.setName( media.getName() );
+        byte[] fileContent = media.getFileContent();
+        if ( fileContent != null ) {
+            mediaDTO.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
+        }
+        mediaDTO.setDeleted( media.isDeleted() );
+
+        return mediaDTO;
     }
 }

@@ -7,7 +7,9 @@ import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
 import com.ba.exception.SystemException;
+import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
@@ -69,30 +71,13 @@ public class ProductService {
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) {
-        Product product = productRepository.findById(productDTO.getId()).get();
-        List<Category> categoryList = product.getCategories();
-
-        for (int i = 0; i < categoryList.size(); i++) {
-            categoryList.get(i).getProducts().remove(product);
-            categoryRepository.save(categoryList.get(i));
+        Optional<Product> product = productRepository.findById(productDTO.getId());
+        if (product.isEmpty()) {
+            throw new SystemException("Product not found...!");
         }
 
-        List<Long> categoriesIdsList = productDTO.getCategoriesIds();
-        List<Category> categoryList2 = new ArrayList<>();
-
-        Product product2 = productMapper.toEntity(productDTO);
-        List<CategoryDTO> tempCategoryDTOList = productDTO.getCategories();
-        product2.setCategories(CategoryMapper.INSTANCE.toList(tempCategoryDTOList));
-
-        for (int i = 0; i < categoriesIdsList.size(); i++) {
-            Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
-            category.getProducts().add(product2);
-            categoryList2.add(category);
-        }
-        product2.setCategories(categoryList2);
-
-        productRepository.save(product2);
-
+        UpdateHelper.productSetCheck(productDTO, product, categoryRepository);
+        productRepository.save(product.get());
         return productDTO;
     }
 

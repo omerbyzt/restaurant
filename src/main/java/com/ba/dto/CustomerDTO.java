@@ -16,4 +16,5 @@ public class CustomerDTO {
     private String phoneNumber;
     private String address;
     private boolean deleted;
+    private MediaDTO media;
 }

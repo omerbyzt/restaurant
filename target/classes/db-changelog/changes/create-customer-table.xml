@@ -16,12 +16,21 @@
             <column name="address" type="VARCHAR(255)"/>
             <column name="deleted" type="boolean" defaultValue="false"></column>
         </createTable>
+    </changeSet>
+
+    <changeSet author="omer" id="27_12_2020/12:19">
+        <addColumn tableName="customer">
+            <column name="media_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="media_id_fk_into_customer" references="media(id)"></constraints>
+            </column>
+        </addColumn>
 
         <insert tableName="customer">
             <column name="name" value="omer"></column>
             <column name="surname" value="beyazit"></column>
             <column name="phone_Number" value="5373331244"></column>
             <column name="address" value="orhangazi" ></column>
+            <column name="media_id" value="20"/>
         </insert>
     </changeSet>
 

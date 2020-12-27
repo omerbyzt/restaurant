@@ -5,6 +5,7 @@ import Table from "react-bootstrap/Table";
 import CustomerService from "../../service/CustomerService";
 import Loading from "../Loading";
 import UpdateCustomer from "./UpdateCustomer";
+import axios from "axios";
 
 class CustomerList extends Component {
     state = {
@@ -14,7 +15,7 @@ class CustomerList extends Component {
         loadingIsVisible: false,
         token: "Basic YWRtaW46MTIz",
         isUpdateCustomer: false,
-        selectedCustomer: ""
+        selectedCustomer: "",
     }
 
     async componentDidMount() {
@@ -104,6 +105,7 @@ class CustomerList extends Component {
                                 <th>Surname</th>
                                 <th>Phone Number</th>
                                 <th>Address</th>
+                                <th>Customer Madia</th>
                                 <th>Buttons</th>
                             </tr>
                             </thead>
@@ -116,6 +118,10 @@ class CustomerList extends Component {
                                         <td>{v.surname}</td>
                                         <td>{v.phoneNumber}</td>
                                         <td>{v.address}</td>
+                                        <td align="center">
+                                            <img src={'data:image/png;base64,' + v.media.fileContent} width="100"
+                                                 style={{margin: 10}}/>
+                                        </td>
                                         <td align="center">
                                             <button className="btn btn-danger mr-2"
                                                     onClick={() => this.deleteCustomer(v)}>Delete

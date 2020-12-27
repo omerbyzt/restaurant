@@ -57,13 +57,13 @@ public class RoleControllerTest {
         assertEquals(res,"Role Added");
     }
 
-    @Test
-    public void shouldVerifyDeleteRole() {
-        Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
-        String res = controller.deleteRole(id);
-
-        assertEquals(res,"Role Deleted");
-    }
+//    @Test
+//    public void shouldVerifyDeleteRole() {
+//        Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
+//        String res = controller.deleteRole(id);
+//
+//        assertEquals(res,"Role Deleted");
+//    }
 
     @Test
     public void shouldVerifyUpdateRole() {
