@@ -3,9 +3,11 @@ package com.ba.controller;
 import com.ba.builder.CategoryBuilder;
 import com.ba.builder.ProductBuilder;
 import com.ba.builder.ProductDTOBuilder;
+import com.ba.dto.CustomerDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class ProductControllerTest {
     private Category category = new Category();
     private Long id = 111L;
 
+    private Pageable pageable = PageRequest.of(0, 10);
+
     @Before
     public void setUp() throws Exception {
 
@@ -48,27 +53,65 @@ public class ProductControllerTest {
         productListDTO.add(productDTO);
     }
 
-//    @Test
-//    public void shouldVerifyListAllProducts() {
-//
-//        when(service.listAllProducts()).thenReturn(productListDTO);
-//        List<ProductDTO> tempDTOList = controller.listAllProducts();
-//
-//        assertEquals(tempDTOList,productListDTO);
-//    }
-
     @Test
     public void shouldDeleteProduct() {
         when(service.deleteProduct(id)).thenReturn("Product Deleted");
         String res = controller.deleteProduct(id);
 
-        assertEquals(res,"Product Deleted");
+        assertEquals(res, "Product Deleted");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteProduct() {
+        when(service.deleteProduct(id)).thenReturn("Product Deleted");
+        String res = controller.deleteProduct(null);
     }
 
     @Test
     public void shouldVerifyUpdateProduct() {
         when(service.updateProduct(productDTO)).thenReturn(productDTO);
         ProductDTO tempDTO = controller.updateProduct(productDTO);
-        assertEquals(tempDTO,productDTO);
+        assertEquals(tempDTO, productDTO);
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotUpdateProduct() {
+        when(service.updateProduct(productDTO)).thenReturn(productDTO);
+        ProductDTO tempDTO = controller.updateProduct(null);
+    }
+
+    @Test
+    public void shouldListProductPage() {
+        Page<ProductDTO> productDTOPage = new PageImpl<ProductDTO>(productListDTO);
+        when(service.listProductPage(pageable)).thenReturn(productDTOPage);
+        Page<ProductDTO> tempCustomerDTOPage = controller.listProductPage(0, 10);
+
+        assertNotNull(tempCustomerDTOPage);
+        assertEquals(tempCustomerDTOPage, productDTOPage);
+    }
+
+    @Test
+    public void shouldListProductsByCategoryID() {
+        Slice<ProductDTO> productDTOSlice = new PageImpl<ProductDTO>(productListDTO);
+        when(service.listProductsByCategoryID(pageable, 1)).thenReturn(productDTOSlice);
+        Slice<ProductDTO> tempProductDTOSlice = controller.listProductsByCategoryID(0, 10, 1);
+
+        assertNotNull(tempProductDTOSlice);
+        assertEquals(tempProductDTOSlice, productDTOSlice);
+    }
+
+    @Test
+    public void shouldAddProduct() {
+        when(service.addProduct(productDTO)).thenReturn("Product Added");
+        String res = controller.addProduct(productDTO);
+
+        assertNotNull(res);
+        assertEquals(res, "Product Added");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddProduct() {
+        when(service.addProduct(productDTO)).thenReturn("Product Added");
+        String res = controller.addProduct(null);
     }
 }

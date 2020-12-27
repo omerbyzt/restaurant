@@ -33,3 +33,4 @@ public class Customer extends BaseEntity implements Serializable{
     @JoinColumn(name = "media_id")//fetch=Eager
     private Media media;
 }
+

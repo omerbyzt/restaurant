@@ -8,6 +8,7 @@ import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,11 +73,23 @@ public class CategoryControllerTest {
         assertEquals(res, "Category Added");
     }
 
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddCategory() {
+        when(service.addCategory(categoryDTO)).thenReturn("Category Added");
+        String res = controller.addCategory(null);
+    }
+
     @Test
     public void shouldVerifyDeleteCategory() {
         when(service.deleteCategory(id)).thenReturn("Category Deleted");
         String res = controller.deleteCategory(id);
         assertEquals(res, "Category Deleted");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteCategory() {
+        when(service.deleteCategory(id)).thenReturn("Category Deleted");
+        String res = controller.deleteCategory(null);
     }
 
     @Test
@@ -86,17 +99,9 @@ public class CategoryControllerTest {
         assertEquals(tempDTO, categoryDTO);
     }
 
-    @Test
-    public void shouldVerifyListProductById() {
-//        when(service.listProductsById(id)).thenReturn(productSetListDTO);
-//        List<ProductDTO> tempDTOList = controller.listProductsById(id);
-//        assertEquals(tempDTOList, productSetListDTO);
-    }
-
-    @Test
-    public void shouldVerifyAddProductByID() {
-//        when(service.addProduct(productDTO, id)).thenReturn("Product Added");
-//        String res = controller.addProduct(productDTO, id);
-//        assertEquals(res, "Product Added");
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotUpdateCategory() {
+        when(service.updateCategory(categoryDTO)).thenReturn(categoryDTO);
+        CategoryDTO tempDTO = controller.updateCategory(null);
     }
 }

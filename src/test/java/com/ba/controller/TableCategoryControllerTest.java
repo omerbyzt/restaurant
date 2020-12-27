@@ -4,6 +4,7 @@ import com.ba.builder.TableCategoryBuilder;
 import com.ba.builder.TableCategoryDTOBuilder;
 import com.ba.dto.TableCategoryDTO;
 import com.ba.entity.TableCategory;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.TableCategoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,28 +48,46 @@ public class TableCategoryControllerTest {
     public void shouldVerifyListTableCategories() {
         when(service.listTableCategories()).thenReturn(tableCategoryDTOList);
         List<TableCategoryDTO> tempDTOList = controller.listTableCategories();
-        assertEquals(tempDTOList,tableCategoryDTOList);
+        assertEquals(tempDTOList, tableCategoryDTOList);
     }
 
     @Test
     public void shouldVerifyAddTableCategory() {
         when(service.addTableCategory(tableCategoryDTO)).thenReturn("Table Category Added");
         String res = controller.addTableCategory(tableCategoryDTO);
-        assertEquals(res,"Table Category Added");
+        assertEquals(res, "Table Category Added");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddTableCategory() {
+        when(service.addTableCategory(tableCategoryDTO)).thenReturn("Table Category Added");
+        String res = controller.addTableCategory(null);
     }
 
     @Test
     public void shouldVerifyDeleteTableCategory() {
         when(service.deleteTableCategory(id)).thenReturn("Table Category Deleted");
         String res = controller.deleteTableCategory(id);
-        assertEquals(res,"Table Category Deleted");
+        assertEquals(res, "Table Category Deleted");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteTableCategory() {
+        when(service.deleteTableCategory(id)).thenReturn("Table Category Deleted");
+        String res = controller.deleteTableCategory(null);
     }
 
     @Test
     public void shouldVerifyUpdateTableCategory() {
         when(service.updateTableCategory(tableCategoryDTO)).thenReturn(tableCategoryDTO);
         TableCategoryDTO tempDTO = controller.updateTableCategory(tableCategoryDTO);
-        assertEquals(tempDTO,tableCategoryDTO);
+        assertEquals(tempDTO, tableCategoryDTO);
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotUpdateTableCategory() {
+        when(service.updateTableCategory(tableCategoryDTO)).thenReturn(tableCategoryDTO);
+        TableCategoryDTO tempDTO = controller.updateTableCategory(null);
     }
 }
 

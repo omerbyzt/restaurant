@@ -35,7 +35,7 @@ public class CustomerService {
 
     public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
         Optional<Customer> customer = customerRepository.findById(customerDTO.getId());
-        if (customer.isEmpty()) {
+        if (customer == null) {
             throw new SystemException("Customer not found..!");
         }
 

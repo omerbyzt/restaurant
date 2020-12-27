@@ -4,6 +4,7 @@ import com.ba.builder.UserBuilder;
 import com.ba.builder.UserDTOBuilder;
 import com.ba.dto.UserDTO;
 import com.ba.entity.User;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +57,12 @@ public class UserControllerTest {
         assertEquals(res,"User Added");
     }
 
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddUser() {
+        Mockito.when(service.addUser(userDTO)).thenReturn("User Added");
+        String res = controller.addUser(null);
+    }
+
     @Test
     public void shouldVerifyDeleteUser() {
         Mockito.when(service.deleteUser(id)).thenReturn("User Deleted");
@@ -64,11 +71,24 @@ public class UserControllerTest {
         assertEquals(res,"User Deleted");
     }
 
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteUser() {
+        Mockito.when(service.deleteUser(id)).thenReturn("User Deleted");
+        String res = controller.deleteUser(null);
+    }
+
     @Test
     public void shouldVerifyUpdateUser() {
         Mockito.when(service.updateUser(userDTO)).thenReturn("User Updated");
         String res = controller.updateUser(userDTO);
 
         assertEquals(res,"User Updated");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotUpdateUser() {
+        Mockito.when(service.updateUser(userDTO)).thenReturn("User Updated");
+        String res = controller.updateUser(null);
+
     }
 }

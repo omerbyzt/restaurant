@@ -4,7 +4,10 @@ import com.ba.builder.MediaBuilder;
 import com.ba.builder.MediaDTOBuilder;
 import com.ba.dto.MediaDTO;
 import com.ba.entity.Media;
+import com.ba.exception.BusinessRuleException;
+import com.ba.exception.SystemException;
 import com.ba.service.MediaService;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XmlVisitor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -103,11 +106,37 @@ public class MediaControllerTest {
         assertEquals(res,"File Added");
     }
 
+    @Test(expected = SystemException.class)
+    public void shouldNotAddMedia() throws IOException {
+        when(controller.addFile(null,null)).thenReturn("File Added");
+        String res = controller.addFile(null,null);
+    }
+
     @Test
     public void shouldVerifyGetMediaByID() {
         when(service.getMediaByID(id)).thenReturn(mediaDTO);
         MediaDTO tempDTO = controller.getMediaByID(id);
 
         assertEquals(tempDTO,mediaDTO);
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotGetMediaByID() {
+        when(service.getMediaByID(id)).thenReturn(mediaDTO);
+        MediaDTO tempDTO = controller.getMediaByID(null);
+    }
+
+    @Test
+    public void shouldDeleteMedia() {
+        when(service.deleteMedia(id)).thenReturn("Media Deleted!");
+        String res = controller.deleteMedia(id);
+
+        assertNotNull(res);
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteMedia() {
+        when(service.deleteMedia(id)).thenReturn("Media Deleted!");
+        String res = controller.deleteMedia(null);
     }
 }

@@ -4,6 +4,7 @@ import com.ba.builder.RoleBuilder;
 import com.ba.builder.RoleDTOBuilder;
 import com.ba.dto.RoleDTO;
 import com.ba.entity.Role;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.RoleService;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,13 +58,26 @@ public class RoleControllerTest {
         assertEquals(res,"Role Added");
     }
 
-//    @Test
-//    public void shouldVerifyDeleteRole() {
-//        Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
-//        String res = controller.deleteRole(id);
-//
-//        assertEquals(res,"Role Deleted");
-//    }
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddRole() {
+        Mockito.when(service.addRole(roleDTO)).thenReturn("Role Added");
+        String res = controller.addRole(null);
+    }
+
+    @Test
+    public void shouldDeleteRole() {
+        Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
+        String res = controller.deleteRole(id,"testString");
+
+        assertNotNull(res);
+        assertEquals(res,"Role Deleted");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotDeleteRole() {
+        Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
+        String res = controller.deleteRole((long) 0,"testString");
+    }
 
     @Test
     public void shouldVerifyUpdateRole() {
@@ -71,5 +85,11 @@ public class RoleControllerTest {
         String res = controller.updateRole(roleDTO);
 
         assertEquals(res,"Role Updated");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotUpdate() {
+        Mockito.when(service.updateRole(roleDTO)).thenReturn("Role Updated");
+        String res = controller.updateRole(null);
     }
 }

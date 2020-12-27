@@ -19,30 +19,30 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("/list")
-    public List<RoleDTO> listRoles(){
+    public List<RoleDTO> listRoles() {
         return roleService.listRoles();
     }
 
     @PostMapping("/add")
-    public String addRole(@RequestBody RoleDTO roleDTO){
-        if(roleDTO == null){
+    public String addRole(@RequestBody RoleDTO roleDTO) {
+        if (roleDTO == null) {
             throw new BusinessRuleException("Role cannot be empty...!");
         }
         return roleService.addRole(roleDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteRole(@PathVariable Long id,@RequestHeader("Accept-Language") String locale){
-        if(id <= 0){
+    public String deleteRole(@PathVariable Long id, @RequestHeader("Accept-Language") String locale) {
+        if (id <= 0) {
 //            throw new BusinessRuleException("Id cannot be empty...!");
-            throw new BusinessRuleException(InternationalizationHelper.messageSource().getMessage("id.error",null,new Locale(locale)));
+            throw new BusinessRuleException(InternationalizationHelper.messageSource().getMessage("id.error", null, new Locale(locale)));
         }
         return roleService.deleteRole(id);
     }
 
     @PutMapping("/update")
-    public String updateRole(@RequestBody RoleDTO roleDTO){
-        if(roleDTO == null){
+    public String updateRole(@RequestBody RoleDTO roleDTO) {
+        if (roleDTO == null) {
             throw new BusinessRuleException("Role cannot be empty...!");
         }
         return roleService.updateRole(roleDTO);

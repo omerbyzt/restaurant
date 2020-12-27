@@ -34,9 +34,4 @@ public class OrderController {
         orderService.addOrder(orderDTO);
         return "Order Added";
     }
-
-    @GetMapping("/")
-    public String temp(@RequestHeader("Accept-Language") String locale){
-        return InternationalizationHelper.messageSource().getMessage("hello",null,new Locale(locale));
-    }
 }

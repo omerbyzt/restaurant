@@ -4,6 +4,7 @@ import com.ba.builder.OrderBuilder;
 import com.ba.builder.OrderDTOBuilder;
 import com.ba.dto.OrderDTO;
 import com.ba.entity.Orderr;
+import com.ba.exception.BusinessRuleException;
 import com.ba.service.OrderService;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,5 +60,11 @@ public class OrderControllerTest {
         String res = controller.addOrder(orderListDTO);
 
         assertEquals(res,"Order Added");
+    }
+
+    @Test(expected = BusinessRuleException.class)
+    public void shouldNotAddOrder() {
+        when(service.addOrder(orderListDTO)).thenReturn("Order Added");
+        String res = controller.addOrder(null);
     }
 }
