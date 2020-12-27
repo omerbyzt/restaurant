@@ -9,16 +9,27 @@ class AddTableCategory extends Component {
     state = {
         name:"",
         number:"",
-        loadingIsVisible:false
+        loadingIsVisible:false,
+        mediaList:[],
+        selectedMediaName:"Select Media",
+        selectedMediaID:"",
+        selectedMediaURL:""
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const {token} = this.context
 
         if (localStorage.getItem("token") !== null || token !== "No Token") {
             const {setUserName, setToken} = this.context;
             setUserName(localStorage.getItem("username"));
             setToken(localStorage.getItem("token"));
+
+            await axios.get('http://localhost:8080/file/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({mediaList: res.data})
+                });
         } else {
             this.props.history.push('/');
         }
@@ -30,9 +41,16 @@ class AddTableCategory extends Component {
         const {token} = this.context
         const {name, number} = this.state
 
+        const newMedia = {
+            id:this.state.selectedMediaID,
+            name:this.state.selectedMediaName,
+            fileContent:this.state.selectedMediaURL
+        }
+
         const newTableCategory = {
             name: name,
-            number: number
+            number: number,
+            media:newMedia
         }
 
         await axios.post("http://localhost:8080/table-category/add", newTableCategory,
@@ -46,9 +64,18 @@ class AddTableCategory extends Component {
         })
     }
 
+    onClickMediaItem = (e) => {
+        console.log(e)
+        this.setState({
+            selectedMediaName: e.name,
+            selectedMediaID: e.id,
+            selectedMediaURL:e.fileContent
+        })
+    }
+
     render() {
 
-        const{id,name,number} = this.state
+        const{id,name,number,mediaList,selectedMediaName} = this.state
 
         return (
             <div>
@@ -85,7 +112,30 @@ class AddTableCategory extends Component {
                                     />
                                 </div>
 
-                                <button className="btn btn-warning btn-block " type="submit">Add Table Category</button>
+                                <div className="dropdown d-inline">
+                                    <label htmlFor="price">Table Category Media : </label>
+                                    <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="true">
+                                        {selectedMediaName}
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {
+                                            mediaList.map(v => {
+                                                return (
+                                                    <div className="row col-md -12">
+                                                        <a className="dropdown-item"
+                                                           onClick={this.onClickMediaItem.bind(this, v)}>
+                                                            {v.name}
+                                                        </a>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+
+                                <button className="btn btn-warning btn-block mt-3" type="submit">Add Table Category</button>
                             </form>
                         </div>
                     </div>

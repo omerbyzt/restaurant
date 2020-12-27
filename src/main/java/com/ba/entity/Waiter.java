@@ -33,6 +33,4 @@ public class Waiter extends BaseEntity{
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "media_id")
     private Media media;
-
-//    private boolean deleted;
 }

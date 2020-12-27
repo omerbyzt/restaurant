@@ -46,8 +46,8 @@ public class CategoryControllerTest {
     @Before
     public void setUp() throws Exception {
 
-        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).imageToUrl("img").build();
-        categoryDTO = new CategoryDTOBuilder().id(2L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").imageToUrl("imgDTO").build();
+        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).build();
+        categoryDTO = new CategoryDTOBuilder().id(2L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").build();
 
         categoryList.add(category);
 

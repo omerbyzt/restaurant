@@ -20,9 +20,6 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 public class User extends BaseEntity{
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
 
     private String email;
     private String username;
@@ -30,7 +27,6 @@ public class User extends BaseEntity{
     private boolean enabled;
 
     @ManyToMany(
-//            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_ROLES",
@@ -39,5 +35,5 @@ public class User extends BaseEntity{
     )
     private List<Role> roles = new ArrayList<>();
 
-//    private boolean deleted;
+
 }

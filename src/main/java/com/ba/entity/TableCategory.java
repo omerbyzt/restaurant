@@ -4,10 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -23,4 +20,8 @@ public class TableCategory extends BaseEntity{
 
     private String name;
     private int number;
+
+    @ManyToOne
+    @JoinColumn(name = "media_id")//fetch=Eager
+    private Media media;
 }

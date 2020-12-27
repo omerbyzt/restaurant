@@ -12,7 +12,6 @@ public class CategoryBuilder extends Builder{
 
     private String name;
     private String description;
-    private String imageToUrl;
     private List<Product> products;
     private Media media;
 
@@ -31,11 +30,6 @@ public class CategoryBuilder extends Builder{
         return this;
     }
 
-    public CategoryBuilder imageToUrl(String imageToUrl){
-        this.imageToUrl = imageToUrl;
-        return this;
-    }
-
     public CategoryBuilder products(List<Product> products){
         this.products = products;
         return this;
@@ -51,7 +45,6 @@ public class CategoryBuilder extends Builder{
         Category category = new Category();
 
         category.setProducts(this.products);
-        category.setImageToUrl(this.imageToUrl);
         category.setDescription(this.description);
         category.setName(this.name);
         category.setId(this.getId());

@@ -9,7 +9,9 @@ import liquibase.pro.packaged.O;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -20,14 +22,34 @@ public class OrderService {
 
     public List<OrderDTO> listAllOrders(){
         List<Orderr> orderList = orderRepository.findAll();
-        if(orderList.isEmpty()){
-            throw new SystemException("Orders not found...!");
-        }
         return OrderMapper.INSTANCE.toDTOList(orderList);
     }
 
     public String addOrder(List<OrderDTO> orderDTO){
         orderRepository.saveAll(OrderMapper.INSTANCE.toList(orderDTO));
         return "Order Added";
+    }
+
+    public String temp(HttpServletRequest request){
+        Locale currentLocale = request.getLocale();
+
+        String countryCode = currentLocale.getCountry();
+        String countryName = currentLocale.getDisplayCountry();
+
+        String langCode = currentLocale.getLanguage();
+        String langName = currentLocale.getDisplayLanguage();
+
+        System.out.println(countryCode+ ": "+ countryName);
+        System.out.println(langCode+": "+langName);
+
+        System.out.println("================");
+        String[] languages = Locale.getISOLanguages();
+
+        for(String language : languages){
+            Locale locale = new Locale(language);
+            System.out.println(language + ": "+ locale.getDisplayLanguage());
+        }
+
+        return null;
     }
 }

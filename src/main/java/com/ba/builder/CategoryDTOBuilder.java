@@ -12,7 +12,6 @@ public class CategoryDTOBuilder extends Builder{
 
     private String name;
     private String description;
-    private String imageToUrl;
     private List<ProductDTO> products;
     private MediaDTO mediaDTO;
 
@@ -31,11 +30,6 @@ public class CategoryDTOBuilder extends Builder{
         return this;
     }
 
-    public CategoryDTOBuilder imageToUrl(String imageToUrl){
-        this.imageToUrl = imageToUrl;
-        return this;
-    }
-
     public CategoryDTOBuilder products(List<ProductDTO> products){
         this.products = products;
         return this;
@@ -51,7 +45,6 @@ public class CategoryDTOBuilder extends Builder{
         CategoryDTO categoryDTO = new CategoryDTO();
 
         categoryDTO.setProducts(this.products);
-        categoryDTO.setImageToUrl(this.imageToUrl);
         categoryDTO.setDescription(this.description);
         categoryDTO.setName(this.name);
         categoryDTO.setId(this.getId());

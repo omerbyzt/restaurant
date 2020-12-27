@@ -3,8 +3,6 @@ import Table from "react-bootstrap/Table";
 import Header from "./Header";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
 import UserContext from "../Context";
 import Loading from "./Loading";
 import {Modal} from "react-bootstrap";
@@ -17,7 +15,7 @@ class CategoryList extends Component {
         id: "",
         name: "",
         description: "",
-        imageToUrl: "",
+        // imageToUrl: "",
         selectedMediaID: "",
         selectedMediaName: "Select Media",
         selectedMediaURL: "",
@@ -96,7 +94,7 @@ class CategoryList extends Component {
             id: e.id,
             name: e.name,
             description: e.description,
-            imageToUrl: e.imageToUrl,
+            // imageToUrl: e.imageToUrl,
             products:e.products
         })
         console.log(e)
@@ -105,7 +103,7 @@ class CategoryList extends Component {
     categoryUpdate = async () => {
         this.setState({loadingIsVisible: true});
         const {token} = this.context
-        const {id, name, description, imageToUrl} = this.state;
+        const {id, name, description} = this.state;
 
         const newMedia = {
             id: this.state.selectedMediaID,
@@ -117,7 +115,7 @@ class CategoryList extends Component {
             id: id,
             name: name,
             description: description,
-            imageToUrl: imageToUrl,
+            // imageToUrl: imageToUrl,
             products: [],
             mediaDTO: newMedia
         }
@@ -149,7 +147,7 @@ class CategoryList extends Component {
     }
 
     render() {
-        const {categoryList, isUpdate, id, name, description, imageToUrl, selectedMediaName, mediaList} = this.state;
+        const {categoryList, isUpdate, id, name, description, selectedMediaName, mediaList} = this.state;
         return (
             <div>
                 <Header/>
@@ -218,17 +216,17 @@ class CategoryList extends Component {
                                                 />
                                             </div>
 
-                                            <div className="form-group">
-                                                <label htmlFor="imageToUrl">Category Image Url</label>
-                                                <input type="text"
-                                                       className="form-control"
-                                                       placeholder={imageToUrl}
-                                                       name="imageToUrl"
-                                                       id="iamgeInput"
-                                                       value={imageToUrl}
-                                                       onChange={this.changeInput}
-                                                />
-                                            </div>
+                                            {/*<div className="form-group">*/}
+                                            {/*    <label htmlFor="imageToUrl">Category Image Url</label>*/}
+                                            {/*    <input type="text"*/}
+                                            {/*           className="form-control"*/}
+                                            {/*           placeholder={imageToUrl}*/}
+                                            {/*           name="imageToUrl"*/}
+                                            {/*           id="iamgeInput"*/}
+                                            {/*           value={imageToUrl}*/}
+                                            {/*           onChange={this.changeInput}*/}
+                                            {/*    />*/}
+                                            {/*</div>*/}
 
 
                                             <div className="dropdown d-inline">
@@ -276,8 +274,8 @@ class CategoryList extends Component {
                         <th>Category ID</th>
                         <th>Category Name</th>
                         <th>Category Description</th>
-                        <th>Category ImageUrl</th>
-                        <td>Category Image</td>
+                        {/*<th>Category ImageUrl</th>*/}
+                        <th>Category Image</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -289,7 +287,7 @@ class CategoryList extends Component {
                                     <td>{v.id}</td>
                                     <td>{v.name}</td>
                                     <td>{v.description}</td>
-                                    <td>{v.imageToUrl}</td>
+                                    {/*<td>{v.imageToUrl}</td>*/}
                                     <td>
                                         <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
                                              style={{margin: 10}}/>

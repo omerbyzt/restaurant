@@ -11,18 +11,21 @@
             <column name="id" valueNumeric="1"/>
             <column name="name" value="Salon"/>
             <column name="number" valueNumeric="5"/>
+            <column name="media_id" value="17"/>
         </insert>
 
         <insert tableName="table_category">
             <column name="id" valueNumeric="2"/>
             <column name="name" value="Balkon"/>
             <column name="number" valueNumeric="15"/>
+            <column name="media_id" value="19"/>
         </insert>
 
         <insert tableName="table_category">
             <column name="id" valueNumeric="3"/>
             <column name="name" value="Bahçe"/>
             <column name="number" valueNumeric="8"/>
+            <column name="media_id" value="18"/>
         </insert>
 
     </changeSet>

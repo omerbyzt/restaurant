@@ -11,7 +11,7 @@ class AddCategory extends Component {
     state = {
         name: "",
         description: "",
-        imageToUrl: "",
+        // imageToUrl: "",
         mediaList: [],
         selectedMediaName: "Chose Media",
         selectedMediaUrl: "",
@@ -58,7 +58,7 @@ class AddCategory extends Component {
 
     addCategory = async () => {
         const {token} = this.context
-        const {name, description, imageToUrl, selectedMediaID} = this.state;
+        const {name, description,  selectedMediaID} = this.state;
 
         const newMedia = {
             id: selectedMediaID
@@ -67,7 +67,7 @@ class AddCategory extends Component {
         const newCategory = {
             name: name,
             description: description,
-            imageToUrl: imageToUrl,
+            // imageToUrl: imageToUrl,
             products: [],
             mediaDTO: newMedia
         }
@@ -101,7 +101,7 @@ class AddCategory extends Component {
     }
 
     render() {
-        const {name, description, imageToUrl, mediaList, selectedMediaName} = this.state;
+        const {name, description, mediaList, selectedMediaName} = this.state;
         return (
             <div>
                 <Header/>
@@ -150,17 +150,17 @@ class AddCategory extends Component {
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="imageToUrl">Category Image Url</label>
-                                    <input type="text"
-                                           className="form-control"
-                                           placeholder="Enter Image Url"
-                                           name="imageToUrl"
-                                           id="descInput"
-                                           value={imageToUrl}
-                                           onChange={this.changeInput}
-                                    />
-                                </div>
+                                {/*<div className="form-group">*/}
+                                {/*    <label htmlFor="imageToUrl">Category Image Url</label>*/}
+                                {/*    <input type="text"*/}
+                                {/*           className="form-control"*/}
+                                {/*           placeholder="Enter Image Url"*/}
+                                {/*           name="imageToUrl"*/}
+                                {/*           id="descInput"*/}
+                                {/*           value={imageToUrl}*/}
+                                {/*           onChange={this.changeInput}*/}
+                                {/*    />*/}
+                                {/*</div>*/}
 
                                 <div className="dropdown d-inline">
                                     <label htmlFor="price">Product Category : </label>

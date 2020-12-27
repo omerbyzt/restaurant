@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -30,5 +31,10 @@ public class OrderController {
         }
         orderService.addOrder(orderDTO);
         return "Order Added";
+    }
+
+    @GetMapping("/")
+    public String temp(HttpServletRequest request){
+        return orderService.temp(request);
     }
 }

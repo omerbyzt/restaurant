@@ -12,36 +12,5 @@ public class TableCategoryDTO {
     private String name;
     private int number;
     private boolean deleted;
-
-//    public long getId() {
-//        return id;
-//    }
-//
-//    public void setId(long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public int getNumber() {
-//        return number;
-//    }
-//
-//    public void setNumber(int number) {
-//        this.number = number;
-//    }
-//
-//    public boolean isDeleted() {
-//        return deleted;
-//    }
-//
-//    public void setDeleted(boolean deleted) {
-//        this.deleted = deleted;
-//    }
+    private MediaDTO media;
 }

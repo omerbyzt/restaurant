@@ -39,10 +39,7 @@ public class ProductControllerTest {
     @Before
     public void setUp() throws Exception {
 
-        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").imageToUrl("denemeImg").build();
-
-//        product = new ProductBuilder().category(category).productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
-//        productDTO = new ProductDTOBuilder().category(category).productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();
+        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").build();
 
         product = new ProductBuilder().productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).build();
         productDTO = new ProductDTOBuilder().productName("mercimekDTO").productDesc("mercimek çorbasıDTO").productCategory("çorbaDTO").productPrice(15D).productID(1L).build();

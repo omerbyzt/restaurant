@@ -14,7 +14,11 @@ class TableCategoryList extends Component {
         id: "",
         name: "",
         number: "",
-        loadingIsVisible: false
+        loadingIsVisible: false,
+        mediaList:"",
+        selectedMediaId:"",
+        selectedMediaName:"Select Media",
+        selectedMediaURL:""
     }
 
     async componentDidMount() {
@@ -40,6 +44,13 @@ class TableCategoryList extends Component {
                         tableCategoryList: data
                     })
                 })
+
+            await axios.get('http://localhost:8080/file/list',
+                // {headers: {Authorization: sessionStorage.getItem('token')}})
+                {headers: {Authorization: token}})
+                .then(res => {
+                    this.setState({mediaList: res.data})
+                });
         } else {
             this.props.history.push('/');
         }
@@ -73,10 +84,17 @@ class TableCategoryList extends Component {
         const {token} = this.context
         const {id, name, tableCategoryList, number} = this.state
 
+        const putMedia = {
+            id:this.state.selectedMediaID,
+            name:this.state.selectedMediaName,
+            fileContent:this.state.selectedMediaURL
+        }
+
         const putTableCategory = {
             id: id,
             name: name,
-            number: number
+            number: number,
+            media:putMedia
         }
 
         await axios.put('http://localhost:8080/table-category/update/', putTableCategory,
@@ -105,8 +123,17 @@ class TableCategoryList extends Component {
         this.setState({loadingIsVisible: false});
     }
 
+    onClickMediaItem = (e) => {
+        console.log(e)
+        this.setState({
+            selectedMediaName: e.name,
+            selectedMediaID: e.id,
+            selectedMediaURL:e.fileContent
+        })
+    }
+
     render() {
-        const {tableCategoryList, isUpdate, id, name, number} = this.state
+        const {tableCategoryList, isUpdate, id, name, number,selectedMediaName,mediaList} = this.state
         return (
             <div>
                 <Header/>
@@ -160,7 +187,30 @@ class TableCategoryList extends Component {
                                             />
                                         </div>
 
-                                        <button className="btn btn-warning btn-block"
+                                        <div className="dropdown d-inline">
+                                            <label htmlFor="price">Table Category Media : </label>
+                                            <button className="btn btn-info dropdown-toggle dropdownCss" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="true">
+                                                {selectedMediaName}
+                                            </button>
+                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                {
+                                                    mediaList.map(v => {
+                                                        return (
+                                                            <div className="row col-md -12">
+                                                                <a className="dropdown-item"
+                                                                   onClick={this.onClickMediaItem.bind(this, v)}>
+                                                                    {v.name}
+                                                                </a>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <button className="btn btn-warning btn-block mt-3"
                                                 onClick={this.updateTableCategory}>Update
                                         </button>
                                     </form>
@@ -174,6 +224,7 @@ class TableCategoryList extends Component {
                         <th>Table Category ID</th>
                         <th>Table Category Name</th>
                         <th>Table Number</th>
+                        <th>Table Media</th>
                         <th>Buttons</th>
                     </tr>
                     </thead>
@@ -189,6 +240,10 @@ class TableCategoryList extends Component {
                                     </td>
                                     <td>
                                         {v.number}
+                                    </td>
+                                    <td align="center">
+                                        <img src={'data:image/png;base64,' + v.media.fileContent} width="100"
+                                             style={{margin: 10}}/>
                                     </td>
                                     <td>
                                         <button className="btn btn-warning mr-2"

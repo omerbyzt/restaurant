@@ -13,7 +13,7 @@ public class CategoryDTO {
     private Long id;
     private String name;
     private String description;
-    private String imageToUrl;
+//    private String imageToUrl;
     private List<ProductDTO> products;
     private MediaDTO mediaDTO;
     private boolean deleted;

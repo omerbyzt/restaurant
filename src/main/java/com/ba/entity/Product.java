@@ -22,9 +22,6 @@ import java.util.List;
 @Entity
 public class Product extends BaseEntity{
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long productID;
     private String productName;
     private String productDesc;
     private String productCategory;
@@ -41,7 +38,4 @@ public class Product extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "media_id")//fetch=Eager
     private Media media;
-
-    private boolean deleted;
-
 }

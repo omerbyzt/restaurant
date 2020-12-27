@@ -18,13 +18,9 @@ import javax.persistence.*;
 @Entity
 public class Media extends BaseEntity{
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     private String name;
 
     @Column(length = 1000000)
     private byte[] fileContent;
 
-//    private boolean deleted;
 }

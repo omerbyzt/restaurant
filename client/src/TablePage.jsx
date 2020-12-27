@@ -315,8 +315,11 @@ class TablePage extends Component {
                                     {
                                         tableCategoryList.map(v => {
                                             return (
-                                                <button className="btn btn-info btn-block mb-1"
+                                                <button className="btn btn-info btn-block mb-1 categoryButtonCss"
                                                         onClick={() => this.onClickTableCategoryName(v)}>{v.name}
+                                                        <br/>
+                                                    <img src={'data:image/png;base64,' + v.media.fileContent}
+                                                         width="87" style={{margin: 10}}/>
                                                 </button>
                                             )
                                         })

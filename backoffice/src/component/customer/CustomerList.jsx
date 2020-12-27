@@ -20,7 +20,7 @@ class CustomerList extends Component {
     async componentDidMount() {
         this.setState({loadingIsVisible: true});
         const token = "Basic YWRtaW46MTIz";
-        await CustomerService.getPageCustomer(token, this.state.selectedPage).then((res) => {
+        await CustomerService.getPageCustomer(token, this.state.selectedPage-1).then((res) => {
             this.setState({
                 totalPage: res.data.totalPages,
                 customerList: res.data.content

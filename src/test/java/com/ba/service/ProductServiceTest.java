@@ -51,7 +51,7 @@ public class ProductServiceTest {
         media = new MediaBuilder().id(id).build();
         mediaDTO = new MediaDTOBuilder().id(id).build();
 
-        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").imageToUrl("denemeImg").media(media).build();
+        category = new CategoryBuilder().id(1L).description("denemeDesc").name("denemeName").media(media).build();
         categories.add(category);
 
         product = new ProductBuilder().productName("mercimek").productDesc("mercimek çorbası").productCategory("çorba").productPrice(15D).productID(1L).media(media).categories(categories).build();

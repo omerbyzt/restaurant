@@ -33,30 +33,34 @@ public class ProductService {
     @Autowired
     private ProductMapper productMapper;
 
-    public Page<ProductDTO> listProductPage(Pageable pageable){
-        Page<ProductDTO> productDTOPage = productRepository.findAll(pageable).map(productMapper::toDTO);
-        if(productDTOPage.isEmpty()){
+    public Page<ProductDTO> listProductPage(Pageable pageable) {
+        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<ProductDTO> productDTOPage = productPage.map(productMapper::toDTO);
+        if (productDTOPage.isEmpty()) {
             throw new SystemException("Products not found...!");
+        }
+        for (int i = 0; i < productDTOPage.getContent().size(); i++) {
+            productDTOPage.getContent().get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productPage.getContent().get(i).getCategories()));
         }
         return productDTOPage;
     }
 
-    public Slice<ProductDTO> listProductsByCategoryID(Pageable pageable, int id){
+    public Slice<ProductDTO> listProductsByCategoryID(Pageable pageable, int id) {
         Slice<ProductDTO> productDTOSlice = productRepository.findProductByCategoriesId(pageable, (long) id).map(productMapper::toDTO);
-        if(productDTOSlice.isEmpty()){
+        if (productDTOSlice.isEmpty()) {
             throw new SystemException("Products not found...!");
         }
         return productDTOSlice;
     }
 
-    public String deleteProduct(Long id){
+    public String deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if(product.isEmpty()){
+        if (product.isEmpty()) {
             throw new SystemException("An error occured...!");
         }
 
         product.get().getCategories().forEach(category -> {
-           category.getProducts().remove(product.get());
+            category.getProducts().remove(product.get());
         });
 
         productRepository.delete(product.get());
@@ -64,11 +68,11 @@ public class ProductService {
         return "Product Deleted";
     }
 
-    public ProductDTO updateProduct(ProductDTO productDTO){
+    public ProductDTO updateProduct(ProductDTO productDTO) {
         Product product = productRepository.findById(productDTO.getId()).get();
         List<Category> categoryList = product.getCategories();
 
-        for (int i = 0 ;i<categoryList.size();i++){
+        for (int i = 0; i < categoryList.size(); i++) {
             categoryList.get(i).getProducts().remove(product);
             categoryRepository.save(categoryList.get(i));
         }
@@ -80,7 +84,7 @@ public class ProductService {
         List<CategoryDTO> tempCategoryDTOList = productDTO.getCategories();
         product2.setCategories(CategoryMapper.INSTANCE.toList(tempCategoryDTOList));
 
-        for(int i = 0 ; i<categoriesIdsList.size() ; i++){
+        for (int i = 0; i < categoriesIdsList.size(); i++) {
             Category category = categoryRepository.findById(categoriesIdsList.get(i)).get();
             category.getProducts().add(product2);
             categoryList2.add(category);
@@ -93,7 +97,7 @@ public class ProductService {
     }
 
     public String addProduct(ProductDTO productDTO) {
-        if(productDTO.getCategoriesIds().isEmpty()){
+        if (productDTO.getCategoriesIds().isEmpty()) {
             throw new SystemException("An error occured...!");
         }
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
@@ -102,7 +106,7 @@ public class ProductService {
 
         categoriesIdsList.forEach(categoryId -> {
             Optional<Category> category = categoryRepository.findById(categoryId);
-            if(category.isEmpty()){
+            if (category.isEmpty()) {
                 throw new SystemException("An error occured...!");
             }
             category.get().getProducts().add(product);

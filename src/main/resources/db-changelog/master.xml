@@ -23,7 +23,7 @@
     <include file="/db-changelog/changes/create-category-product-table.xml"/>
     <include file="/db-changelog/changes/insert-category-product-table.xml"/>
     <include file="/db-changelog/changes/create-customer-table.xml"/>
-    <include file="/db-changelog/changes/table-category.sql"/>
+<!--    <include file="/db-changelog/changes/table-category.sql"/>-->
     <include file="/db-changelog/changes/products.sql"/>
     <include file="/db-changelog/changes/product-category.sql"/>
 </databaseChangeLog>

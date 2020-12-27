@@ -19,10 +19,5 @@ import javax.persistence.*;
 @Table(name = "ROLES")
 public class Role extends BaseEntity{
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     private String name;
-
-//    private boolean deleted;
 }

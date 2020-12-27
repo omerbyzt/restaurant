@@ -20,12 +20,9 @@ import java.util.List;
 @Where(clause = "deleted = false")
 @Entity
 public class Category extends BaseEntity{
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+
     private String name;
     private String description;
-    private String imageToUrl;
 
     @JsonManagedReference
     @ManyToMany
@@ -39,5 +36,4 @@ public class Category extends BaseEntity{
     )
     private Media media;
 
-//    private boolean deleted;
 }

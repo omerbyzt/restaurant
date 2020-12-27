@@ -50,8 +50,8 @@ public class CategoryServiceTest {
         media = new MediaBuilder().id(1L).build();
         mediaDTO = new MediaDTOBuilder().id(1L).build();
 
-        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).imageToUrl("img").media(media).build();
-        categoryDTO = new CategoryDTOBuilder().id(1L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").imageToUrl("imgDTO").media(mediaDTO).build();
+        category = new CategoryBuilder().name("Çorba").description("Sıcak Çorba").id(1L).media(media).build();
+        categoryDTO = new CategoryDTOBuilder().id(1L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").media(mediaDTO).build();
 
         categoryList.add(category);
 

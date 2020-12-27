@@ -1,14 +1,17 @@
 package com.ba.mapper;
 
+import com.ba.dto.MediaDTO;
 import com.ba.dto.TableCategoryDTO;
+import com.ba.entity.Media;
 import com.ba.entity.TableCategory;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-26T16:09:07+0300",
+    date = "2020-12-27T02:34:30+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class TableCategoryMapperImpl implements TableCategoryMapper {
@@ -25,6 +28,7 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
         tableCategory.setDeleted( tableCategoryDTO.isDeleted() );
         tableCategory.setName( tableCategoryDTO.getName() );
         tableCategory.setNumber( tableCategoryDTO.getNumber() );
+        tableCategory.setMedia( mediaDTOToMedia( tableCategoryDTO.getMedia() ) );
 
         return tableCategory;
     }
@@ -43,6 +47,7 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
         tableCategoryDTO.setName( tableCategory.getName() );
         tableCategoryDTO.setNumber( tableCategory.getNumber() );
         tableCategoryDTO.setDeleted( tableCategory.isDeleted() );
+        tableCategoryDTO.setMedia( mediaToMediaDTO( tableCategory.getMedia() ) );
 
         return tableCategoryDTO;
     }
@@ -73,5 +78,41 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
         }
 
         return list;
+    }
+
+    protected Media mediaDTOToMedia(MediaDTO mediaDTO) {
+        if ( mediaDTO == null ) {
+            return null;
+        }
+
+        Media media = new Media();
+
+        media.setId( mediaDTO.getId() );
+        media.setDeleted( mediaDTO.isDeleted() );
+        media.setName( mediaDTO.getName() );
+        byte[] fileContent = mediaDTO.getFileContent();
+        if ( fileContent != null ) {
+            media.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
+        }
+
+        return media;
+    }
+
+    protected MediaDTO mediaToMediaDTO(Media media) {
+        if ( media == null ) {
+            return null;
+        }
+
+        MediaDTO mediaDTO = new MediaDTO();
+
+        mediaDTO.setId( media.getId() );
+        mediaDTO.setName( media.getName() );
+        byte[] fileContent = media.getFileContent();
+        if ( fileContent != null ) {
+            mediaDTO.setFileContent( Arrays.copyOf( fileContent, fileContent.length ) );
+        }
+        mediaDTO.setDeleted( media.isDeleted() );
+
+        return mediaDTO;
     }
 }

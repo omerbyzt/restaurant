@@ -103,5 +103,23 @@
             <column name ="file_Content" valueBlobFile="./food.png"/>
         </insert>
 
+        <insert tableName="media">
+            <column name="id" valueNumeric="17"/>
+            <column name="name" value="salon"/>
+            <column name ="file_Content" valueBlobFile="./salon.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="18"/>
+            <column name="name" value="bahce"/>
+            <column name ="file_Content" valueBlobFile="./bahce.png"/>
+        </insert>
+
+        <insert tableName="media">
+            <column name="id" valueNumeric="19"/>
+            <column name="name" value="balkon"/>
+            <column name ="file_Content" valueBlobFile="./balkon.png"/>
+        </insert>
+
     </changeSet>
 </databaseChangeLog>

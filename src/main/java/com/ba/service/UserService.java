@@ -1,5 +1,6 @@
 package com.ba.service;
 
+import com.ba.dto.RoleDTO;
 import com.ba.dto.UserDTO;
 import com.ba.entity.Role;
 import com.ba.entity.User;
@@ -12,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -39,7 +37,7 @@ public class UserService {
     public String addUser(UserDTO userDTO) {
 
         User user = UserMapper.INSTANCE.toEntity(userDTO);
-
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
 
         return "User Added";
@@ -50,9 +48,47 @@ public class UserService {
         if (user.isEmpty()) {
             throw new SystemException("User not found...!");
         }
+
+        if(!user.get().getUsername().equals(userDTO.getUsername())){
+            user.get().setUsername(userDTO.getUsername());
+        }
+        if(!user.get().getEmail().equals(userDTO.getEmail())){
+            user.get().setEmail(userDTO.getEmail());
+        }
+        if(!user.get().getPassword().equals(userDTO.getPassword())){
+            user.get().setPassword(userDTO.getPassword());
+        }
         if (user.get().getRoles().isEmpty() && !userDTO.getRoles().isEmpty()) {
             user.get().setRoles(RoleMapper.INSTANCE.toList(userDTO.getRoles()));
         }
+
+
+//        List<Role> tempRoleList = user.get().getRoles();
+//        List<Long> dbRoleIdList = new ArrayList<>();
+//        tempRoleList.forEach(role->{dbRoleIdList.add(role.getId());});
+//
+//        List<RoleDTO> tempDTORoleList = userDTO.getRoles();
+//        List<Long> inputRoleIdList = new ArrayList<>();
+//        tempDTORoleList.forEach(role->{inputRoleIdList.add(role.getId());});
+//
+//        List<Long> newRoleList = new ArrayList<>();
+//        if(!inputRoleIdList.equals(dbRoleIdList)){
+//            if(inputRoleIdList.size()>dbRoleIdList.size()){
+//                inputRoleIdList.removeAll(dbRoleIdList);
+//                inputRoleIdList.forEach(inputRoleId->{
+////                    user.get().getRoles().add(roleRepository.findById(inputRoleId).get());//
+//                    userDTO.getRoles().forEach(role->{
+//                        if(role.getId().equals(inputRoleId)){
+//                            user.get().getRoles().add(RoleMapper.INSTANCE.toEntity(userDTO.getRoles().get(Math.toIntExact(inputRoleId))));
+//                        }
+//                    });
+//                });
+//            }else{
+//                dbRoleIdList.removeAll(inputRoleIdList);
+//                newRoleList = dbRoleIdList;
+//            }
+//        }
+
 
 //        User user2 = UserMapper.INSTANCE.toEntity(userDTO);
 //        user2.setRoles(roleList);

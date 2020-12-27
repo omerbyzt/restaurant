@@ -43,6 +43,10 @@ public class UpdateHelper {
         if(tableCategory.get().getNumber() != (tableCategoryDTO.getNumber())){
             tableCategory.get().setNumber(tableCategoryDTO.getNumber());
         }
+        Media tempMedia= MediaMapper.INSTANCE.toEntity(tableCategoryDTO.getMedia());
+        if(!tableCategory.get().getMedia().equals(tempMedia) ){
+            tableCategory.get().setMedia(tempMedia);
+        }
     }
     public static void roleSetCheck(RoleDTO roleDTO, Optional<Role> role) {
         if(role.get().getName().equals(roleDTO.getName())){
