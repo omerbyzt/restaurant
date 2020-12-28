@@ -17,19 +17,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
@@ -70,6 +67,7 @@ public class CustomerServiceTest {
     public void shouldAddCustomer() {
         when(customerRepository.save(customerMapper.toEntity(customerDTO))).thenReturn(customer);
         String res = customerService.addCustomer(customerDTO);
+        verify(customerRepository).save(customer);
         assertEquals(res,"Customer Added");
     }
 
@@ -87,6 +85,7 @@ public class CustomerServiceTest {
         when(customerMapper.toDTO(customer)).thenReturn(customerDTO);
 
         CustomerDTO tempCustomerDTO = customerService.updateCustomer(customerDTO);
+        verify(customerRepository).saveAndFlush(customer);
         assertNotNull(tempCustomerDTO);
         assertEquals(tempCustomerDTO,customerDTO);
     }

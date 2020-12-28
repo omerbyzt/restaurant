@@ -1,15 +1,11 @@
 package com.ba.service;
 
-import com.ba.dto.CategoryDTO;
 import com.ba.dto.ProductDTO;
-import com.ba.dto.ProductWrapperList;
-import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.entity.Category;
 import com.ba.entity.Product;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CategoryMapper;
-import com.ba.mapper.MediaMapper;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;

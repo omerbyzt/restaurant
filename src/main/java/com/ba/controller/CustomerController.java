@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
+//customers
 @CrossOrigin(origins = "*")
 public class CustomerController {
 

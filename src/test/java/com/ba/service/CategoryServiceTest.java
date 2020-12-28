@@ -2,12 +2,15 @@ package com.ba.service;
 
 import com.ba.builder.*;
 import com.ba.dto.CategoryDTO;
+import com.ba.dto.CustomerDTO;
 import com.ba.dto.MediaDTO;
 import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Media;
 import com.ba.entity.Product;
+import com.ba.exception.SystemException;
 import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.junit.Before;
@@ -27,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryServiceTest {
+
     @InjectMocks
     private CategoryService service;
 
@@ -36,17 +40,18 @@ public class CategoryServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    private Category category = new Category();
-    private CategoryDTO categoryDTO = new CategoryDTO();
+    private Category category;
+    private CategoryDTO categoryDTO;
     private List<Category> categoryList = new ArrayList<>();
     private List<Product> productSet = new ArrayList<>();
-    private Product product = new Product();
-    private ProductDTO productDTO = new ProductDTO();
+    private Product product;
+    private ProductDTO productDTO;
     private Long id = 1L;
-    private Media media = new Media();
-    private MediaDTO mediaDTO = new MediaDTO();
+    private Media media;
+    private MediaDTO mediaDTO;
     @Before
     public void setUp() throws Exception {
+
         media = new MediaBuilder().id(1L).build();
         mediaDTO = new MediaDTOBuilder().id(1L).build();
 
@@ -87,14 +92,14 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldUpdateCategory() {
-
+        when(repository.findById(id)).thenReturn(Optional.of(category));
         when(repository.saveAndFlush(category)).thenReturn(category);
 
-        //categoryRepository.findBy null geliyor
-//        CategoryDTO categoryDTO2 = service.updateCategory(categoryDTO);
-//
-//        assertNotNull(categoryDTO2);
-//        assertEquals(categoryDTO2, categoryDTO);
+        CategoryDTO result = service.updateCategory(categoryDTO);
+        verify(repository).saveAndFlush(category);
+
+        assertNotNull(result);
+        assertEquals(result.getId(), categoryDTO.getId());
     }
 
     @Test
@@ -102,44 +107,13 @@ public class CategoryServiceTest {
         when(repository.findAll()).thenReturn(categoryList);
 
         List<CategoryDTO> tempDTOList = CategoryMapper.INSTANCE.toDTOList(categoryList);
-//        List<CategoryDTO> tempDTOList = CategoryConvertor.convertListToCategoryListDTO(categoryList);
         List<CategoryDTO> tempDTOList2 = service.listCategory();
 
         assertEquals(tempDTOList.get(0).getId(), tempDTOList2.get(0).getId());
     }
 
-    @Test
-    public void shouldAddProductIntoCategory() {
-
-        //productSet.add(product);
-
-//        category.setProducts(productSet);
-//        Optional<Category> optionalCategoryList = Optional.of(category);
-//
-//        when(repository.findById(id)).thenReturn(optionalCategoryList);
-//        when(service.addProduct(productDTO,id)).thenReturn("Product Added");
-//        String res = service.addProduct(productDTO, id);
-//        assertNotNull(res);
-//        assertEquals(res, "Product Added");
-    }
-
-    @Test
-    public void shouldListProductsByCategoryId() {
-
-//        //productSet.add(product);
-//        category.setProducts(productSet);
-//        Optional<Category> optionalCategoryList = Optional.of(category);
-//        Category tempCategory = optionalCategoryList.get();
-//
-//        when(repository.findById(id)).thenReturn(optionalCategoryList);
-//
-//        List<ProductDTO> tempDTOList = CategoryMapper.INSTANCE.toEntity(tempCategory);
-//        List<ProductDTO> tempDTOList = CategoryConvertor.convertOptionalCategoryToSetDTO(optionalCategoryList);
-//        List<ProductDTO> tempDTOList2 = service.listProductsById(id);
-//
-//        assertNotNull(tempDTOList);
-//        assertNotNull(tempDTOList2);
-        //eşitlik kontrolü
-//        assertEquals(tempDTOList.get(0).getProductID(), tempDTOList2.get(0).getProductID());
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionListCategory() {
+        service.listCategory();
     }
 }

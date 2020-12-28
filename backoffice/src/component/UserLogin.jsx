@@ -50,8 +50,6 @@ class LoginPage extends Component {
                 setToken('Basic ' + btoa(this.state.username + ":" + this.state.password));
                 setUserName(this.state.username);
 
-
-
                 sessionStorage.setItem("token", 'Basic ' + btoa(this.state.username + ":" + this.state.password));
                 sessionStorage.setItem("username", this.state.username);
                 this.props.history.push('/home');

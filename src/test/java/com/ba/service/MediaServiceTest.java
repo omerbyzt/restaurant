@@ -41,7 +41,7 @@ public class MediaServiceTest {
             0x20, (byte)0xea, 0x3a, 0x69, 0x10, (byte)0xa2, (byte)0xd8, 0x08, 0x00, 0x2b,
             0x30, 0x30, (byte)0x9d };
 
-    byte[] json = "{\"name\":\"yeeeah\"}".getBytes(StandardCharsets.UTF_8);
+    byte[] json = "{\"name\":\"test\"}".getBytes(StandardCharsets.UTF_8);
     MockMultipartFile file = new MockMultipartFile("json", "json", "application/json", json);
 
     @Before

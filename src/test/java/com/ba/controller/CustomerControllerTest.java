@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,22 +38,15 @@ public class CustomerControllerTest {
     private CustomerService customerService;
 
     @Mock
-    private CustomerRepository customerRepository;
-
-    @Mock
     private CustomerMapper customerMapper;
 
-    @Mock
-    private BusinessRuleException businessRuleException;
-
-    private Customer customer = new Customer();
-    private CustomerDTO customerDTO = new CustomerDTO();
-    private CustomerDTO customerDTOWOId = new CustomerDTO();
+    private Customer customer;
+    private CustomerDTO customerDTO;
     private List<Customer> customerList = new ArrayList<>();
     private List<CustomerDTO> customerDTOList = new ArrayList<>();
     
-    private Media media = new Media();
-    private MediaDTO mediaDTO = new MediaDTO();
+    private Media media;
+    private MediaDTO mediaDTO;
 
     private Long id = 1L;
 
@@ -83,19 +77,21 @@ public class CustomerControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotAddCustomer() {
-        String res = customerController.addCustomer(null);
+        //exprected message
+        customerController.addCustomer(null);
     }
 
     @Test
     public void shouldDeleteCustomer() {
         when(customerService.deleteCustomer(id)).thenReturn("Customer Deleted");
         String res = customerController.deleteCustomer(id);
+        verify(customerService).deleteCustomer(id);
         assertEquals(res,"Customer Deleted");
     }
 
     @Test(expected = BusinessRuleException.class)
-    public void shouldNotDeleteCustomer() {
-        String res = customerController.deleteCustomer(null);
+    public void shouldNotDeleteCustomerWhenIdNull() {
+        customerController.deleteCustomer(null);
     }
 
     @Test
@@ -107,7 +103,7 @@ public class CustomerControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotUpdateCustomer() {
-        CustomerDTO tempCustomerDTO = customerController.updateCustomer(null);
+        customerController.updateCustomer(null);
     }
 
     @Test
@@ -119,26 +115,26 @@ public class CustomerControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotGetCustomerById() {
-        CustomerDTO tempCustomerDTO = customerController.getCustomerById(null);
+        customerController.getCustomerById(null);
     }
 
     @Test
     public void shouldGetCustomersBySlice() {
         Slice<CustomerDTO> customerDTOSlice = new SliceImpl<CustomerDTO>(dtoList);
-        when(customerController.getCustomersBySlice(0,10)).thenReturn(customerDTOSlice);
-        Slice<CustomerDTO> tempCustomerDTOSlice = customerService.getCustomersBySlice(pageable);
+        when(customerService.getCustomersBySlice(pageable)).thenReturn(customerDTOSlice);
+        Slice<CustomerDTO> result = customerController.getCustomersBySlice(0,10);
 
-        assertNotNull(tempCustomerDTOSlice);
-        assertEquals(tempCustomerDTOSlice,customerDTOSlice);
+        assertNotNull(result);
+        assertEquals(result,customerDTOSlice);
     }
 
     @Test
     public void shouldGetCustomersByPage() {
         Page<CustomerDTO> customerDTOPage = new PageImpl<CustomerDTO>(dtoList);
-        when(customerController.getCustomersByPage(0,10)).thenReturn(customerDTOPage);
-        Page<CustomerDTO> tempCustomerDTOPage = customerService.getCustomersByPage(pageable);
+        when(customerService.getCustomersByPage(pageable)).thenReturn(customerDTOPage);
+        Page<CustomerDTO> result = customerController.getCustomersByPage(0,10);
 
-        assertNotNull(tempCustomerDTOPage);
-        assertEquals(tempCustomerDTOPage,customerDTOPage);
+        assertNotNull(result);
+        assertEquals(result,customerDTOPage);
     }
 }

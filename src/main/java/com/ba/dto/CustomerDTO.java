@@ -10,11 +10,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerDTO {
+    //basedto
     private long id;
     private String name;
     private String surname;
     private String phoneNumber;
     private String address;
-    private boolean deleted;
     private MediaDTO media;
 }

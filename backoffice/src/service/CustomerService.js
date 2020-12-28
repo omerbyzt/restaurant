@@ -5,6 +5,8 @@ const Customer_Api_Page_URL = "http://localhost:8080/customer/page?page=";
 const Customer_Api_Slice_URL = "http://localhost:8080/customer/slice";
 
 class CustomerService {
+    static token = "Basic YWRtaW46MTIz";//context veya localden alınacak
+
     getCustomer(token) {
         return axios.get(Customer_Api_Base_URL, {
             headers: {

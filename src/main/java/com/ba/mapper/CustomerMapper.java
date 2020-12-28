@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
-//    CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
     Customer toEntity(CustomerDTO customerDTO);
     CustomerDTO toDTO(Customer customer);
