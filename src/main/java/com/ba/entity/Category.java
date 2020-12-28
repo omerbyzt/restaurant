@@ -14,11 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE CATEGORY " +
+        "UPDATE Category " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "Category")
 public class Category extends BaseEntity{
 
     private String name;

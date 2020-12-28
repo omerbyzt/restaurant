@@ -5,6 +5,7 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 import UserContext from "../Context";
 import Loading from "./Loading";
+import ReactToExcel from 'react-html-table-to-excel';
 
 class TableCategoryList extends Component {
     static contextType = UserContext;
@@ -218,7 +219,7 @@ class TableCategoryList extends Component {
                             </div>
                         </div> : null
                 }
-                <Table striped bordered hover className="usersTable">
+                <Table striped bordered hover className="usersTable" id="table-catogory-to-xls">
                     <thead>
                     <tr>
                         <th>Table Category ID</th>
@@ -259,6 +260,13 @@ class TableCategoryList extends Component {
                     }
                     </tbody>
                 </Table>
+                <ReactToExcel
+                    className="btn btn-success"
+                    table="table-catogory-to-xls"
+                    filename="tableCategoryExcelFile"
+                    sheet="sheet 1"
+                    buttonText="Export"
+                />
                 {
                     this.state.loadingIsVisible ?
                         <Loading/> : null

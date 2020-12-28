@@ -31,6 +31,9 @@ public class RoleServiceTest {
     @Mock
     private RoleRepository repository;
 
+    @Mock
+    private RoleMapper roleMapper;
+
     private Role role = new Role();
     private RoleDTO roleDTO = new RoleDTO();
     private List<Role> roleList = new ArrayList<>();
@@ -49,7 +52,7 @@ public class RoleServiceTest {
     public void shouldVerifyListRoles() {
         when(repository.findAll()).thenReturn(roleList);
 
-        List<RoleDTO> tempDTOList = RoleMapper.INSTANCE.toDTOList(roleList);
+        List<RoleDTO> tempDTOList = roleMapper.toDTOList(roleList);
 //        List<RoleDTO> tempDTOList = RoleConverter.convertListToDTOList(roleList);
         List<RoleDTO> tempDTOList2 = service.listRoles();
 

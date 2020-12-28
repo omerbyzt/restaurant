@@ -7,16 +7,16 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet author="omer" id="1">
 
-        <createTable tableName="category_product">
+        <createTable tableName="CATEGORY_PRODUCT">
             <column name="category_id" type="int(10)">
-                <constraints nullable="false" foreignKeyName="category_id_fk" references="category(id)" primaryKey="true"></constraints>
+                <constraints nullable="false" foreignKeyName="category_id_fk" references="Category(id)" primaryKey="true"></constraints>
             </column>
             <column name="product_id" type="int(10)">
-                <constraints nullable="false" foreignKeyName="product_id_fk" references="product(id)" primaryKey="true"></constraints>
+                <constraints nullable="false" foreignKeyName="product_id_fk" references="Product(id)" primaryKey="true"></constraints>
             </column>
         </createTable>
 
-        <addColumn tableName="category_product">
+        <addColumn tableName="CATEGORY_PRODUCT">
             <column name="deleted" type="boolean" defaultValue="false"></column>
         </addColumn>
 

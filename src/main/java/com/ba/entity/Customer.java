@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Getter
@@ -18,10 +19,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE CUSTOMER " +
+        "UPDATE Customer " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
+@Table(name = "Customer")
 public class Customer extends BaseEntity implements Serializable{
 
     private String name;

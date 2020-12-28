@@ -7,9 +7,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TableCategoryMapper {
-    TableCategoryMapper INSTANCE = Mappers.getMapper(TableCategoryMapper.class);
+//    TableCategoryMapper INSTANCE = Mappers.getMapper(TableCategoryMapper.class);
 
     TableCategory toEntity(TableCategoryDTO tableCategoryDTO);
     TableCategoryDTO toDTO(TableCategory tableCategory);

@@ -4,9 +4,9 @@ import com.ba.dto.TableCategoryDTO;
 import com.ba.entity.TableCategory;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
+import com.ba.mapper.MediaMapper;
 import com.ba.mapper.TableCategoryMapper;
 import com.ba.repository.TableCategoryRepository;
-import com.mysql.cj.xdevapi.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +19,22 @@ public class TableCategoryService {
     @Autowired
     private TableCategoryRepository tableCategoryRepository;
 
+    @Autowired
+    private TableCategoryMapper tableCategoryMapper;
+
+    @Autowired
+    private MediaMapper mediaMapper;
+
     public List<TableCategoryDTO> listTableCategories() {
         List<TableCategory> categoryDTOList = tableCategoryRepository.findAll();
         if(categoryDTOList.isEmpty()){
             throw new SystemException("Table categories not found...!");
         }
-        return TableCategoryMapper.INSTANCE.toDTOList(categoryDTOList);
+        return tableCategoryMapper.toDTOList(categoryDTOList);
     }
 
     public String addTableCategory(TableCategoryDTO tableCategoryDTO) {
-        tableCategoryRepository.save(TableCategoryMapper.INSTANCE.toEntity(tableCategoryDTO));
+        tableCategoryRepository.save(tableCategoryMapper.toEntity(tableCategoryDTO));
         return "Table Category Added";
     }
 
@@ -43,10 +49,10 @@ public class TableCategoryService {
             throw new SystemException("Table category not found");
         }
 
-        UpdateHelper.tableCategorySetCheck(tableCategoryDTO, tableCategory);
+        UpdateHelper.tableCategorySetCheck(tableCategoryDTO, tableCategory, mediaMapper);
 
         tableCategoryRepository.saveAndFlush(tableCategory.get());
 
-        return TableCategoryMapper.INSTANCE.toDTO(tableCategory.get());
+        return tableCategoryMapper.toDTO(tableCategory.get());
     }
 }

@@ -2,30 +2,30 @@ package com.ba.helper;
 
 import com.ba.dto.*;
 import com.ba.entity.*;
-import com.ba.exception.SystemException;
 import com.ba.mapper.CategoryMapper;
 import com.ba.mapper.MediaMapper;
 import com.ba.mapper.RoleMapper;
 import com.ba.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
 public class UpdateHelper {
 
-    public static void categorySetCheck(CategoryDTO categoryDTO, Optional<Category> tempCategory) {
+    public static void categorySetCheck(CategoryDTO categoryDTO, Optional<Category> tempCategory, MediaMapper mediaMapper) {
         if (!tempCategory.get().getName().equals(categoryDTO.getName())) {
             tempCategory.get().setName(categoryDTO.getName());
         }
         if (!tempCategory.get().getDescription().equals(categoryDTO.getDescription())) {
             tempCategory.get().setDescription(categoryDTO.getDescription());
         }
-        Media tempMedia = MediaMapper.INSTANCE.toEntity(categoryDTO.getMediaDTO());
+        Media tempMedia = mediaMapper.toEntity(categoryDTO.getMediaDTO());
         if (!tempCategory.get().getMedia().equals(tempMedia)) {
             tempCategory.get().setMedia(tempMedia);
         }
     }
 
-    public static void customerSetCheck(CustomerDTO customerDTO, Optional<Customer> customer) {
+    public static void customerSetCheck(CustomerDTO customerDTO, Optional<Customer> customer, MediaMapper mediaMapper) {
         if (!customer.get().getName().equals(customerDTO.getName())) {
             customer.get().setName(customerDTO.getName());
         }
@@ -38,20 +38,20 @@ public class UpdateHelper {
         if (!customer.get().getPhoneNumber().equals(customerDTO.getPhoneNumber())) {
             customer.get().setPhoneNumber(customerDTO.getPhoneNumber());
         }
-        Media tempMedia = MediaMapper.INSTANCE.toEntity((customerDTO.getMedia()));
+        Media tempMedia = mediaMapper.toEntity((customerDTO.getMedia()));
         if (!customer.get().getMedia().equals(customerDTO.getMedia())) {
             customer.get().setMedia(tempMedia);
         }
     }
 
-    public static void tableCategorySetCheck(TableCategoryDTO tableCategoryDTO, Optional<TableCategory> tableCategory) {
+    public static void tableCategorySetCheck(TableCategoryDTO tableCategoryDTO, Optional<TableCategory> tableCategory, MediaMapper mediaMapper) {
         if (!tableCategory.get().getName().equals(tableCategoryDTO.getName())) {
             tableCategory.get().setName(tableCategoryDTO.getName());
         }
         if (tableCategory.get().getNumber() != (tableCategoryDTO.getNumber())) {
             tableCategory.get().setNumber(tableCategoryDTO.getNumber());
         }
-        Media tempMedia = MediaMapper.INSTANCE.toEntity(tableCategoryDTO.getMedia());
+        Media tempMedia = mediaMapper.toEntity(tableCategoryDTO.getMedia());
         if (!tableCategory.get().getMedia().equals(tempMedia)) {
             tableCategory.get().setMedia(tempMedia);
         }
@@ -81,7 +81,7 @@ public class UpdateHelper {
         }
     }
 
-    public static void userSetCheck(UserDTO userDTO, User user) {
+    public static void userSetCheck(UserDTO userDTO, User user, RoleMapper roleMapper) {
         if (!user.getUsername().equals(userDTO.getUsername())) {
             user.setUsername(userDTO.getUsername());
         }
@@ -92,10 +92,10 @@ public class UpdateHelper {
             user.setPassword(userDTO.getPassword());
         }
         removeRedundantRole(userDTO, user);
-        addNotExistRole(userDTO, user);
+        addNotExistRole(userDTO, user, roleMapper);
     }
 
-    public static void addNotExistRole(UserDTO userDTO, User user) {
+    public static void addNotExistRole(UserDTO userDTO, User user, RoleMapper roleMapper) {
         //lambda for
         for (int i = 0; i < userDTO.getRoles().size(); i++) {
             boolean hasRole = false;
@@ -105,7 +105,7 @@ public class UpdateHelper {
                 }
             }
             if (!hasRole) {
-                user.getRoles().add(RoleMapper.INSTANCE.toEntity(userDTO.getRoles().get(i)));
+                user.getRoles().add(roleMapper.toEntity(userDTO.getRoles().get(i)));
             }
         }
     }
@@ -124,7 +124,7 @@ public class UpdateHelper {
         }
     }
 
-    public static void productSetCheck(ProductDTO productDTO, Optional<Product> product, CategoryRepository categoryRepository) {
+    public static void productSetCheck(ProductDTO productDTO, Optional<Product> product, CategoryRepository categoryRepository, MediaMapper mediaMapper, CategoryMapper categoryMapper) {
         if (!product.get().getProductName().equals(productDTO.getProductName())) {
             product.get().setProductName(productDTO.getProductName());
         }
@@ -137,16 +137,16 @@ public class UpdateHelper {
         if (!product.get().getProductCategory().equals(productDTO.getProductCategory())) {
             product.get().setProductCategory(productDTO.getProductCategory());
         }
-        if (!product.get().getMedia().getId().equals(productDTO.getMediaDTO().getId())) {
-            product.get().setMedia(MediaMapper.INSTANCE.toEntity(productDTO.getMediaDTO()));
+        if (!product.get().getMedia().getId().equals(productDTO.getMediaDTO().getId()) && productDTO.getMediaDTO().getFileContent() != null) {
+            product.get().setMedia(mediaMapper.toEntity(productDTO.getMediaDTO()));
         }
 
         removeCategory(productDTO, product, categoryRepository);
-        addCategory(productDTO, product, categoryRepository);
+        addCategory(productDTO, product, categoryRepository, categoryMapper);
 
     }
 
-    public static void addCategory(ProductDTO productDTO, Optional<Product> product, CategoryRepository categoryRepository) {
+    public static void addCategory(ProductDTO productDTO, Optional<Product> product, CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         for (int i = 0; i < productDTO.getCategories().size(); i++) {
             boolean hasCategory = false;
             for (int j = 0; j < product.get().getCategories().size(); j++) {
@@ -155,7 +155,7 @@ public class UpdateHelper {
                 }
             }
             if (!hasCategory) {
-                product.get().getCategories().add(CategoryMapper.INSTANCE.toEntity(productDTO.getCategories().get(i)));
+                product.get().getCategories().add(categoryMapper.toEntity(productDTO.getCategories().get(i)));
                 Category category = categoryRepository.findById(productDTO.getCategories().get(i).getId()).get();
                 category.getProducts().add(product.get());
             }

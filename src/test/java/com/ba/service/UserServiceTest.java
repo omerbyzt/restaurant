@@ -30,6 +30,9 @@ public class UserServiceTest {
     @Mock
     private UserRepository repository;
 
+    @Mock
+    private UserMapper userMapper;
+
     private User user = new User();
     private UserDTO userDTO = new UserDTO();
     private List<User> userList = new ArrayList();
@@ -48,8 +51,7 @@ public class UserServiceTest {
     public void shouldVerifyListUsers() {
         when(repository.findAll()).thenReturn(userList);
 
-        List<UserDTO> tempDTOList1 = UserMapper.INSTANCE.toDTOList(userList);
-//        List<UserDTO> tempDTOList1 = UserConverter.convertListToDTOList(userList);
+        List<UserDTO> tempDTOList1 = userMapper.toDTOList(userList);
         List<UserDTO> tempDTOList2 = service.listUsers();
 
         assertEquals(tempDTOList1.get(0).getId(),tempDTOList2.get(0).getId());

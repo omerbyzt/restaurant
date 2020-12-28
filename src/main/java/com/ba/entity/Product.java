@@ -15,11 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE PRODUCT " +
+        "UPDATE Product " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "Product")
 public class Product extends BaseEntity{
 
     private String productName;
@@ -31,7 +32,6 @@ public class Product extends BaseEntity{
     @ManyToMany(
             mappedBy = "products",
             fetch = FetchType.EAGER
-//            cascade = CascadeType.DETACH
     )
     private List<Category> categories = new ArrayList<>();
 

@@ -18,16 +18,19 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
     public List<RoleDTO> listRoles(){
         List<Role> role = roleRepository.findAll();
         if(role.isEmpty()){
             throw new SystemException("Roles cannot be found...!");
         }
-        return RoleMapper.INSTANCE.toDTOList(role);
+        return roleMapper.toDTOList(role);
     }
 
     public String addRole(RoleDTO roleDTO){
-        roleRepository.save(RoleMapper.INSTANCE.toEntity(roleDTO));
+        roleRepository.save(roleMapper.toEntity(roleDTO));
         return "Role Added";
     }
 
@@ -43,7 +46,7 @@ public class RoleService {
         }
         UpdateHelper.roleSetCheck(roleDTO, role);
 
-        roleRepository.saveAndFlush(RoleMapper.INSTANCE.toEntity(roleDTO));
+        roleRepository.saveAndFlush(roleMapper.toEntity(roleDTO));
         return "Role Updated";
     }
 }

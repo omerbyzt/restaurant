@@ -5,6 +5,8 @@ import com.ba.entity.User;
 import com.ba.exception.BusinessRuleException;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
+import com.ba.mapper.MediaMapper;
+import com.ba.mapper.RoleMapper;
 import com.ba.mapper.UserMapper;
 import com.ba.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
     private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public List<UserDTO> listUsers() {
@@ -27,12 +35,12 @@ public class UserService {
         if (user.isEmpty()) {
             throw new SystemException("Users cannot be found...!");
         }
-        return UserMapper.INSTANCE.toDTOList(user);
+        return userMapper.toDTOList(user);
     }
 
     public String addUser(UserDTO userDTO) {
 
-        User user = UserMapper.INSTANCE.toEntity(userDTO);
+        User user = userMapper.toEntity(userDTO);
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
 
@@ -46,7 +54,7 @@ public class UserService {
             throw new SystemException("User not found...!");
         }
 
-        UpdateHelper.userSetCheck(userDTO, user.get());
+        UpdateHelper.userSetCheck(userDTO, user.get(), roleMapper);
 
         userRepository.save(user.get());
         //saveandFlush
@@ -55,10 +63,9 @@ public class UserService {
 
     public String deleteUser(Long id) {
         //try catch
-        try{
+        try {
             userRepository.deleteById(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new BusinessRuleException("Id error");
         }
 

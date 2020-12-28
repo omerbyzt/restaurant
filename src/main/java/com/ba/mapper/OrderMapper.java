@@ -7,9 +7,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface OrderMapper {
-    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
+//    OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     List<Orderr> toList(List<OrderDTO> orderDTOList);
     List<OrderDTO> toDTOList(List<Orderr> orderList);

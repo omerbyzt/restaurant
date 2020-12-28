@@ -40,6 +40,9 @@ public class WaiterServiceTest {
     @Mock
     private MediaRepository mediaRepository;
 
+    @Mock
+    private WaiterMapper waiterMapper;
+
     private Waiter waiter = new Waiter();
     private WaiterDTO waiterDTO = new WaiterDTO();
     private List<Waiter> waiterList = new ArrayList<>();
@@ -95,7 +98,7 @@ public class WaiterServiceTest {
     public void shouldListWaiters() {
         when(repository.findAll()).thenReturn(waiterList);
 
-        List<WaiterDTO> tempDTOList = WaiterMapper.INSTANCE.toDTOList(waiterList);
+        List<WaiterDTO> tempDTOList = waiterMapper.toDTOList(waiterList);
 //        List<WaiterDTO> tempDTOList = WaiterConverter.convertListToDTOList(waiterList);
         List<WaiterDTO> tempDTOList2 = service.listAllWaiters();
 

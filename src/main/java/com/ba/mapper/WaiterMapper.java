@@ -8,9 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface WaiterMapper {
-    WaiterMapper INSTANCE = Mappers.getMapper(WaiterMapper.class);
+//    WaiterMapper INSTANCE = Mappers.getMapper(WaiterMapper.class);
 
     @Mapping(source = "mediaDTO" , target = "media")
     Waiter toEntity(WaiterDTO waiterDTO);

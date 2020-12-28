@@ -207,7 +207,6 @@ class AddProduct extends Component {
                                                 {
                                                     categoryList.map(v => {
                                                         return (
-
                                                             <div className="row col-md -12">
                                                                 <label>
                                                                     <input type="checkbox" value=""

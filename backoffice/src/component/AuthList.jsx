@@ -5,6 +5,7 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 import UserContext from "../Context";
 import Loading from "./Loading";
+import ReactToExcel from "react-html-table-to-excel";
 
 class AuthList extends Component {
     static contextType = UserContext;
@@ -140,7 +141,7 @@ class AuthList extends Component {
                             </div>
                         </div>:null
                 }
-                <Table striped bordered hover className="usersTable">
+                <Table striped bordered hover className="usersTable" id="role-to-xls">
                     <thead>
                         <tr>
                             <th>#ID</th>
@@ -165,6 +166,14 @@ class AuthList extends Component {
                     }
                     </tbody>
                 </Table>
+
+                <ReactToExcel
+                    className="btn btn-success"
+                    table="role-to-xls"
+                    filename="roleExcelFile"
+                    sheet="sheet 1"
+                    buttonText="Export"
+                />
 
                 {
                     this.state.loadingIsVisible ?

@@ -33,6 +33,9 @@ public class TableCategoryServiceTest {
     @Mock
     private TableCategoryRepository tableCategoryRepository;
 
+    @Mock
+    private TableCategoryMapper tableCategoryMapper;
+
     private TableCategory tableCategory = new TableCategory();
     private TableCategoryDTO tableCategoryDTO = new TableCategoryDTO();
     private List<TableCategoryDTO> tableCategoryDTOList = new ArrayList<>();
@@ -92,7 +95,7 @@ public class TableCategoryServiceTest {
 
         when(tableCategoryRepository.findAll()).thenReturn(tableCategoriesList);
 
-        List<TableCategoryDTO> tempDTOList = TableCategoryMapper.INSTANCE.toDTOList(tableCategoriesList);
+        List<TableCategoryDTO> tempDTOList = tableCategoryMapper.toDTOList(tableCategoriesList);
 //        List<TableCategoryDTO> tempDTOList = TableCategoryConverter.convertDTOListtoList(tableCategoriesList);
         List<TableCategoryDTO> tempDTOList2 = tableCategoryService.listTableCategories();
 

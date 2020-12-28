@@ -8,9 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(uses = {RoleMapper.class})
+@Mapper(uses = {RoleMapper.class}, componentModel = "spring")
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+//    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     User toEntity(UserDTO userDTO);
     UserDTO toDTO(User user);

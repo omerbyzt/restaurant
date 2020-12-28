@@ -7,12 +7,10 @@ import com.ba.helper.MediaHelper;
 import com.ba.mapper.MediaMapper;
 import com.ba.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +20,15 @@ public class MediaService {
     @Autowired
     private MediaRepository mediaRepository;
 
+    @Autowired
+    private MediaMapper mediaMapper;
+
     public List<MediaDTO> getWholeFiles(){
         List<Media> mediaList = mediaRepository.findAll();
         if(mediaList.isEmpty()){
             throw new SystemException("Medialist not found");
         }
-        return MediaMapper.INSTANCE.toDTOList(mediaList);
+        return mediaMapper.toDTOList(mediaList);
     }
 
     public MediaDTO getMediaByID(Long id){
@@ -35,7 +36,7 @@ public class MediaService {
         if(media.isEmpty()){
             throw new SystemException("Media not found");
         }
-        return MediaMapper.INSTANCE.toDTO(media.get());
+        return mediaMapper.toDTO(media.get());
     }
 
     public String addFile(MultipartFile file ,String imageName) throws IOException {

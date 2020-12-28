@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE USERS " +
+        "UPDATE Users " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
-@Table(name = "USERS")
+@Table(name = "Users")
 public class User extends BaseEntity{
 
     private String email;

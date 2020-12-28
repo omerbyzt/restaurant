@@ -5,6 +5,7 @@ import com.ba.entity.Category;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,24 @@ public class CategoryService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Autowired
+    private MediaMapper mediaMapper;
+
     @Cacheable(value = "CategoryCache")
     public List<CategoryDTO> listCategory() {
         List<Category> tempCategoryList = categoryRepository.findAll();
         if(tempCategoryList.isEmpty()){
             throw new SystemException("Categories not found...!");
         }
-        return CategoryMapper.INSTANCE.toDTOList(tempCategoryList);
+        return categoryMapper.toDTOList(tempCategoryList);
     }
 
     @CacheEvict(value="CategoryCache", allEntries = true)
     public String addCategory(CategoryDTO categoryDTO) {
-        categoryRepository.save(CategoryMapper.INSTANCE.toEntity(categoryDTO));
+        categoryRepository.save(categoryMapper.toEntity(categoryDTO));
         return "Category Added";
     }
 
@@ -48,13 +55,13 @@ public class CategoryService {
     @CacheEvict(value="CategoryCache", allEntries = true)
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
         Optional<Category> tempCategory =  categoryRepository.findById(categoryDTO.getId());
-        if(tempCategory.isEmpty()){
+        if(tempCategory == null){
             throw new SystemException("Category not found...!");
         }
 
-        UpdateHelper.categorySetCheck(categoryDTO, tempCategory);
+        UpdateHelper.categorySetCheck(categoryDTO, tempCategory, mediaMapper);
 
         categoryRepository.saveAndFlush(tempCategory.get());
-        return CategoryMapper.INSTANCE.toDTO(tempCategory.get());
+        return categoryMapper.toDTO(tempCategory.get());
     }
 }

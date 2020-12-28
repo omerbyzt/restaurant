@@ -3,6 +3,7 @@ package com.ba.service;
 import com.ba.dto.OrderDTO;
 import com.ba.entity.Orderr;
 import com.ba.exception.SystemException;
+import com.ba.mapper.MediaMapper;
 import com.ba.mapper.OrderMapper;
 import com.ba.repository.OrderRepository;
 import liquibase.pro.packaged.O;
@@ -20,13 +21,16 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OrderMapper orderMapper;
+
     public List<OrderDTO> listAllOrders(){
         List<Orderr> orderList = orderRepository.findAll();
-        return OrderMapper.INSTANCE.toDTOList(orderList);
+        return orderMapper.toDTOList(orderList);
     }
 
     public String addOrder(List<OrderDTO> orderDTO){
-        orderRepository.saveAll(OrderMapper.INSTANCE.toList(orderDTO));
+        orderRepository.saveAll(orderMapper.toList(orderDTO));
         return "Order Added";
     }
 

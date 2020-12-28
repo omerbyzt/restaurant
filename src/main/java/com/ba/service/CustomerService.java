@@ -5,6 +5,7 @@ import com.ba.entity.Customer;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CustomerMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ public class CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private MediaMapper mediaMapper;
+
     public String addCustomer(CustomerDTO customerDTO) {
         customerRepository.save(customerMapper.toEntity(customerDTO));
         return "Customer Added";
@@ -39,7 +43,7 @@ public class CustomerService {
             throw new SystemException("Customer not found..!");
         }
 
-        UpdateHelper.customerSetCheck(customerDTO, customer);
+        UpdateHelper.customerSetCheck(customerDTO, customer, mediaMapper);
 
         customerRepository.saveAndFlush(customer.get());
         return customerMapper.toDTO(customer.get());

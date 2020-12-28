@@ -6,6 +6,7 @@ import com.ba.entity.Product;
 import com.ba.exception.SystemException;
 import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CategoryMapper;
+import com.ba.mapper.MediaMapper;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.CategoryRepository;
 import com.ba.repository.ProductRepository;
@@ -31,6 +32,12 @@ public class ProductService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Autowired
+    private MediaMapper mediaMapper;
+
     public Page<ProductDTO> listProductPage(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         Page<ProductDTO> productDTOPage = productPage.map(productMapper::toDTO);
@@ -38,7 +45,7 @@ public class ProductService {
             throw new SystemException("Products not found...!");
         }
         for (int i = 0; i < productDTOPage.getContent().size(); i++) {
-            productDTOPage.getContent().get(i).setCategories(CategoryMapper.INSTANCE.toDTOList(productPage.getContent().get(i).getCategories()));
+            productDTOPage.getContent().get(i).setCategories(categoryMapper.toDTOList(productPage.getContent().get(i).getCategories()));
         }
         return productDTOPage;
     }
@@ -72,7 +79,7 @@ public class ProductService {
             throw new SystemException("Product not found...!");
         }
 
-        UpdateHelper.productSetCheck(productDTO, product, categoryRepository);
+        UpdateHelper.productSetCheck(productDTO, product, categoryRepository, mediaMapper, categoryMapper);
         productRepository.save(product.get());
         return productDTO;
     }

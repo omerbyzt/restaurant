@@ -23,18 +23,21 @@ public class WaiterService {
     @Autowired
     private MediaRepository mediaRepository;
 
+    @Autowired
+    private WaiterMapper waiterMapper;
+
     public List<WaiterDTO> listAllWaiters(){
         List<Waiter> waiterList = waiterRepository.findAll();
         if(waiterList.isEmpty()){
             throw new SystemException("Waiters not found...!");
         }
-        return  WaiterMapper.INSTANCE.toDTOList(waiterRepository.findAll());
+        return  waiterMapper.toDTOList(waiterRepository.findAll());
     }
 
     public String addWaiter(WaiterDTO waiterDTO){
         mediaRepository.deleteById(waiterDTO.getMediaDTO().getId());
 
-        Waiter tempWaiter = WaiterMapper.INSTANCE.toEntity(waiterDTO);
+        Waiter tempWaiter = waiterMapper.toEntity(waiterDTO);
 
         Media tempMedia = tempWaiter.getMedia();
         tempMedia.setId(null);
@@ -58,6 +61,6 @@ public class WaiterService {
         UpdateHelper.waiterSetCheck(waiterDTO, waiter);
 
         waiterRepository.saveAndFlush(waiter.get());
-        return WaiterMapper.INSTANCE.toDTO(waiter.get());
+        return waiterMapper.toDTO(waiter.get());
     }
 }

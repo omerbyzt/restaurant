@@ -11,11 +11,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE MEDIA " +
+        "UPDATE Media " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "Media")
 public class Media extends BaseEntity{
 
     private String name;

@@ -11,11 +11,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE TABLE_CATEGORY " +
+        "UPDATE TableCategory " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "TableCategory")
 public class TableCategory extends BaseEntity{
 
     private String name;

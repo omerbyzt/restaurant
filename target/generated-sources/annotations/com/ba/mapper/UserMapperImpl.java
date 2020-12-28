@@ -5,16 +5,19 @@ import com.ba.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-28T12:26:04+0300",
+    date = "2020-12-29T00:28:10+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
+@Component
 public class UserMapperImpl implements UserMapper {
 
-    private final RoleMapper roleMapper = Mappers.getMapper( RoleMapper.class );
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public User toEntity(UserDTO userDTO) {

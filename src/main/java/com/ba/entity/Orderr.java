@@ -13,11 +13,12 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE ORDERR " +
+        "UPDATE Orderr " +
                 "SET deleted = true " +
                 "WHERE orderID = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "Orderr")
 public class Orderr {
 
     @Id

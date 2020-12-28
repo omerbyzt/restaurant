@@ -40,15 +40,23 @@ public class CategoryServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryMapper categoryMapper;
+
+    @Mock
+    private MediaMapper mediaMapper;
+
     private Category category;
     private CategoryDTO categoryDTO;
     private List<Category> categoryList = new ArrayList<>();
+    private List<CategoryDTO> categoryDTOList = new ArrayList<>();
     private List<Product> productSet = new ArrayList<>();
     private Product product;
     private ProductDTO productDTO;
     private Long id = 1L;
     private Media media;
     private MediaDTO mediaDTO;
+
     @Before
     public void setUp() throws Exception {
 
@@ -59,6 +67,7 @@ public class CategoryServiceTest {
         categoryDTO = new CategoryDTOBuilder().id(1L).name("ÇorbaDTO").description("Sıcak ÇorbaDTO").media(mediaDTO).build();
 
         categoryList.add(category);
+        categoryDTOList.add(categoryDTO);
 
         product = new ProductBuilder().productID(1L).productPrice(15D).productCategory("Çorba").productDesc("desc").productName("Mercimek").media(media).build();
         productDTO = new ProductDTOBuilder().productID(1L).productPrice(15D).productCategory("ÇorbaDTO").productDesc("descDTO").productName("MercimekDTO").media(mediaDTO).build();
@@ -94,6 +103,8 @@ public class CategoryServiceTest {
     public void shouldUpdateCategory() {
         when(repository.findById(id)).thenReturn(Optional.of(category));
         when(repository.saveAndFlush(category)).thenReturn(category);
+        when(categoryMapper.toDTO(category)).thenReturn(categoryDTO);
+        when(mediaMapper.toEntity(mediaDTO)).thenReturn(media);
 
         CategoryDTO result = service.updateCategory(categoryDTO);
         verify(repository).saveAndFlush(category);
@@ -102,11 +113,18 @@ public class CategoryServiceTest {
         assertEquals(result.getId(), categoryDTO.getId());
     }
 
+    @Test(expected = SystemException.class)
+    public void shouldNotUpdateCategory() {
+        when(repository.findById(id)).thenReturn(null);
+        service.updateCategory(categoryDTO);
+    }
+
     @Test
     public void shouldListCategory() {
         when(repository.findAll()).thenReturn(categoryList);
+        when(categoryMapper.toDTOList(categoryList)).thenReturn(categoryDTOList);
 
-        List<CategoryDTO> tempDTOList = CategoryMapper.INSTANCE.toDTOList(categoryList);
+        List<CategoryDTO> tempDTOList = categoryMapper.toDTOList(categoryList);
         List<CategoryDTO> tempDTOList2 = service.listCategory();
 
         assertEquals(tempDTOList.get(0).getId(), tempDTOList2.get(0).getId());

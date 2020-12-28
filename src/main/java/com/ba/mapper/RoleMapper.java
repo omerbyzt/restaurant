@@ -7,9 +7,9 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RoleMapper {
-    RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
+//    RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
     Role toEntity(RoleDTO roleDTO);
     RoleDTO toDTO(Role role);

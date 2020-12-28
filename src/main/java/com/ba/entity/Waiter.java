@@ -12,11 +12,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql =
-        "UPDATE WAITER " +
+        "UPDATE Waiter " +
                 "SET deleted = true " +
                 "WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
+@Table(name = "Waiter")
 public class Waiter extends BaseEntity{
 
 //    @Id

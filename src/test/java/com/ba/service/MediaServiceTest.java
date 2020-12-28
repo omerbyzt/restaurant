@@ -31,6 +31,9 @@ public class MediaServiceTest {
     @Mock
     private MediaRepository repository;
 
+    @Mock
+    private MediaMapper mediaMapper;
+
     private Media media = new Media();
     private MediaDTO mediaDTO = new MediaDTO();
     private List<Media> mediaList = new ArrayList<>();
@@ -57,7 +60,7 @@ public class MediaServiceTest {
     public void shouldListMedias() {
         when(repository.findAll()).thenReturn(mediaList);
 
-        List<MediaDTO> tempDTOList = MediaMapper.INSTANCE.toDTOList(mediaList);
+        List<MediaDTO> tempDTOList = mediaMapper.toDTOList(mediaList);
 //        List<MediaDTO> tempDTOList = MediaConverter.convertListToListDTO(mediaList);
         List<MediaDTO> tempDTOList2 = service.getWholeFiles();
 
