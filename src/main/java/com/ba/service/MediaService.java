@@ -8,6 +8,8 @@ import com.ba.mapper.MediaMapper;
 import com.ba.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,12 +35,13 @@ public class MediaService {
 
     public MediaDTO getMediaByID(Long id){
         Optional<Media> media = mediaRepository.findById(id);
-        if(media.isEmpty()){
+        if(media == null){
             throw new SystemException("Media not found");
         }
         return mediaMapper.toDTO(media.get());
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addFile(MultipartFile file ,String imageName) throws IOException {
         Media media = MediaHelper.addHelper(file,imageName);
         if(media == null){
@@ -48,6 +51,7 @@ public class MediaService {
         return "File Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteMedia(Long id){
         mediaRepository.deleteById(id);
         return "Media deleted!";

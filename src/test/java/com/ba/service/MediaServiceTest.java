@@ -4,6 +4,8 @@ import com.ba.builder.MediaBuilder;
 import com.ba.builder.MediaDTOBuilder;
 import com.ba.dto.MediaDTO;
 import com.ba.entity.Media;
+import com.ba.exception.SystemException;
+import com.ba.helper.MediaHelper;
 import com.ba.mapper.MediaMapper;
 import com.ba.repository.MediaRepository;
 import org.junit.Before;
@@ -18,9 +20,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -33,6 +37,9 @@ public class MediaServiceTest {
 
     @Mock
     private MediaMapper mediaMapper;
+
+    @Mock
+    private MediaHelper mediaHelper;
 
     private Media media = new Media();
     private MediaDTO mediaDTO = new MediaDTO();
@@ -59,12 +66,22 @@ public class MediaServiceTest {
     @Test
     public void shouldListMedias() {
         when(repository.findAll()).thenReturn(mediaList);
+        when(mediaMapper.toDTOList(mediaList)).thenReturn(mediaDTOList);
 
-        List<MediaDTO> tempDTOList = mediaMapper.toDTOList(mediaList);
-//        List<MediaDTO> tempDTOList = MediaConverter.convertListToListDTO(mediaList);
-        List<MediaDTO> tempDTOList2 = service.getWholeFiles();
+        List<MediaDTO> result = service.getWholeFiles();
 
-        assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());
+        assertNotNull(result);
+        assertEquals(result,mediaDTOList);
+    }
+
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWhenMediaListEmpty() {
+        service.getWholeFiles();
+    }
+
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWhenMediaNotFound() {
+        service.getWholeFiles();
     }
 
     @Test
@@ -76,12 +93,31 @@ public class MediaServiceTest {
         assertEquals(res,"File Added");
     }
 
-    @Test
-    public void shoulVerifyGetMediaByID() {
-//        when(service.getMediaByID(id)).thenReturn(mediaDTO);
-//        MediaDTO mediaDTO = service.getMediaByID(id);
-//
-//        assertNotNull(mediaDTO);
+//    @Test(expected = SystemException.class)
+//    public void shouldThrowSysExceptionWhenMediaNull() throws IOException {
+//        when(mediaHelper.addHelper(file,"testString")).thenReturn(null);
+//        service.addFile(file,"testString");
+//    }
 
+    @Test
+    public void shouldGetMediaByID() {
+        when(repository.findById(id)).thenReturn(Optional.of(media));
+        when(mediaMapper.toDTO(media)).thenReturn(mediaDTO);
+
+        MediaDTO result = service.getMediaByID(id);
+        assertNotNull(result);
+        assertEquals(result,mediaDTO);
+    }
+
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWhenMediaIdNull() {
+        service.getMediaByID(id);
+    }
+
+    @Test
+    public void shouldDeleteMedia() {
+        String res = service.deleteMedia(id);
+        verify(repository).deleteById(id);
+        assertNotNull(res);
     }
 }

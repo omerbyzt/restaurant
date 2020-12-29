@@ -9,6 +9,8 @@ import com.ba.mapper.TableCategoryMapper;
 import com.ba.repository.TableCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +35,19 @@ public class TableCategoryService {
         return tableCategoryMapper.toDTOList(categoryDTOList);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addTableCategory(TableCategoryDTO tableCategoryDTO) {
         tableCategoryRepository.save(tableCategoryMapper.toEntity(tableCategoryDTO));
         return "Table Category Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteTableCategory(Long id) {
         tableCategoryRepository.deleteById(id);
         return "Table Category Deleted";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public TableCategoryDTO updateTableCategory(TableCategoryDTO tableCategoryDTO) {
         Optional<TableCategory> tableCategory = tableCategoryRepository.findById(tableCategoryDTO.getId());
         if(tableCategory.isEmpty()){

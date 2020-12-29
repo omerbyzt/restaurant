@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,7 @@ public class ProductService {
         return productDTOSlice;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isEmpty()) {
@@ -73,6 +76,7 @@ public class ProductService {
         return "Product Deleted";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public ProductDTO updateProduct(ProductDTO productDTO) {
         Optional<Product> product = productRepository.findById(productDTO.getId());
         if (product.isEmpty()) {
@@ -84,6 +88,7 @@ public class ProductService {
         return productDTO;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addProduct(ProductDTO productDTO) {
         if (productDTO.getCategoriesIds().isEmpty()) {
             throw new SystemException("An error occured...!");

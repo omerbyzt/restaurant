@@ -9,6 +9,8 @@ import com.ba.repository.OrderRepository;
 import liquibase.pro.packaged.O;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,31 +31,9 @@ public class OrderService {
         return orderMapper.toDTOList(orderList);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addOrder(List<OrderDTO> orderDTO){
         orderRepository.saveAll(orderMapper.toList(orderDTO));
         return "Order Added";
-    }
-
-    public String temp(HttpServletRequest request){
-        Locale currentLocale = request.getLocale();
-
-        String countryCode = currentLocale.getCountry();
-        String countryName = currentLocale.getDisplayCountry();
-
-        String langCode = currentLocale.getLanguage();
-        String langName = currentLocale.getDisplayLanguage();
-
-        System.out.println(countryCode+ ": "+ countryName);
-        System.out.println(langCode+": "+langName);
-
-        System.out.println("================");
-        String[] languages = Locale.getISOLanguages();
-
-        for(String language : languages){
-            Locale locale = new Locale(language);
-            System.out.println(language + ": "+ locale.getDisplayLanguage());
-        }
-
-        return null;
     }
 }

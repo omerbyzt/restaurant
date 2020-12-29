@@ -10,6 +10,8 @@ import com.ba.repository.MediaRepository;
 import com.ba.repository.WaiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,7 @@ public class WaiterService {
         return  waiterMapper.toDTOList(waiterRepository.findAll());
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addWaiter(WaiterDTO waiterDTO){
         mediaRepository.deleteById(waiterDTO.getMediaDTO().getId());
 
@@ -47,11 +50,13 @@ public class WaiterService {
         return "Waiter Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteWaiter(Long id){
         waiterRepository.deleteById(id);
         return "Waiter Deleted";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public WaiterDTO updateWaiter(WaiterDTO waiterDTO){
         Optional<Waiter> waiter = waiterRepository.findById(waiterDTO.getId());
         if(waiter.isEmpty()){

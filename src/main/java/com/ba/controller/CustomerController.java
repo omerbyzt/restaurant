@@ -21,6 +21,11 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @GetMapping
+    public List<CustomerDTO> listCustomers(){
+        return customerService.listCustomers();
+    }
+
     @PostMapping
     public String addCustomer(@RequestBody CustomerDTO customerDTO){
         if(customerDTO == null){

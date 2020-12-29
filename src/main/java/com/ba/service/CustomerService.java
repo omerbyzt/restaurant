@@ -12,7 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,16 +30,27 @@ public class CustomerService {
     @Autowired
     private MediaMapper mediaMapper;
 
+    public List<CustomerDTO> listCustomers(){
+        List<Customer> result = customerRepository.findAll();
+        if(result == null){
+            throw new SystemException("Customers not found...!");
+        }
+        return customerMapper.toDTOList(result);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addCustomer(CustomerDTO customerDTO) {
         customerRepository.save(customerMapper.toEntity(customerDTO));
         return "Customer Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteCustomer(Long id) {
         customerRepository.deleteById(id);
         return "Customer Deleted";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
         Optional<Customer> customer = customerRepository.findById(customerDTO.getId());
         if (customer == null) {
@@ -51,7 +65,7 @@ public class CustomerService {
 
     public CustomerDTO getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {
+        if (customer == null) {
             throw new SystemException("Customers not found...!");
         }
         CustomerDTO customerDTO = customerMapper.toDTO(customer.get());
@@ -60,17 +74,11 @@ public class CustomerService {
 
     public Slice<CustomerDTO> getCustomersBySlice(Pageable pageable) {
         Slice<CustomerDTO> customerDTOSlice = customerRepository.findBy(pageable).map(customerMapper::toDTO);
-        if (customerDTOSlice.isEmpty()) {
-            throw new SystemException("Customers not found...!");
-        }
         return customerDTOSlice;
     }
 
     public Page<CustomerDTO> getCustomersByPage(Pageable pageable) {
         Page<CustomerDTO> customerDTOPage = customerRepository.findAll(pageable).map(customerMapper::toDTO);
-        if (customerDTOPage.isEmpty()) {
-            throw new SystemException("Customers not found...!");
-        }
         return customerDTOPage;
     }
 }

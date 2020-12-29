@@ -8,6 +8,8 @@ import com.ba.mapper.RoleMapper;
 import com.ba.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +31,19 @@ public class RoleService {
         return roleMapper.toDTOList(role);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addRole(RoleDTO roleDTO){
         roleRepository.save(roleMapper.toEntity(roleDTO));
         return "Role Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteRole(Long id){
         roleRepository.deleteById(id);
         return "Role Deleted";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String updateRole(RoleDTO roleDTO){
         Optional<Role> role = roleRepository.findById(roleDTO.getId());
         if(role.isEmpty()){

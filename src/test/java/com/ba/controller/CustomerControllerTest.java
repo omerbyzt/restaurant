@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.*;
 
@@ -66,6 +67,15 @@ public class CustomerControllerTest {
         customerDTOList.add(customerDTO);
 
         dtoList.add(customerDTO);
+    }
+
+    @Test
+    public void shouldListCustomers() {
+        when(customerService.listCustomers()).thenReturn(customerDTOList);
+        List<CustomerDTO> result = customerController.listCustomers();
+        Mockito.verify(customerService).listCustomers();
+
+        assertNotNull(result);
     }
 
     @Test

@@ -5,6 +5,7 @@ import Table from "react-bootstrap/Table";
 import CustomerService from "../../service/CustomerService";
 import Loading from "../Loading";
 import UpdateCustomer from "./UpdateCustomer";
+import ReactToExcel from "react-html-table-to-excel";
 
 class CustomerList extends Component {
     state = {
@@ -118,7 +119,7 @@ class CustomerList extends Component {
         }
 
         return <div align="center">
-            <Table striped bordered hover className="usersTable">
+            <Table striped bordered hover className="usersTable" id="customer-table">
                 <thead>
                 <tr>
                     <th>CustomerID</th>
@@ -136,6 +137,15 @@ class CustomerList extends Component {
                 }
                 </tbody>
             </Table>
+
+            <ReactToExcel
+                className="btn btn-success"
+                table="customer-table"
+                filename="customer-table"
+                sheet="sheet 1"
+                buttonText="Export"
+            />
+
             <div align="center">
                 {this.pageButtons()}
             </div>

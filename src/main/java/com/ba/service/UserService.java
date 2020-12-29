@@ -12,6 +12,8 @@ import com.ba.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +40,7 @@ public class UserService {
         return userMapper.toDTOList(user);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String addUser(UserDTO userDTO) {
 
         User user = userMapper.toEntity(userDTO);
@@ -48,6 +51,7 @@ public class UserService {
         return "User Added";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String updateUser(UserDTO userDTO) {
         Optional<User> user = userRepository.findById(userDTO.getId());
         if (user.isEmpty()) {
@@ -61,6 +65,7 @@ public class UserService {
         return "User Updated";
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public String deleteUser(Long id) {
         //try catch
         try {
