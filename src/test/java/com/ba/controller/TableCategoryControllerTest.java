@@ -58,12 +58,6 @@ public class TableCategoryControllerTest {
         assertEquals(res, "Table Category Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddTableCategory() {
-        when(service.addTableCategory(tableCategoryDTO)).thenReturn("Table Category Added");
-        String res = controller.addTableCategory(null);
-    }
-
     @Test
     public void shouldVerifyDeleteTableCategory() {
         when(service.deleteTableCategory(id)).thenReturn("Table Category Deleted");
@@ -86,8 +80,9 @@ public class TableCategoryControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotUpdateTableCategory() {
+        tableCategoryDTO.setId(0);
         when(service.updateTableCategory(tableCategoryDTO)).thenReturn(tableCategoryDTO);
-        TableCategoryDTO tempDTO = controller.updateTableCategory(null);
+        controller.updateTableCategory(tableCategoryDTO);
     }
 }
 

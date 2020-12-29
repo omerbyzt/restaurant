@@ -2,29 +2,17 @@ package com.ba.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
+public class RoleDTO implements Serializable {
 
     private Long id;
+    @NotNull(message = "Role name cannot null...!")
     private String name;
     private boolean deleted;
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
 }

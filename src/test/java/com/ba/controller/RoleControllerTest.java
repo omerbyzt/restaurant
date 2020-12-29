@@ -58,12 +58,6 @@ public class RoleControllerTest {
         assertEquals(res,"Role Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddRole() {
-        Mockito.when(service.addRole(roleDTO)).thenReturn("Role Added");
-        String res = controller.addRole(null);
-    }
-
     @Test
     public void shouldDeleteRole() {
         Mockito.when(service.deleteRole(id)).thenReturn("Role Deleted");
@@ -89,7 +83,8 @@ public class RoleControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotUpdate() {
+        roleDTO.setId(null);
         Mockito.when(service.updateRole(roleDTO)).thenReturn("Role Updated");
-        String res = controller.updateRole(null);
+        String res = controller.updateRole(roleDTO);
     }
 }

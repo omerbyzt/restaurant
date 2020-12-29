@@ -59,12 +59,6 @@ public class WaiterControllerTest {
         assertEquals(res,"Waiter Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddWaiter() {
-        when(service.addWaiter(waiterDTO)).thenReturn("Waiter Added");
-        String res = controller.addWaiter(null);
-    }
-
     @Test
     public void shouldVerifyDeleteWaiter() {
         when(service.deleteWaiter(id)).thenReturn("Waiter Deleted");
@@ -87,7 +81,8 @@ public class WaiterControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotUpdateWaiter() {
+        waiterDTO.setId(null);
         when(service.updateWaiter(waiterDTO)).thenReturn(waiterDTO);
-        WaiterDTO tempDTO = controller.updateWaiter(null);
+        controller.updateWaiter(waiterDTO);
     }
 }

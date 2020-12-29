@@ -63,7 +63,7 @@ public class ProductService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
+        if (product == null) {
             throw new SystemException("An error occured...!");
         }
 
@@ -90,9 +90,6 @@ public class ProductService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public String addProduct(ProductDTO productDTO) {
-        if (productDTO.getCategoriesIds().isEmpty()) {
-            throw new SystemException("An error occured...!");
-        }
         List<Long> categoriesIdsList = productDTO.getCategoriesIds();
         List<Category> categoryList = new ArrayList<>();
         Product product = productMapper.toEntity(productDTO);

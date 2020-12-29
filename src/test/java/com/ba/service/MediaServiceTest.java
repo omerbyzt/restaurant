@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -37,9 +38,6 @@ public class MediaServiceTest {
 
     @Mock
     private MediaMapper mediaMapper;
-
-    @Mock
-    private MediaHelper mediaHelper;
 
     private Media media = new Media();
     private MediaDTO mediaDTO = new MediaDTO();
@@ -95,7 +93,8 @@ public class MediaServiceTest {
 
 //    @Test(expected = SystemException.class)
 //    public void shouldThrowSysExceptionWhenMediaNull() throws IOException {
-//        when(mediaHelper.addHelper(file,"testString")).thenReturn(null);
+//        media.setId(null);
+//        when(MediaHelper.addHelper(file,"testString")).thenReturn(media);
 //        service.addFile(file,"testString");
 //    }
 

@@ -5,6 +5,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -19,5 +20,6 @@ import javax.persistence.*;
 @Table(name = "Roles")
 public class Role extends BaseEntity{
 
+    @NotNull
     private String name;
 }

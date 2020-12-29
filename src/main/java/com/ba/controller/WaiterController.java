@@ -6,6 +6,7 @@ import com.ba.service.WaiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,10 +23,7 @@ public class WaiterController {
     }
 
     @PostMapping("/add-waiter")
-    public String addWaiter(@RequestBody WaiterDTO waiterDTO){
-        if(waiterDTO == null){
-            throw new BusinessRuleException("Waiter cannot be empty...!");
-        }
+    public String addWaiter(@Valid @RequestBody WaiterDTO waiterDTO){
         return waiterService.addWaiter(waiterDTO);
     }
 
@@ -38,8 +36,8 @@ public class WaiterController {
     }
 
     @PutMapping("/update-waiter")
-    public WaiterDTO updateWaiter(@RequestBody WaiterDTO waiterDTO){
-        if(waiterDTO == null){
+    public WaiterDTO updateWaiter(@Valid @RequestBody WaiterDTO waiterDTO){
+        if(waiterDTO.getId() == null){
             throw new BusinessRuleException("Waiter cannot be empty...!");
         }
         return waiterService.updateWaiter(waiterDTO);

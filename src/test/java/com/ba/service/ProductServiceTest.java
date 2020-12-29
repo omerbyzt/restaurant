@@ -6,6 +6,7 @@ import com.ba.dto.ProductDTO;
 import com.ba.entity.Category;
 import com.ba.entity.Media;
 import com.ba.entity.Product;
+import com.ba.exception.SystemException;
 import com.ba.mapper.ProductMapper;
 import com.ba.repository.ProductRepository;
 import org.junit.Before;
@@ -24,6 +25,7 @@ import static org.mockito.Matchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,18 +65,18 @@ public class ProductServiceTest {
 
     @Test
     public void shouldDeleteProduct() {
+        when(repository.findById(id)).thenReturn(Optional.of(product));
+        String res = service.deleteProduct(id);
+        verify(repository).delete(product);
 
-//        String res = service.deleteProduct(id);
-//
-//        assertEquals(res,"Product Deleted");
-//        verify(repository,times(1)).deleteById(id);
+        assertNotNull(res);
+        assertEquals(res,"Product Added");
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = SystemException.class)
     public void shouldNotDeleteProductWhenThrownException() {
-
-        doThrow(new RuntimeException("Cant delete here")).when(repository).deleteById(id);
-        String res = service.deleteProduct(id);
+        when(repository.findById(id)).thenReturn(null);
+        service.deleteProduct(id);
     }
 
     @Test

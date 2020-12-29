@@ -10,6 +10,7 @@ import com.ba.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
@@ -25,17 +26,14 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public String addUser(@RequestBody UserDTO userDTO) {
-        if(userDTO == null){
-            throw new BusinessRuleException("User cannot be empty...!");
-        }
+    public String addUser(@Valid @RequestBody UserDTO userDTO) {
         return userService.addUser(userDTO);
     }
 
     @PutMapping("/update")
-    public String updateUser(@RequestBody UserDTO userDTO){
-        if(userDTO == null){
-            throw new BusinessRuleException("User cannot be empty...!");
+    public String updateUser(@Valid @RequestBody UserDTO userDTO){
+        if(userDTO.getId() == null){
+            throw new BusinessRuleException("User id cannot empty...!");
         }
         return userService.updateUser(userDTO);
     }

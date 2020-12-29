@@ -74,12 +74,6 @@ public class ProductControllerTest {
         assertEquals(tempDTO, productDTO);
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotUpdateProduct() {
-        when(service.updateProduct(productDTO)).thenReturn(productDTO);
-        ProductDTO tempDTO = controller.updateProduct(null);
-    }
-
     @Test
     public void shouldListProductPage() {
         Page<ProductDTO> productDTOPage = new PageImpl<ProductDTO>(productListDTO);
@@ -107,11 +101,5 @@ public class ProductControllerTest {
 
         assertNotNull(res);
         assertEquals(res, "Product Added");
-    }
-
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddProduct() {
-        when(service.addProduct(productDTO)).thenReturn("Product Added");
-        String res = controller.addProduct(null);
     }
 }

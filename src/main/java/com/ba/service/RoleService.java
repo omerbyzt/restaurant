@@ -25,7 +25,7 @@ public class RoleService {
 
     public List<RoleDTO> listRoles(){
         List<Role> role = roleRepository.findAll();
-        if(role.isEmpty()){
+        if(role == null){
             throw new SystemException("Roles cannot be found...!");
         }
         return roleMapper.toDTOList(role);
@@ -46,7 +46,7 @@ public class RoleService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String updateRole(RoleDTO roleDTO){
         Optional<Role> role = roleRepository.findById(roleDTO.getId());
-        if(role.isEmpty()){
+        if(role == null){
             throw new SystemException("Role not found");
         }
         UpdateHelper.roleSetCheck(roleDTO, role);

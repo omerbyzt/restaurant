@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-29T00:28:09+0300",
+    date = "2020-12-30T00:33:20+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 @Component
@@ -48,8 +48,8 @@ public class TableCategoryMapperImpl implements TableCategoryMapper {
         }
         tableCategoryDTO.setName( tableCategory.getName() );
         tableCategoryDTO.setNumber( tableCategory.getNumber() );
-        tableCategoryDTO.setDeleted( tableCategory.isDeleted() );
         tableCategoryDTO.setMedia( mediaToMediaDTO( tableCategory.getMedia() ) );
+        tableCategoryDTO.setDeleted( tableCategory.isDeleted() );
 
         return tableCategoryDTO;
     }

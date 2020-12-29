@@ -44,9 +44,6 @@ public class MediaService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String addFile(MultipartFile file ,String imageName) throws IOException {
         Media media = MediaHelper.addHelper(file,imageName);
-        if(media == null){
-            throw new SystemException("Media cannot be added...!");
-        }
         mediaRepository.save(media);
         return "File Added";
     }

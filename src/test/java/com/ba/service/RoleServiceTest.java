@@ -4,6 +4,7 @@ import com.ba.builder.RoleBuilder;
 import com.ba.builder.RoleDTOBuilder;
 import com.ba.dto.RoleDTO;
 import com.ba.entity.Role;
+import com.ba.exception.SystemException;
 import com.ba.mapper.RoleMapper;
 import com.ba.repository.RoleRepository;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -49,19 +51,26 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void shouldVerifyListRoles() {
+    public void shouldListRoles() {
         when(repository.findAll()).thenReturn(roleList);
+        when(roleMapper.toDTOList(roleList)).thenReturn(roleDTOList);
 
-        List<RoleDTO> tempDTOList = roleMapper.toDTOList(roleList);
-//        List<RoleDTO> tempDTOList = RoleConverter.convertListToDTOList(roleList);
-        List<RoleDTO> tempDTOList2 = service.listRoles();
+        List<RoleDTO> result = service.listRoles();
+        assertNotNull(result);
+        assertEquals(result,roleDTOList);
+    }
 
-        assertEquals(tempDTOList.get(0).getId(),tempDTOList2.get(0).getId());
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWhenRoleNullListRoles() {
+        when(repository.findAll()).thenReturn(null);
+        service.listRoles();
     }
 
     @Test
-    public void shouldVerifyAddRole() {
+    public void shouldAddRole() {
         when(repository.save(role)).thenReturn(role);
+        when(roleMapper.toEntity(roleDTO)).thenReturn(role);
+
         String res = service.addRole(roleDTO);
 
         assertNotNull(res);
@@ -69,16 +78,26 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void shouldVerifyDeleteRole() {
+    public void shouldDeleteRole() {
         String res = service.deleteRole(id);
         assertEquals(res,"Role Deleted");
         verify(repository,times(1)).deleteById(id);
     }
 
     @Test
-    public void shouldVerifyUpdateRole() {
+    public void shouldUpdateRole() {
+        when(repository.findById(roleDTO.getId())).thenReturn(Optional.of(role));
+        when(roleMapper.toEntity(roleDTO)).thenReturn(role);
+
         String res = service.updateRole(roleDTO);
+        verify(repository).saveAndFlush(role);
         assertNotNull(res);
         assertEquals(res,"Role Updated");
+    }
+
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWhenRoleNullUpdateRole() {
+        when(repository.findById(roleDTO.getId())).thenReturn(null);
+        service.updateRole(roleDTO);
     }
 }

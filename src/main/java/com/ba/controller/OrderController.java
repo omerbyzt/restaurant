@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,10 +28,7 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public String addOrder(@RequestBody List<OrderDTO> orderDTO) {
-        if(orderDTO == null){
-            throw new BusinessRuleException("List cannot be empty");
-        }
+    public String addOrder(@Valid @RequestBody List<OrderDTO> orderDTO) {
         orderService.addOrder(orderDTO);
         return "Order Added";
     }

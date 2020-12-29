@@ -57,12 +57,6 @@ public class UserControllerTest {
         assertEquals(res,"User Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddUser() {
-        Mockito.when(service.addUser(userDTO)).thenReturn("User Added");
-        String res = controller.addUser(null);
-    }
-
     @Test
     public void shouldVerifyDeleteUser() {
         Mockito.when(service.deleteUser(id)).thenReturn("User Deleted");
@@ -87,8 +81,9 @@ public class UserControllerTest {
 
     @Test(expected = BusinessRuleException.class)
     public void shouldNotUpdateUser() {
+        userDTO.setId(null);
         Mockito.when(service.updateUser(userDTO)).thenReturn("User Updated");
-        String res = controller.updateUser(null);
+        controller.updateUser(userDTO);
 
     }
 }

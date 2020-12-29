@@ -61,10 +61,4 @@ public class OrderControllerTest {
 
         assertEquals(res,"Order Added");
     }
-
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddOrder() {
-        when(service.addOrder(orderListDTO)).thenReturn("Order Added");
-        String res = controller.addOrder(null);
-    }
 }

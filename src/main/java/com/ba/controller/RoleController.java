@@ -7,6 +7,7 @@ import com.ba.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,25 +25,21 @@ public class RoleController {
     }
 
     @PostMapping("/add")
-    public String addRole(@RequestBody RoleDTO roleDTO) {
-        if (roleDTO == null) {
-            throw new BusinessRuleException("Role cannot be empty...!");
-        }
+    public String addRole(@Valid @RequestBody RoleDTO roleDTO) {
         return roleService.addRole(roleDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteRole(@PathVariable Long id, @RequestHeader("Accept-Language") String locale) {
         if (id <= 0) {
-//            throw new BusinessRuleException("Id cannot be empty...!");
             throw new BusinessRuleException(InternationalizationHelper.messageSource().getMessage("id.error", null, new Locale(locale)));
         }
         return roleService.deleteRole(id);
     }
 
     @PutMapping("/update")
-    public String updateRole(@RequestBody RoleDTO roleDTO) {
-        if (roleDTO == null) {
+    public String updateRole(@Valid @RequestBody RoleDTO roleDTO) {
+        if (roleDTO.getId() == null) {
             throw new BusinessRuleException("Role cannot be empty...!");
         }
         return roleService.updateRole(roleDTO);

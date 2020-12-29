@@ -73,12 +73,6 @@ public class CategoryControllerTest {
         assertEquals(res, "Category Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddCategory() {
-        when(service.addCategory(categoryDTO)).thenReturn("Category Added");
-        String res = controller.addCategory(null);
-    }
-
     @Test
     public void shouldVerifyDeleteCategory() {
         when(service.deleteCategory(id)).thenReturn("Category Deleted");
@@ -97,11 +91,5 @@ public class CategoryControllerTest {
         when(service.updateCategory(categoryDTO)).thenReturn(categoryDTO);
         CategoryDTO tempDTO = controller.updateCategory(categoryDTO);
         assertEquals(tempDTO, categoryDTO);
-    }
-
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotUpdateCategory() {
-        when(service.updateCategory(categoryDTO)).thenReturn(categoryDTO);
-        CategoryDTO tempDTO = controller.updateCategory(null);
     }
 }

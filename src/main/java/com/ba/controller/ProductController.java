@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -44,19 +45,13 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ProductDTO updateProduct(@RequestBody ProductDTO productDTO) {
-        if(productDTO == null){
-            throw new BusinessRuleException("Product cannot be empty");
-        }
+    public ProductDTO updateProduct(@Valid @RequestBody ProductDTO productDTO) {
         productService.updateProduct(productDTO);
         return productDTO;
     }
 
     @PostMapping("/add-product")
-    public String  addProduct(@RequestBody ProductDTO productDTO){
-        if(productDTO == null){
-            throw new BusinessRuleException("Parameters cannot be empty...!");
-        }
+    public String  addProduct(@Valid @RequestBody ProductDTO productDTO){
         productService.addProduct(productDTO);
         return "Product Added";
     }

@@ -85,12 +85,6 @@ public class CustomerControllerTest {
         assertEquals(res,"Customer Added");
     }
 
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotAddCustomer() {
-        //exprected message
-        customerController.addCustomer(null);
-    }
-
     @Test
     public void shouldDeleteCustomer() {
         when(customerService.deleteCustomer(id)).thenReturn("Customer Deleted");
@@ -109,11 +103,6 @@ public class CustomerControllerTest {
         when(customerService.updateCustomer(customerDTO)).thenReturn(customerDTO);
         CustomerDTO tempCustomerDTO = customerController.updateCustomer(customerDTO);
         assertEquals(tempCustomerDTO,customerDTO);
-    }
-
-    @Test(expected = BusinessRuleException.class)
-    public void shouldNotUpdateCustomer() {
-        customerController.updateCustomer(null);
     }
 
     @Test

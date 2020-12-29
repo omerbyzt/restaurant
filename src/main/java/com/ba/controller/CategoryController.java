@@ -6,6 +6,7 @@ import com.ba.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,10 +23,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add-category")
-    public String addCategory(@RequestBody CategoryDTO categoryDTO){
-        if(categoryDTO == null){
-            throw new BusinessRuleException("Category parameters cannot be empty...!");
-        }
+    public String addCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         categoryService.addCategory(categoryDTO);
         return "Category Added";
     }
@@ -40,10 +38,7 @@ public class CategoryController {
     }
 
     @PutMapping("/update-category")
-    public CategoryDTO updateCategory(@RequestBody CategoryDTO categoryDTO){
-        if(categoryDTO == null){
-            throw new BusinessRuleException("Category parameters cannot be empty...!");
-        }
+    public CategoryDTO updateCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         return categoryService.updateCategory(categoryDTO);
     }
 
