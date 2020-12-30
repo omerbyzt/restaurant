@@ -163,6 +163,16 @@
     overflow-y: auto;
 }
 
+.payCashButton{
+    height: 50px;
+    width: 100px;
+}
+
+.payCCButton{
+    height: 50px;
+    width: 200px;
+}
+
 
 
 

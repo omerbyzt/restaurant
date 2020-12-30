@@ -19,7 +19,7 @@ class MenuPage extends Component {
         customerList: [],
         pageCount: 0,
         scrollPosition: 0,
-        last: false
+        last: false,
     }
 
     constructor(props) {
@@ -100,8 +100,9 @@ class MenuPage extends Component {
                 'Authorization': token,
                 'Content-Type': 'application/json'
             }
-        })
-        sessionStorage.setItem("customer",name);
+        }).then(res => {
+            sessionStorage.setItem("customer" , res.data.id)
+            });
         this.setState({addOrListCustomerModal: false})
         this.props.history.push("/home");
     }
@@ -132,7 +133,7 @@ class MenuPage extends Component {
             });
     }
 
-    clickCutomer = (e) => {
+    clickCustomer = (e) => {
         sessionStorage.setItem("customer",e.id);
         this.props.history.push("/home")
     }
@@ -152,7 +153,7 @@ class MenuPage extends Component {
                                 customerList.map(v => {
                                     return (
                                         <button
-                                            className="btn btn-outline-info btn-block categoryButtonCss" onClick={()=> this.clickCutomer(v)}>{v.name} {v.surname}
+                                            className="btn btn-outline-info btn-block categoryButtonCss" onClick={()=> this.clickCustomer(v)}>{v.name} {v.surname}
                                         <br/>
                                             <img src={'data:image/png;base64,' + v.media.fileContent}
                                                  width="87" style={{margin: 10}}/>

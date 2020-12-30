@@ -27,6 +27,6 @@ public class CustomerDTO {
     @NotNull(message = "Customer address cannot null...!")
     private String address;
 
-    @NotNull(message = "Customer media cannot null...!")
+//    @NotNull(message = "Customer media cannot null...!")
     private MediaDTO media;
 }

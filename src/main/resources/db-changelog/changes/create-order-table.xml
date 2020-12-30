@@ -5,24 +5,37 @@
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet author="omer" id="1">
+    <changeSet author="omer" id="30_12_2020/22:37">
 
-        <createTable tableName="orderr">
-            <column autoIncrement="true" name="orderID" type="int(10)">
+        <createTable tableName="OrderTable">
+            <column autoIncrement="true" name="id" type="int(10)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="p_Id" type="int(10)"/>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="price" type="int(10)"/>
-            <column name="amount" type="int(10)"/>
-            <column name="table_Name" type="VARCHAR(255)"/>
-            <column name="waiterID" type="int(10)"/>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="order_Date" type="TIMESTAMP"/>
-        </createTable>
 
-        <addColumn tableName="orderr">
-            <column name="deleted" type="boolean" defaultValue="false"></column>
-        </addColumn>
+            <column name="payment_type_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="payment_type_id_fk" references="PaymentType(id)"></constraints>
+            </column>
+
+            <column name="customer_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="customer_id_fk" references="Customer(id)"></constraints>
+            </column>
+
+            <column name="waiter_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="waiter_id_fk" references="Waiter(id)"></constraints>
+            </column>
+
+            <column name="order_item_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="order_item_id_fk" references="OrderItem(id)"></constraints>
+            </column>
+
+            <column name="totalAmount" type="int(10)"/>
+
+            <column name="totalCount" type="int(10)"/>
+
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="orderDate" type="TIMESTAMP"/>
+
+            <column name="deleted" type="boolean" defaultValue="false"/>
+        </createTable>
 
     </changeSet>
 

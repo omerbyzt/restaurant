@@ -6,6 +6,9 @@ import axios from 'axios';
 import {Link} from "react-router-dom";
 import UserContext from "./Context";
 import Loading from "./Loading";
+import {Modal} from "react-bootstrap";
+import 'react-credit-cards/es/styles-compiled.css';
+import Cards from 'react-credit-cards';
 
 class ClientHomePage extends Component {
     static contextType = UserContext;
@@ -31,9 +34,17 @@ class ClientHomePage extends Component {
         scrollPosition: 0,
         pageNumber: 0,
         selectedCategoryId: 1,
-        tempArray:[],
-        last:false,
-        temp:""
+        tempArray: [],
+        last: false,
+        temp: "",
+        showPaymentTypeModal: false,
+        showCreditCardModal: false,
+
+        cvc: '',
+        expiry: '',
+        focus: '',
+        name: '',
+        number: '',
     }
 
     constructor(props) {
@@ -75,9 +86,9 @@ class ClientHomePage extends Component {
             )
                 .then(res => {
                     this.setState({
-                        last:res.data.last,
-                        tempArray : [...this.state.tempArray, ...res.data.content ],
-                        temp:res.data
+                        last: res.data.last,
+                        tempArray: [...this.state.tempArray, ...res.data.content],
+                        temp: res.data
                     })
                 });
             //
@@ -120,9 +131,9 @@ class ClientHomePage extends Component {
         )
             .then(res => {
                 this.setState({
-                    last:res.data.last,
-                    selectedCategoryId:id,
-                    tempArray : [...this.state.tempArray, ...res.data.content ]
+                    last: res.data.last,
+                    selectedCategoryId: id,
+                    tempArray: [...this.state.tempArray, ...res.data.content]
                 })
             });
         this.setState({loadingIsVisible: false});
@@ -152,21 +163,18 @@ class ClientHomePage extends Component {
         const {shoppingList, totalPayment, shoppingListAmounts} = this.state;
         const {table, waiterID} = this.context;
         this.state.totalPayment += param.productPrice;
-
-        if (this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.productID).length > 0) {
-            var shoppingListObj = this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.productID)
+        console.log(param)
+        if (this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.id).length > 0) {
+            var shoppingListObj = this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.id)
             shoppingListObj[0].amount += 1;
             shoppingListObj[0].totalPrice = shoppingListObj[0].totalPrice + shoppingListObj[0].price;
 
             this.setState([{...this.state.shoppingList, [shoppingListObj[0].pId]: shoppingListObj[0]}])
-
-
         } else {
             this.setState({
-
                     shoppingListObj: {
                         shoppingListObjId: nextId(),
-                        pId: param.productID,
+                        pId: param.id,
                         name: param.productName,
                         price: param.productPrice,
                         amount: 1,
@@ -209,35 +217,9 @@ class ClientHomePage extends Component {
     }
 
     clickPayButton = async (value) => {
-        this.setState({loadingIsVisible: true});
-        const {token, setTable, setWaiterID, setWaiterName} = this.context
-        // CREATE TABLE OR PAY DIRECTLY
-        // if(sessionStorage.getItem("table") === "No Table"){
-
-        await axios.post('http://localhost:8080/order/add', value, {
-            headers: {
-                Authorization: token //the token is a variable which holds the token
-            }
+        this.setState({
+            showPaymentTypeModal: !this.state.showPaymentTypeModal
         })
-        window.alert("Ödeme Alındı");
-        // }else{
-        //     let orderList = ClientHomePage.getOrderListFromStorage();
-        //     if (this.state.shoppingList.length>0){
-        //         orderList.push(this.state.shoppingList);
-        //         localStorage.setItem("orderList",JSON.stringify(orderList));
-        //     }
-        //     window.alert("Table Created");
-        // }
-
-        // sessionStorage.setItem("table", "No Table");
-        // sessionStorage.setItem("waiterID", "-1");
-        // sessionStorage.setItem("waiterName", "No Waiter");
-
-        setTable("No Table");
-        setWaiterName("No Waiter");
-        setWaiterID("-1");
-        this.setState({loadingIsVisible: false});
-        this.props.history.push("/menu")
     }
 
     static getOrderListFromStorage = () => {
@@ -259,9 +241,6 @@ class ClientHomePage extends Component {
             orderList.push(this.state.shoppingList);
             localStorage.setItem("orderList", JSON.stringify(orderList));
         }
-        // sessionStorage.setItem("table", "No Table")
-        // sessionStorage.setItem("waiterID", "-1")
-        // sessionStorage.setItem("waiterName", "No Waiter")
 
         setTable("No Table");
         setWaiterName("No Waiter");
@@ -273,12 +252,71 @@ class ClientHomePage extends Component {
         const scrollTop = this.myRef.current.scrollTop
         this.setState({scrollPosition: scrollTop})
 
-        if ((scrollPosition > (this.state.pageNumber+1)*800) && !this.state.last) {
+        if ((scrollPosition > (this.state.pageNumber + 1) * 800) && !this.state.last) {
             this.state.pageNumber++;
             await this.categoryNameSlice(selectedCategoryId)
             this.setState({scrollPosition: 0})
-            this.myRef.current.scrollTop = (this.state.pageNumber+1)*400
+            this.myRef.current.scrollTop = (this.state.pageNumber + 1) * 400
         }
+    }
+
+    handlePaymentTypeModal = () => {
+        this.setState({
+            showPaymentTypeModal: !this.state.showPaymentTypeModal,
+        })
+    }
+
+    handleCreditCardModal = () => {
+        this.setState({
+            showCreditCardModal: !this.state.showCreditCardModal,
+        })
+    }
+
+    handleInputFocus = (e) => {
+        this.setState({focus: e.target.name});
+    }
+
+    handleInputChange = (e) => {
+        const {name, value} = e.target;
+        this.setState({[name]: value});
+    }
+
+    clickCCType = () => {
+        this.setState({
+            // showPaymentTypeModal:false,
+            showCreditCardModal:true
+        })
+    }
+
+    pay = async (value) => {
+        this.setState({loadingIsVisible: true});
+        const {token, setTable, setWaiterID, setWaiterName} = this.context
+
+        const newCreditCard = {
+            name:this.state.name,
+            number:this.state.number,
+            expiry:this.state.expiry,
+            cvc:this.state.cvc
+        }
+
+        const orderAndCreditDTO = {
+            orderDTOList : this.state.shoppingList,
+            creditCardDTO: newCreditCard,
+            customerId:sessionStorage.getItem("customer")
+        }
+
+        await axios.post('http://localhost:8080/order/add', orderAndCreditDTO, {
+            headers: {
+                Authorization: token //the token is a variable which holds the token
+            }
+        })
+        window.alert("Ödeme Alındı");
+
+        setTable("No Table");
+        setWaiterName("No Waiter");
+        setWaiterID("-1");
+        this.setState({loadingIsVisible: false});
+        this.props.history.push("/menu")
     }
 
     render() {
@@ -286,6 +324,108 @@ class ClientHomePage extends Component {
         const {waiterName, table} = this.context;
         return (
             <div className="App">
+
+                <Modal show={this.state.showPaymentTypeModal} onHide={() => this.handlePaymentTypeModal()}>
+                    <Modal.Header closeButton>
+                        <h4>Please Select Payment Type</h4>
+                    </Modal.Header>
+                    <Modal.Body align="center">
+                        <Table>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                shoppingList.map(v => {
+                                    return (
+                                        <tr>
+                                            <td>{v.name}</td>
+                                            <td>{v.amount}</td>
+                                            <td>{v.price * v.amount}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                            </tbody>
+                        </Table>
+                        <hr/>
+                        <button className="btn btn-success mt-1 payCashButton" onClick={()=> this.pay(shoppingList)}>Pay Cash</button>
+                        <button className="btn btn-info ml-2 mt-1 payCCButton" onClick={()=> this.clickCCType()}>Pay With Credit Card</button>
+                    </Modal.Body>
+                    <Modal.Footer>
+
+                        <button className="btn btn-danger" onClick={() => this.handlePaymentTypeModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={this.state.showCreditCardModal} size="lg"
+                       onHide={() => this.setState({showCreditCardModal: !this.state.showCreditCardModal})}>
+                    <Modal.Header closeButton>
+                        <h4>Credit Card Information</h4>
+                    </Modal.Header>
+                    <Modal.Body align="center">
+                        <div id="PaymentForm" className="row">
+                            <div className="col-xl-5 mt-1">
+                                <Cards
+                                    cvc={this.state.cvc}
+                                    expiry={this.state.expiry}
+                                    focused={this.state.focus}
+                                    name={this.state.name}
+                                    number={this.state.number}
+                                />
+                            </div>
+                            <div className="col-xl-7">
+                                <form className="mt-2">
+                                    <input
+                                        className="form-control "
+                                        type="tel"
+                                        name="number"
+                                        placeholder="Card Number"
+                                        onChange={this.handleInputChange}
+                                        onFocus={this.handleInputFocus}
+                                    />
+                                    <input
+                                        className="form-control mt-2"
+                                        type="text"
+                                        name="name"
+                                        placeholder="Name"
+                                        onChange={this.handleInputChange}
+                                        onFocus={this.handleInputFocus}
+                                    />
+
+                                    <input
+                                        className="form-control mt-2"
+                                        type="tel"
+                                        name="expiry"
+                                        placeholder="Date"
+                                        onChange={this.handleInputChange}
+                                        onFocus={this.handleInputFocus}
+                                    />
+                                    <input
+                                        className="form-control mt-2"
+                                        type="tel"
+                                        name="cvc"
+                                        placeholder="Cvc"
+                                        onChange={this.handleInputChange}
+                                        onFocus={this.handleInputFocus}
+                                    />
+
+                                </form>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-success" onClick={() => this.pay(shoppingList)}>Pay</button>
+                        <button className="btn btn-danger" onClick={() => this.handleCreditCardModal()}>Close Modal
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+
                 <Table bordered>
                     <tbody>
                     <tr>
@@ -335,13 +475,14 @@ class ClientHomePage extends Component {
                                             return (
                                                 <div className="card productCards">
                                                     <div className="card-header">
-                                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent} width="100"
+                                                        <img src={'data:image/png;base64,' + v.mediaDTO.fileContent}
+                                                             width="100"
                                                              style={{margin: 10}}/>
-                                                             <br/>
+                                                        <br/>
                                                         <h4 className="d-inline">{v.productName}</h4>
                                                     </div>
                                                     <div className="card-body">
-                                                        <p className="card-text">Product Description : {v.productID}</p>
+                                                        <p className="card-text">Product Description : {v.id}</p>
                                                         <p className="card-text">Product Description
                                                             : {v.productDesc}</p>
                                                         <p className="card-text">Product Category

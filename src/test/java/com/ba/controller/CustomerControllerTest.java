@@ -78,12 +78,12 @@ public class CustomerControllerTest {
         assertNotNull(result);
     }
 
-    @Test
-    public void shouldAddCustomer() {
-        when(customerService.addCustomer(customerDTO)).thenReturn("Customer Added");
-        String res = customerController.addCustomer(customerDTO);
-        assertEquals(res,"Customer Added");
-    }
+//    @Test
+//    public void shouldAddCustomer() {
+//        when(customerService.addCustomer(customerDTO)).thenReturn("Customer Added");
+//        String res = customerController.addCustomer(customerDTO);
+//        assertEquals(res,"Customer Added");
+//    }
 
     @Test
     public void shouldDeleteCustomer() {

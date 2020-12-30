@@ -11,7 +11,7 @@
 <!--    <include file="/db-changelog/changes/insert-users-table.xml"/>-->
 <!--    <include file="/db-changelog/changes/create-authorities-table.xml"/>-->
 <!--    <include file="/db-changelog/changes/insert-authorities-table.xml"/>-->
-<!--    <include file="/db-changelog/changes/create-order-table.xml"/>-->
+<!--    <include file="/db-changelog/changes/123.xml"/>-->
 <!--    <include file="/db-changelog/changes/create-waiter-table.xml"/>-->
 <!--    <include file="/db-changelog/changes/create-tablecategory-table.xml"/>-->
 <!--    <include file="/db-changelog/changes/insert-tablecategory-table.xml"/>-->
@@ -26,4 +26,8 @@
 <!--    <include file="/db-changelog/changes/table-category.sql"/>-->
 <!--    <include file="/db-changelog/changes/products.sql"/>-->
 <!--    <include file="/db-changelog/changes/product-category.sql"/>-->
+    <include file="/db-changelog/changes/create-payment-type-table.xml"/>
+    <include file="/db-changelog/changes/create-order-item-table.xml"/>
+    <include file="/db-changelog/changes/create-credit-card-table.xml"/>
+    <include file="/db-changelog/changes/create-order-table.xml"/>
 </databaseChangeLog>

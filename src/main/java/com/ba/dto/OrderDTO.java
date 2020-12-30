@@ -1,9 +1,11 @@
 package com.ba.dto;
 
-import lombok.*;
+import com.ba.entity.PaymentType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -11,27 +13,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    private Long orderID;
-
-    @NotNull(message = "Order product id cannot null...!")
-    private Long pId;
-
-    @NotNull(message = "Order product cannot null...!")
-    private String name;
-
-    @NotNull(message = "Order product price cannot null...!")
-    private Long price;
-
-    @NotNull(message = "Order product amount cannot null...!")
-    private Long amount;
-
-    @NotNull(message = "Order table name cannot null...!")
-    private String tableName;
-
-    private Date orderDate = new Timestamp(System.currentTimeMillis());
-
-    @NotNull(message = "Order waiter id cannot null...!")
-    private Long waiterID;
-
-    private boolean deleted;
+    private Long id;
+    private PaymentTypeDTO paymentType;
+    private CustomerDTO customer;
+    private WaiterDTO waiter;
+    private OrderItemDTO orderItem;
+    private Long totalAmount;
+    private Long totalCount;
+    private Date orderDate;
 }

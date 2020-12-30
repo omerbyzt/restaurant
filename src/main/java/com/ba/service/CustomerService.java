@@ -7,6 +7,7 @@ import com.ba.helper.UpdateHelper;
 import com.ba.mapper.CustomerMapper;
 import com.ba.mapper.MediaMapper;
 import com.ba.repository.CustomerRepository;
+import com.ba.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,9 @@ public class CustomerService {
     @Autowired
     private MediaMapper mediaMapper;
 
+    @Autowired
+    private MediaRepository mediaRepository;
+
     public List<CustomerDTO> listCustomers(){
         List<Customer> result = customerRepository.findAll();
         if(result == null){
@@ -39,9 +43,12 @@ public class CustomerService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public String addCustomer(CustomerDTO customerDTO) {
-        customerRepository.save(customerMapper.toEntity(customerDTO));
-        return "Customer Added";
+    public CustomerDTO addCustomer(CustomerDTO customerDTO) {
+        if(customerDTO.getMedia() == null){
+            customerDTO.setMedia(mediaMapper.toDTO(mediaRepository.findById(20L).get()));
+        }
+        Customer res = customerRepository.save(customerMapper.toEntity(customerDTO));
+        return customerMapper.toDTO(res);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

@@ -17,9 +17,7 @@ class TableList extends Component {
     }
     componentDidMount() {
         axios.get('http://localhost:8080/table/listall',
-            // {headers:{Authorization: sessionStorage.getItem('token')}})
             {headers:{Authorization: this.state.token}})
-
             .then(res => {this.setState({tableList: res.data})});
     }
 

@@ -28,7 +28,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public String addCustomer(@Valid @RequestBody CustomerDTO customerDTO){
+    public CustomerDTO addCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         return customerService.addCustomer(customerDTO);
     }
 
