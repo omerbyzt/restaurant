@@ -29,7 +29,7 @@ public class TableCategoryService {
 
     public List<TableCategoryDTO> listTableCategories() {
         List<TableCategory> categoryDTOList = tableCategoryRepository.findAll();
-        if(categoryDTOList.isEmpty()){
+        if(categoryDTOList == null){
             throw new SystemException("Table categories not found...!");
         }
         return tableCategoryMapper.toDTOList(categoryDTOList);
@@ -50,7 +50,7 @@ public class TableCategoryService {
     @Transactional(propagation = Propagation.REQUIRED)
     public TableCategoryDTO updateTableCategory(TableCategoryDTO tableCategoryDTO) {
         Optional<TableCategory> tableCategory = tableCategoryRepository.findById(tableCategoryDTO.getId());
-        if(tableCategory.isEmpty()){
+        if(tableCategory == null){
             throw new SystemException("Table category not found");
         }
 

@@ -30,7 +30,7 @@ public class WaiterService {
 
     public List<WaiterDTO> listAllWaiters(){
         List<Waiter> waiterList = waiterRepository.findAll();
-        if(waiterList.isEmpty()){
+        if(waiterList == null){
             throw new SystemException("Waiters not found...!");
         }
         return  waiterMapper.toDTOList(waiterRepository.findAll());
@@ -59,7 +59,7 @@ public class WaiterService {
     @Transactional(propagation = Propagation.REQUIRED)
     public WaiterDTO updateWaiter(WaiterDTO waiterDTO){
         Optional<Waiter> waiter = waiterRepository.findById(waiterDTO.getId());
-        if(waiter.isEmpty()){
+        if(waiter == null){
             throw new SystemException("Waiter not found...!");
         }
 

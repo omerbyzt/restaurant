@@ -1,11 +1,13 @@
 package com.ba.builder;
 
+import com.ba.dto.MediaDTO;
 import com.ba.dto.TableCategoryDTO;
 
 public class TableCategoryDTOBuilder extends Builder{
 
     private String name;
     private int number;
+    private MediaDTO media;
 
     public TableCategoryDTOBuilder id(Long id){
         this.setId(id);
@@ -22,6 +24,11 @@ public class TableCategoryDTOBuilder extends Builder{
         return this;
     }
 
+    public TableCategoryDTOBuilder media(MediaDTO media){
+        this.media = media;
+        return this;
+    }
+
     @Override
     public TableCategoryDTO build() {
         TableCategoryDTO tableCategoryDTO = new TableCategoryDTO();
@@ -29,6 +36,7 @@ public class TableCategoryDTOBuilder extends Builder{
         tableCategoryDTO.setNumber(this.number);
         tableCategoryDTO.setName(this.name);
         tableCategoryDTO.setId(this.getId());
+        tableCategoryDTO.setMedia(media);
 
         return tableCategoryDTO;
     }

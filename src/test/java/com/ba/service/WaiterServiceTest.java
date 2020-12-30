@@ -8,6 +8,7 @@ import com.ba.dto.MediaDTO;
 import com.ba.dto.WaiterDTO;
 import com.ba.entity.Media;
 import com.ba.entity.Waiter;
+import com.ba.exception.SystemException;
 import com.ba.mapper.WaiterMapper;
 import com.ba.repository.MediaRepository;
 import com.ba.repository.WaiterRepository;
@@ -20,6 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
@@ -38,16 +40,17 @@ public class WaiterServiceTest {
     private WaiterRepository repository;
 
     @Mock
-    private MediaRepository mediaRepository;
+    private WaiterMapper waiterMapper;
 
     @Mock
-    private WaiterMapper waiterMapper;
+    private MediaRepository mediaRepository;
+
 
     private Waiter waiter = new Waiter();
     private WaiterDTO waiterDTO = new WaiterDTO();
     private List<Waiter> waiterList = new ArrayList<>();
     private List<WaiterDTO> waiterListDTO = new ArrayList<>();
-    private Long id = 111L;
+    private Long id = 1L;
     private Media media = new Media();
     private MediaDTO mediaDTO = new MediaDTO();
 
@@ -65,12 +68,14 @@ public class WaiterServiceTest {
 
     @Test
     public void shouldAddNewWaiter() {
+        when(waiterMapper.toEntity(waiterDTO)).thenReturn(waiter);
 
-//        when(repository.save(waiter)).thenReturn(waiter);
-//        String res = service.addWaiter(waiterDTO);
-//
-//        assertNotNull(res);
-//        assertEquals(res,"Waiter Added");
+        String res = service.addWaiter(waiterDTO);
+        verify(mediaRepository).deleteById(id);
+        verify(repository).save(waiter);
+
+        assertNotNull(res);
+        assertEquals(res,"Waiter Added");
     }
 
     @Test
@@ -88,20 +93,34 @@ public class WaiterServiceTest {
 
     @Test
     public void shouldUpdateWaiter() {
-        when(repository.saveAndFlush(any())).thenReturn(waiter);
-        WaiterDTO tempDTO = service.updateWaiter(waiterDTO);
-        assertNotNull(tempDTO);
-        assertEquals(tempDTO,waiterDTO);
+        when(repository.findById(id)).thenReturn(Optional.of(waiter));
+        when(waiterMapper.toDTO(waiter)).thenReturn(waiterDTO);
+
+        WaiterDTO result = service.updateWaiter(waiterDTO);
+
+        assertNotNull(result);
+        assertEquals(result,waiterDTO);
+    }
+
+    @Test(expected = SystemException.class)
+    public void shouldThrowExceptionWhenWaiterNullUpdateWaiter() {
+        when(repository.findById(id)).thenReturn(null);
+        service.updateWaiter(waiterDTO);
     }
 
     @Test
     public void shouldListWaiters() {
         when(repository.findAll()).thenReturn(waiterList);
+        when(waiterMapper.toDTOList(waiterList)).thenReturn(waiterListDTO);
 
-        List<WaiterDTO> tempDTOList = waiterMapper.toDTOList(waiterList);
-//        List<WaiterDTO> tempDTOList = WaiterConverter.convertListToDTOList(waiterList);
-        List<WaiterDTO> tempDTOList2 = service.listAllWaiters();
+        List<WaiterDTO> result = service.listAllWaiters();
+        assertNotNull(result);
+        assertEquals(result,waiterListDTO);
+    }
 
-        assertEquals(tempDTOList.get(0).getId(), tempDTOList2.get(0).getId());
+    @Test(expected = SystemException.class)
+    public void shouldThrowSysExceptionWaiterListNullListAllWaiters() {
+        when(repository.findAll()).thenReturn(null);
+        service.listAllWaiters();
     }
 }

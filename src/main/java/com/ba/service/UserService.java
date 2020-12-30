@@ -34,7 +34,7 @@ public class UserService {
 
     public List<UserDTO> listUsers() {
         List<User> user = userRepository.findAll();
-        if (user.isEmpty()) {
+        if (user == null) {
             throw new SystemException("Users cannot be found...!");
         }
         return userMapper.toDTOList(user);
@@ -54,7 +54,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String updateUser(UserDTO userDTO) {
         Optional<User> user = userRepository.findById(userDTO.getId());
-        if (user.isEmpty()) {
+        if (user == null) {
             throw new SystemException("User not found...!");
         }
 
