@@ -16,6 +16,10 @@
                 <constraints nullable="true" foreignKeyName="product_id_fk_order_item" references="Product(id)"></constraints>
             </column>
 
+            <column name="order_id" type="int(10)">
+                <constraints nullable="true" foreignKeyName="order_id_fk" references="OrderTable(id)"></constraints>
+            </column>
+
             <column name="piece" type="int(10)"/>
 
             <column name="totalPrice" type="int(10)"/>

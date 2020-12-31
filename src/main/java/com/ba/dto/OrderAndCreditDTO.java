@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderAndCreditDTO {
-    private List<OrderDTO> orderDTOList;
+    private List<OrderWrapper> orderWrapperList;
     private CreditCardDTO creditCardDTO;
-    private Long customerId;
+    private Long paymentId;
 }

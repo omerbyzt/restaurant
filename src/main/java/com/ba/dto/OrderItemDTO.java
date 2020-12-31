@@ -13,6 +13,7 @@ public class OrderItemDTO {
     private Long id;
     private ProductDTO product;
     private Long piece;
-    private Long totalPiece;
+    private Long totalPrice;
+    private OrderDTO order;
     private String table;
 }

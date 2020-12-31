@@ -1,8 +1,6 @@
 package com.ba.controller;
 
 import com.ba.dto.ProductDTO;
-import com.ba.dto.ProductWrapperList;
-import com.ba.dto.ProductWrapperSlicerList;
 import com.ba.exception.BusinessRuleException;
 import com.ba.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")

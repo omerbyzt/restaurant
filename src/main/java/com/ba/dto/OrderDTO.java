@@ -17,8 +17,7 @@ public class OrderDTO {
     private PaymentTypeDTO paymentType;
     private CustomerDTO customer;
     private WaiterDTO waiter;
-    private OrderItemDTO orderItem;
-    private Long totalAmount;
-    private Long totalCount;
+    private int totalAmount;
+    private int totalCount;
     private Date orderDate;
 }

@@ -35,10 +35,6 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "waiter_id")
     private Waiter waiter;
 
-    @ManyToOne
-    @JoinColumn(name = "order_item_id")
-    private OrderItem orderItem;
-
     private Long totalAmount;
 
     private Long totalCount;

@@ -24,10 +24,6 @@
                 <constraints nullable="true" foreignKeyName="waiter_id_fk" references="Waiter(id)"></constraints>
             </column>
 
-            <column name="order_item_id" type="int(10)">
-                <constraints nullable="true" foreignKeyName="order_item_id_fk" references="OrderItem(id)"></constraints>
-            </column>
-
             <column name="totalAmount" type="int(10)"/>
 
             <column name="totalCount" type="int(10)"/>

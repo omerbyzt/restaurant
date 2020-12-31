@@ -21,12 +21,14 @@ class ClientHomePage extends Component {
 
         shoppingListObj: {
             shoppingListObjId: 0,
+            pId: 0,
             name: "",
             price: 0,
-            amount: 0,
-            pId: 0,
+            amount: 1,
             totalPrice: 0,
             tableName: "",
+            waiterID: 0,
+            customerId:0
         },
 
         selectedCategoryName: "",
@@ -45,6 +47,8 @@ class ClientHomePage extends Component {
         focus: '',
         name: '',
         number: '',
+
+        paymentId:1
     }
 
     constructor(props) {
@@ -163,7 +167,6 @@ class ClientHomePage extends Component {
         const {shoppingList, totalPayment, shoppingListAmounts} = this.state;
         const {table, waiterID} = this.context;
         this.state.totalPayment += param.productPrice;
-        console.log(param)
         if (this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.id).length > 0) {
             var shoppingListObj = this.state.shoppingList.filter(shoppingListObj => shoppingListObj.pId == param.id)
             shoppingListObj[0].amount += 1;
@@ -171,16 +174,20 @@ class ClientHomePage extends Component {
 
             this.setState([{...this.state.shoppingList, [shoppingListObj[0].pId]: shoppingListObj[0]}])
         } else {
-            this.setState({
+            console.log(param)
+            this.setState(
+                {
                     shoppingListObj: {
                         shoppingListObjId: nextId(),
                         pId: param.id,
+                        productId:param.id,
                         name: param.productName,
                         price: param.productPrice,
                         amount: 1,
                         totalPrice: param.productPrice,
                         tableName: table,
-                        waiterID: waiterID
+                        waiterID: waiterID,
+                        customerId:sessionStorage.getItem("customer")
                     }
                 }, () => this.setState({shoppingList: [...this.state.shoppingList, this.state.shoppingListObj]})
             )
@@ -269,6 +276,7 @@ class ClientHomePage extends Component {
     handleCreditCardModal = () => {
         this.setState({
             showCreditCardModal: !this.state.showCreditCardModal,
+            paymentId:1
         })
     }
 
@@ -284,7 +292,8 @@ class ClientHomePage extends Component {
     clickCCType = () => {
         this.setState({
             // showPaymentTypeModal:false,
-            showCreditCardModal:true
+            showCreditCardModal:true,
+            paymentId:2
         })
     }
 
@@ -300,9 +309,9 @@ class ClientHomePage extends Component {
         }
 
         const orderAndCreditDTO = {
-            orderDTOList : this.state.shoppingList,
+            orderWrapperList : value,
             creditCardDTO: newCreditCard,
-            customerId:sessionStorage.getItem("customer")
+            paymentId:this.state.paymentId
         }
 
         await axios.post('http://localhost:8080/order/add', orderAndCreditDTO, {
@@ -310,12 +319,14 @@ class ClientHomePage extends Component {
                 Authorization: token //the token is a variable which holds the token
             }
         })
+
         window.alert("Ödeme Alındı");
 
         setTable("No Table");
         setWaiterName("No Waiter");
         setWaiterID("-1");
         this.setState({loadingIsVisible: false});
+        sessionStorage.setItem("customer","-1");
         this.props.history.push("/menu")
     }
 
@@ -482,7 +493,7 @@ class ClientHomePage extends Component {
                                                         <h4 className="d-inline">{v.productName}</h4>
                                                     </div>
                                                     <div className="card-body">
-                                                        <p className="card-text">Product Description : {v.id}</p>
+                                                        <p className="card-text">Product Id : {v.id}</p>
                                                         <p className="card-text">Product Description
                                                             : {v.productDesc}</p>
                                                         <p className="card-text">Product Category
