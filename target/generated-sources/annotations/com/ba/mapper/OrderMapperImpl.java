@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-31T02:24:36+0300",
+    date = "2020-12-31T11:11:04+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 @Component
@@ -36,8 +36,8 @@ public class OrderMapperImpl implements OrderMapper {
         order.setPaymentType( paymentTypeDTOToPaymentType( orderDTO.getPaymentType() ) );
         order.setCustomer( customerDTOToCustomer( orderDTO.getCustomer() ) );
         order.setWaiter( waiterDTOToWaiter( orderDTO.getWaiter() ) );
-        order.setTotalAmount( (long) orderDTO.getTotalAmount() );
-        order.setTotalCount( (long) orderDTO.getTotalCount() );
+        order.setTotalAmount( orderDTO.getTotalAmount() );
+        order.setTotalCount( orderDTO.getTotalCount() );
         order.setOrderDate( orderDTO.getOrderDate() );
 
         return order;
@@ -55,12 +55,8 @@ public class OrderMapperImpl implements OrderMapper {
         orderDTO.setPaymentType( paymentTypeToPaymentTypeDTO( order.getPaymentType() ) );
         orderDTO.setCustomer( customerToCustomerDTO( order.getCustomer() ) );
         orderDTO.setWaiter( waiterToWaiterDTO( order.getWaiter() ) );
-        if ( order.getTotalAmount() != null ) {
-            orderDTO.setTotalAmount( order.getTotalAmount().intValue() );
-        }
-        if ( order.getTotalCount() != null ) {
-            orderDTO.setTotalCount( order.getTotalCount().intValue() );
-        }
+        orderDTO.setTotalAmount( order.getTotalAmount() );
+        orderDTO.setTotalCount( order.getTotalCount() );
         orderDTO.setOrderDate( order.getOrderDate() );
 
         return orderDTO;

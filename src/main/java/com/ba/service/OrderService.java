@@ -71,31 +71,30 @@ public class OrderService {
         CreditCardDTO inputCreditCard = orderAndCreditDTO.getCreditCardDTO();
         Long paymentId = orderAndCreditDTO.getPaymentId();
 
-        //CreditCard
         if (inputCreditCard.getNumber() != "") {
             CreditCard creditCard = creditCardRepository.findCreditCardByNumber(inputCreditCard.getNumber());
             if (creditCard == null) {
                 saveCreditCard(inputCreditCard);
             }
         }
-
-        //Order
         Order order = saveOrder(inputWrapper, paymentId);
+        saveOrderItemList(inputWrapper, order);
 
-        //OrderItem
-        inputWrapper.forEach(item->{
+        return new ResponseEntity<>("Order and credit card added", HttpStatus.OK);
+    }
+
+    public void saveOrderItemList(List<OrderWrapper> inputWrapper, Order order) {
+        inputWrapper.forEach(item -> {
             OrderItem orderItem = new OrderItem();
 
             orderItem.setProduct(productRepository.findById(item.getProductId()).get());
-            orderItem.setPiece((long) item.getAmount());
-            orderItem.setTotalPrice((long) item.getTotalPrice());
+            orderItem.setPiece(item.getAmount());
+            orderItem.setTotalPrice(item.getTotalPrice());
             orderItem.setOrder(order);
-            orderItem.setTable(item.getTableName());
+            orderItem.setTableName(item.getTableName());
 
             orderItemRepository.save(orderItem);
         });
-
-        return new ResponseEntity<>("Order and credit card added", HttpStatus.OK);
     }
 
     public Order saveOrder(List<OrderWrapper> inputWrapper, Long paymentId) {
@@ -104,7 +103,7 @@ public class OrderService {
         if (inputWrapper.get(0).getCustomerId() != -1) {
             orderDTO.setCustomer(customerMapper.toDTO(customerRepository.findById(inputWrapper.get(0).getCustomerId()).get()));
         }
-        if (inputWrapper.get(0).getWaiterID() != -1){
+        if (inputWrapper.get(0).getWaiterID() != -1) {
             orderDTO.setWaiter(waiterMapper.toDTO(waiterRepository.findById(inputWrapper.get(0).getWaiterID()).get()));
         }
         int totalAmount = inputWrapper.stream().mapToInt(OrderWrapper::getTotalPrice).sum();

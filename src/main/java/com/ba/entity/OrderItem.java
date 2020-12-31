@@ -33,8 +33,8 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Long piece;
-    private Long totalPrice;
-    private String table;
+    private int piece;
+    private int totalPrice;
+    private String tableName;
 
 }

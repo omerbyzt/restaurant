@@ -24,7 +24,7 @@
 
             <column name="totalPrice" type="int(10)"/>
 
-            <column name="table" type="VARCHAR(255)"/>
+            <column name="tableName" type="VARCHAR(255)"/>
 
             <column name="deleted" type="boolean" defaultValue="false"/>
         </createTable>

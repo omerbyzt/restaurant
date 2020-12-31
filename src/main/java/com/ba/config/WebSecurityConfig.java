@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("h2-console/**").permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
-        http.authorizeRequests().antMatchers("/login/**").permitAll();
-        //http.authorizeRequests().antMatchers("/user/**").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/user/**").permitAll();
+//        http.authorizeRequests().antMatchers("/product/**").access("hasRole('ADMIN')");
         http.httpBasic();
     }
 }

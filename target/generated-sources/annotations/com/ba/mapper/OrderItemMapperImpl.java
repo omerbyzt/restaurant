@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-31T02:24:36+0300",
+    date = "2020-12-31T11:11:04+0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 @Component
@@ -41,8 +41,8 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         orderItemDTO.setId( orderItem.getId() );
         orderItemDTO.setProduct( productToProductDTO( orderItem.getProduct() ) );
         orderItemDTO.setPiece( orderItem.getPiece() );
+        orderItemDTO.setTotalPrice( orderItem.getTotalPrice() );
         orderItemDTO.setOrder( orderToOrderDTO( orderItem.getOrder() ) );
-        orderItemDTO.setTable( orderItem.getTable() );
 
         return orderItemDTO;
     }
@@ -59,7 +59,7 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         orderItem.setProduct( productDTOToProduct( orderItemDTO.getProduct() ) );
         orderItem.setOrder( orderDTOToOrder( orderItemDTO.getOrder() ) );
         orderItem.setPiece( orderItemDTO.getPiece() );
-        orderItem.setTable( orderItemDTO.getTable() );
+        orderItem.setTotalPrice( orderItemDTO.getTotalPrice() );
 
         return orderItem;
     }
@@ -232,12 +232,8 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         orderDTO.setPaymentType( paymentTypeToPaymentTypeDTO( order.getPaymentType() ) );
         orderDTO.setCustomer( customerToCustomerDTO( order.getCustomer() ) );
         orderDTO.setWaiter( waiterToWaiterDTO( order.getWaiter() ) );
-        if ( order.getTotalAmount() != null ) {
-            orderDTO.setTotalAmount( order.getTotalAmount().intValue() );
-        }
-        if ( order.getTotalCount() != null ) {
-            orderDTO.setTotalCount( order.getTotalCount().intValue() );
-        }
+        orderDTO.setTotalAmount( order.getTotalAmount() );
+        orderDTO.setTotalCount( order.getTotalCount() );
         orderDTO.setOrderDate( order.getOrderDate() );
 
         return orderDTO;
@@ -381,8 +377,8 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         order.setPaymentType( paymentTypeDTOToPaymentType( orderDTO.getPaymentType() ) );
         order.setCustomer( customerDTOToCustomer( orderDTO.getCustomer() ) );
         order.setWaiter( waiterDTOToWaiter( orderDTO.getWaiter() ) );
-        order.setTotalAmount( (long) orderDTO.getTotalAmount() );
-        order.setTotalCount( (long) orderDTO.getTotalCount() );
+        order.setTotalAmount( orderDTO.getTotalAmount() );
+        order.setTotalCount( orderDTO.getTotalCount() );
         order.setOrderDate( orderDTO.getOrderDate() );
 
         return order;

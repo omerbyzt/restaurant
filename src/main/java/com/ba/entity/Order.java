@@ -35,9 +35,9 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "waiter_id")
     private Waiter waiter;
 
-    private Long totalAmount;
+    private int totalAmount;
 
-    private Long totalCount;
+    private int totalCount;
 
     @Column
     private Date orderDate = new Timestamp(System.currentTimeMillis());
